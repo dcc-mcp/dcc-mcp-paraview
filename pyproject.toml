@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling>=1.25"]
+build-backend = "hatchling.build"
+
+[project]
+name = "dcc-mcp-paraview"
+version = "0.1.0"
+description = "Typed DCC-MCP adapter for an isolated persistent ParaView pipeline"
+readme = "README.md"
+requires-python = ">=3.10,<3.13"
+license = {text = "MIT"}
+dependencies = ["dcc-mcp-core==0.20.41", "dcc-mcp-server==0.20.41"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "ruff>=0.8", "build>=1.2", "PyYAML>=6", "jsonschema>=4.18", "mcp==1.30.0"]
+
+[project.scripts]
+dcc-mcp-paraview = "dcc_mcp_paraview.cli:main"
+
+[project.entry-points."dcc_mcp.adapters"]
+paraview = "dcc_mcp_paraview:ParaViewMcpServer"
+
+[tool.hatch.build.targets.sdist]
+include = ["src/", "tests/", "scripts/", "docs/", ".github/", "README.md", "install.md", "LICENSE", "AGENTS.md", "pyproject.toml", "vx.toml", ".gitignore", ".pre-commit-config.yaml"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/dcc_mcp_paraview"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+markers = ["paraview: requires installed pvpython", "mcp: real Core HTTP MCP transport", "render: requires an operator-provided isolated display"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py39"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B"]

@@ -1,0 +1,1071 @@
+{
+  "tools": [
+    {
+      "name": "inspect_pipeline",
+      "description": "Inspect sources, native geometry counts, host identity, and rendering prerequisites.",
+      "source_file": "scripts/inspect_pipeline.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "context": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "success",
+          "context"
+        ]
+      },
+      "execution": "sync",
+      "job_strategy": "monolithic",
+      "affinity": "main",
+      "enforce_thread_affinity": true,
+      "timeout_hint_secs": 65,
+      "annotations": {
+        "read_only_hint": true,
+        "destructive_hint": false,
+        "idempotent_hint": true,
+        "open_world_hint": false,
+        "deferred_hint": false
+      }
+    },
+    {
+      "name": "create_sphere",
+      "description": "Create a bounded native sphere source.",
+      "source_file": "scripts/create_sphere.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+          },
+          "radius": {
+            "type": "number",
+            "minimum": 0.0001,
+            "maximum": 10000,
+            "default": 1
+          },
+          "center": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": -1000000.0,
+              "maximum": 1000000.0
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "resolution": {
+            "type": "integer",
+            "minimum": 8,
+            "maximum": 128,
+            "default": 32
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "context": {
+            "type": "object"
+          },
+          "job_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "running",
+              "completed",
+              "failed",
+              "cancelled",
+              "interrupted"
+            ]
+          }
+        },
+        "anyOf": [
+          {
+            "required": [
+              "job_id",
+              "status"
+            ]
+          },
+          {
+            "required": [
+              "success",
+              "context"
+            ]
+          }
+        ]
+      },
+      "execution": "async",
+      "job_strategy": "monolithic",
+      "affinity": "main",
+      "enforce_thread_affinity": true,
+      "timeout_hint_secs": 65,
+      "annotations": {
+        "read_only_hint": false,
+        "destructive_hint": true,
+        "idempotent_hint": false,
+        "open_world_hint": false,
+        "deferred_hint": true
+      },
+      "next-tools": {
+        "on-failure": [
+          "inspect_pipeline"
+        ]
+      }
+    },
+    {
+      "name": "edit_sphere",
+      "description": "Edit a sphere radius and optional center or resolution, then read back geometry.",
+      "source_file": "scripts/edit_sphere.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+          },
+          "radius": {
+            "type": "number",
+            "minimum": 0.0001,
+            "maximum": 10000,
+            "default": 1
+          },
+          "center": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": -1000000.0,
+              "maximum": 1000000.0
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "resolution": {
+            "type": "integer",
+            "minimum": 8,
+            "maximum": 128,
+            "default": 32
+          }
+        },
+        "required": [
+          "name",
+          "radius"
+        ],
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "context": {
+            "type": "object"
+          },
+          "job_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "running",
+              "completed",
+              "failed",
+              "cancelled",
+              "interrupted"
+            ]
+          }
+        },
+        "anyOf": [
+          {
+            "required": [
+              "job_id",
+              "status"
+            ]
+          },
+          {
+            "required": [
+              "success",
+              "context"
+            ]
+          }
+        ]
+      },
+      "execution": "async",
+      "job_strategy": "monolithic",
+      "affinity": "main",
+      "enforce_thread_affinity": true,
+      "timeout_hint_secs": 65,
+      "annotations": {
+        "read_only_hint": false,
+        "destructive_hint": true,
+        "idempotent_hint": false,
+        "open_world_hint": false,
+        "deferred_hint": true
+      },
+      "next-tools": {
+        "on-failure": [
+          "inspect_pipeline"
+        ]
+      }
+    },
+    {
+      "name": "clip_plane",
+      "description": "Create a native plane clip from an existing source.",
+      "source_file": "scripts/clip_plane.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+          },
+          "input_name": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+          },
+          "origin": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": -1000000.0,
+              "maximum": 1000000.0
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "normal": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": -1000000.0,
+              "maximum": 1000000.0
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "invert": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": [
+          "name",
+          "input_name"
+        ],
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "context": {
+            "type": "object"
+          },
+          "job_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "running",
+              "completed",
+              "failed",
+              "cancelled",
+              "interrupted"
+            ]
+          }
+        },
+        "anyOf": [
+          {
+            "required": [
+              "job_id",
+              "status"
+            ]
+          },
+          {
+            "required": [
+              "success",
+              "context"
+            ]
+          }
+        ]
+      },
+      "execution": "async",
+      "job_strategy": "monolithic",
+      "affinity": "main",
+      "enforce_thread_affinity": true,
+      "timeout_hint_secs": 65,
+      "annotations": {
+        "read_only_hint": false,
+        "destructive_hint": true,
+        "idempotent_hint": false,
+        "open_world_hint": false,
+        "deferred_hint": true
+      },
+      "next-tools": {
+        "on-failure": [
+          "inspect_pipeline"
+        ]
+      }
+    },
+    {
+      "name": "save_state",
+      "description": "Save a new native PVSM artifact; existing outputs are never replaced.",
+      "source_file": "scripts/save_state.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          },
+          "data_directory": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096,
+            "description": "Optional existing directory of byte-identical dataset copies, within the state output directory. Native reader FileName properties are temporarily set to relative package paths for SaveState, verified, then restored."
+          }
+        },
+        "required": [
+          "path"
+        ],
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "context": {
+            "type": "object"
+          },
+          "job_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "running",
+              "completed",
+              "failed",
+              "cancelled",
+              "interrupted"
+            ]
+          }
+        },
+        "anyOf": [
+          {
+            "required": [
+              "job_id",
+              "status"
+            ]
+          },
+          {
+            "required": [
+              "success",
+              "context"
+            ]
+          }
+        ]
+      },
+      "execution": "async",
+      "job_strategy": "monolithic",
+      "affinity": "main",
+      "enforce_thread_affinity": true,
+      "timeout_hint_secs": 65,
+      "annotations": {
+        "read_only_hint": false,
+        "destructive_hint": true,
+        "idempotent_hint": false,
+        "open_world_hint": false,
+        "deferred_hint": true
+      },
+      "next-tools": {
+        "on-failure": [
+          "inspect_pipeline"
+        ]
+      }
+    },
+    {
+      "name": "reopen_state",
+      "description": "Replace this isolated pipeline with an unchanged state saved by this running session.",
+      "source_file": "scripts/reopen_state.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          },
+          "data_directory": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096,
+            "description": "Optional workspace-confined directory of byte-identical copied single-file data. Copied PVSM must match a state saved by this current session; arbitrary external states remain rejected."
+          }
+        },
+        "required": [
+          "path"
+        ],
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "context": {
+            "type": "object"
+          },
+          "job_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "running",
+              "completed",
+              "failed",
+              "cancelled",
+              "interrupted"
+            ]
+          }
+        },
+        "anyOf": [
+          {
+            "required": [
+              "job_id",
+              "status"
+            ]
+          },
+          {
+            "required": [
+              "success",
+              "context"
+            ]
+          }
+        ]
+      },
+      "execution": "async",
+      "job_strategy": "monolithic",
+      "affinity": "main",
+      "enforce_thread_affinity": true,
+      "timeout_hint_secs": 65,
+      "annotations": {
+        "read_only_hint": false,
+        "destructive_hint": true,
+        "idempotent_hint": false,
+        "open_world_hint": false,
+        "deferred_hint": true
+      },
+      "next-tools": {
+        "on-failure": [
+          "inspect_pipeline"
+        ]
+      }
+    },
+    {
+      "name": "export_dataset",
+      "description": "Export source as VTI, VTP or VTU and verify native geometry round-trip.",
+      "source_file": "scripts/export_dataset.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          }
+        },
+        "required": [
+          "name",
+          "path"
+        ],
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "context": {
+            "type": "object"
+          },
+          "job_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "running",
+              "completed",
+              "failed",
+              "cancelled",
+              "interrupted"
+            ]
+          }
+        },
+        "anyOf": [
+          {
+            "required": [
+              "job_id",
+              "status"
+            ]
+          },
+          {
+            "required": [
+              "success",
+              "context"
+            ]
+          }
+        ]
+      },
+      "execution": "async",
+      "job_strategy": "monolithic",
+      "affinity": "main",
+      "enforce_thread_affinity": true,
+      "timeout_hint_secs": 65,
+      "annotations": {
+        "read_only_hint": false,
+        "destructive_hint": true,
+        "idempotent_hint": false,
+        "open_world_hint": false,
+        "deferred_hint": true
+      },
+      "next-tools": {
+        "on-failure": [
+          "inspect_pipeline"
+        ]
+      }
+    },
+    {
+      "name": "open_dataset",
+      "description": "Open one local VTI, VTP or VTU dataset as a uniquely named source.",
+      "source_file": "scripts/open_dataset.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          }
+        },
+        "required": [
+          "name",
+          "path"
+        ],
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "context": {
+            "type": "object"
+          },
+          "job_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "running",
+              "completed",
+              "failed",
+              "cancelled",
+              "interrupted"
+            ]
+          }
+        },
+        "anyOf": [
+          {
+            "required": [
+              "job_id",
+              "status"
+            ]
+          },
+          {
+            "required": [
+              "success",
+              "context"
+            ]
+          }
+        ]
+      },
+      "execution": "async",
+      "job_strategy": "monolithic",
+      "affinity": "main",
+      "enforce_thread_affinity": true,
+      "timeout_hint_secs": 65,
+      "annotations": {
+        "read_only_hint": false,
+        "destructive_hint": true,
+        "idempotent_hint": false,
+        "open_world_hint": false,
+        "deferred_hint": true
+      },
+      "next-tools": {
+        "on-failure": [
+          "inspect_pipeline"
+        ]
+      }
+    },
+    {
+      "name": "render_preview",
+      "description": "Render a bounded PNG using a configured working DISPLAY; verify dimensions.",
+      "source_file": "scripts/render_preview.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          },
+          "width": {
+            "type": "integer",
+            "minimum": 64,
+            "maximum": 2048,
+            "default": 800
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 64,
+            "maximum": 2048,
+            "default": 600
+          },
+          "scalar": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9 _-]{0,63}$"
+          },
+          "color_range": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "type": "number",
+              "minimum": -1000000000.0,
+              "maximum": 1000000000.0
+            }
+          },
+          "preset": {
+            "type": "string",
+            "enum": [
+              "Cool to Warm (Extended)",
+              "Viridis (matplotlib)",
+              "Inferno (matplotlib)",
+              "Black-Body Radiation"
+            ],
+            "default": "Cool to Warm (Extended)"
+          },
+          "camera_position": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": -1000000.0,
+              "maximum": 1000000.0
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "camera_target": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": -1000000.0,
+              "maximum": 1000000.0
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "background": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "solid_color": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "description": "Solid RGB surface color; mutually exclusive with scalar."
+          },
+          "show_scalar_bar": {
+            "type": "boolean",
+            "default": true
+          },
+          "camera_view_up": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": {
+              "type": "number",
+              "minimum": -1000000.0,
+              "maximum": 1000000.0
+            },
+            "description": "Nonzero view-up vector; must not be parallel to camera direction."
+          },
+          "camera_parallel_scale": {
+            "type": "number",
+            "minimum": 0.001,
+            "maximum": 1000000.0,
+            "description": "When supplied, enable orthographic projection with this half-height; otherwise perspective projection."
+          },
+          "camera_view_angle": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 120,
+            "default": 30
+          },
+          "ambient": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0
+          },
+          "diffuse": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 1
+          },
+          "specular": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0
+          },
+          "specular_power": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 128,
+            "default": 100
+          },
+          "show_orientation_axes": {
+            "type": "boolean",
+            "default": false
+          }
+        },
+        "required": [
+          "name",
+          "path"
+        ],
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "context": {
+            "type": "object"
+          },
+          "job_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "running",
+              "completed",
+              "failed",
+              "cancelled",
+              "interrupted"
+            ]
+          }
+        },
+        "anyOf": [
+          {
+            "required": [
+              "job_id",
+              "status"
+            ]
+          },
+          {
+            "required": [
+              "success",
+              "context"
+            ]
+          }
+        ]
+      },
+      "execution": "async",
+      "job_strategy": "monolithic",
+      "affinity": "main",
+      "enforce_thread_affinity": true,
+      "timeout_hint_secs": 65,
+      "annotations": {
+        "read_only_hint": false,
+        "destructive_hint": true,
+        "idempotent_hint": false,
+        "open_world_hint": false,
+        "deferred_hint": true
+      },
+      "next-tools": {
+        "on-failure": [
+          "inspect_pipeline"
+        ]
+      }
+    },
+    {
+      "name": "contour",
+      "description": "Create bounded isosurfaces from a named single-component point scalar.",
+      "source_file": "scripts/contour.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+          },
+          "input_name": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+          },
+          "scalar": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9 _-]{0,63}$"
+          },
+          "values": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 8,
+            "items": {
+              "type": "number",
+              "minimum": -1000000000.0,
+              "maximum": 1000000000.0
+            }
+          }
+        },
+        "required": [
+          "name",
+          "input_name",
+          "scalar",
+          "values"
+        ],
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "context": {
+            "type": "object"
+          },
+          "job_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "running",
+              "completed",
+              "failed",
+              "cancelled",
+              "interrupted"
+            ]
+          }
+        },
+        "anyOf": [
+          {
+            "required": [
+              "job_id",
+              "status"
+            ]
+          },
+          {
+            "required": [
+              "success",
+              "context"
+            ]
+          }
+        ]
+      },
+      "execution": "async",
+      "job_strategy": "monolithic",
+      "affinity": "main",
+      "enforce_thread_affinity": true,
+      "timeout_hint_secs": 65,
+      "annotations": {
+        "read_only_hint": false,
+        "destructive_hint": true,
+        "idempotent_hint": false,
+        "open_world_hint": false,
+        "deferred_hint": true
+      },
+      "next-tools": {
+        "on-failure": [
+          "inspect_pipeline"
+        ]
+      }
+    },
+    {
+      "name": "get_adapter_info",
+      "description": "Read pure adapter capabilities without touching the native host.",
+      "source_file": "scripts/get_adapter_info.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "context": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "success",
+          "context"
+        ]
+      },
+      "execution": "sync",
+      "job_strategy": "monolithic",
+      "affinity": "any",
+      "enforce_thread_affinity": true,
+      "timeout_hint_secs": 65,
+      "annotations": {
+        "read_only_hint": true,
+        "destructive_hint": false,
+        "idempotent_hint": true,
+        "open_world_hint": false,
+        "deferred_hint": false
+      }
+    }
+  ]
+}
