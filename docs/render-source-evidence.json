@@ -1,0 +1,190 @@
+{
+  "protocol_version": "2025-06-18",
+  "host": {
+    "pid": 50641,
+    "thread_id": 139680647955840,
+    "main_thread_id": 139680647955840,
+    "version": "5.13.2",
+    "render_available": true,
+    "render_prerequisite": "DISPLAY is present; context creation is not guaranteed"
+  },
+  "listener": "127.0.0.1",
+  "cleanup": {
+    "host_exited": true,
+    "pump_stopped": true,
+    "server_stopped": true
+  },
+  "operations": [
+    {
+      "name": "open_dataset",
+      "success": true,
+      "postcondition": {
+        "method": "host_api_readback",
+        "operation": "open_dataset",
+        "verified": true
+      }
+    },
+    {
+      "name": "contour",
+      "success": true,
+      "postcondition": {
+        "method": "host_api_readback",
+        "operation": "contour",
+        "verified": true
+      }
+    },
+    {
+      "name": "render_preview",
+      "success": true,
+      "postcondition": {
+        "method": "host_api_readback",
+        "operation": "render_preview",
+        "verified": true
+      },
+      "artifact": {
+        "path": "<adapter-workspace>/render-acceptance-ys2Xy4/preview.png",
+        "bytes": 19334,
+        "sha256": "344b02de4f80a4697339c0cf972984d5ccb1d22e12f612ac90d371e299f887aa",
+        "dimensions": [
+          320,
+          240
+        ],
+        "pixel_ranges": [
+          [
+            0.0,
+            255.0
+          ],
+          [
+            0.0,
+            255.0
+          ],
+          [
+            0.0,
+            255.0
+          ]
+        ],
+        "view": {
+          "camera_position": [
+            9.0,
+            7.0,
+            6.0
+          ],
+          "camera_target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "camera_view_up": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "background": [
+            0.1,
+            0.15,
+            0.2
+          ],
+          "view_size": [
+            320,
+            240
+          ],
+          "representation": "Surface",
+          "scalar": "RadiusSquared",
+          "color_range": [
+            0.0,
+            10.0
+          ],
+          "preset": "Viridis (matplotlib)",
+          "control_point_count": 256,
+          "control_points_sha256": "fa4b385ce00f9fac08410d3171a26872bd238b3be153bad9f2f2cc167959a81d"
+        }
+      }
+    },
+    {
+      "name": "save_state",
+      "success": true,
+      "postcondition": {
+        "method": "host_api_readback",
+        "operation": "save_state",
+        "verified": true
+      }
+    },
+    {
+      "name": "reopen_state",
+      "success": true,
+      "postcondition": {
+        "method": "host_api_readback",
+        "operation": "reopen_state",
+        "verified": true
+      }
+    },
+    {
+      "name": "render_preview",
+      "success": true,
+      "postcondition": {
+        "method": "host_api_readback",
+        "operation": "render_preview",
+        "verified": true
+      },
+      "artifact": {
+        "path": "<adapter-workspace>/render-acceptance-ys2Xy4/reopened-preview.png",
+        "bytes": 19334,
+        "sha256": "344b02de4f80a4697339c0cf972984d5ccb1d22e12f612ac90d371e299f887aa",
+        "dimensions": [
+          320,
+          240
+        ],
+        "pixel_ranges": [
+          [
+            0.0,
+            255.0
+          ],
+          [
+            0.0,
+            255.0
+          ],
+          [
+            0.0,
+            255.0
+          ]
+        ],
+        "view": {
+          "camera_position": [
+            9.0,
+            7.0,
+            6.0
+          ],
+          "camera_target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "camera_view_up": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "background": [
+            0.1,
+            0.15,
+            0.2
+          ],
+          "view_size": [
+            320,
+            240
+          ],
+          "representation": "Surface",
+          "scalar": "RadiusSquared",
+          "color_range": [
+            0.0,
+            10.0
+          ],
+          "preset": "Viridis (matplotlib)",
+          "control_point_count": 256,
+          "control_points_sha256": "fa4b385ce00f9fac08410d3171a26872bd238b3be153bad9f2f2cc167959a81d"
+        }
+      }
+    }
+  ],
+  "reopened_png_identical": true
+}

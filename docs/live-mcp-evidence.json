@@ -1,0 +1,23 @@
+{
+  "core_version": "0.20.39",
+  "server_version": "0.20.39",
+  "sdk_version": "1.30.0",
+  "listener": "127.0.0.1",
+  "operations": [
+    "create_sphere",
+    "edit_sphere",
+    "clip_plane",
+    "export_dataset",
+    "open_dataset",
+    "save_state",
+    "edit_sphere",
+    "reopen_state"
+  ],
+  "protocol_version": "2025-06-18",
+  "host_version": "5.13.2",
+  "cleanup": {
+    "host_exited": true,
+    "listener_closed": true,
+    "registry_removed": true
+  }
+}

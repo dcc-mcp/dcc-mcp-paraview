@@ -1,0 +1,43 @@
+{
+  "wheel_sha256": "b75a0799694b9d15f0b80ad89bac3dff562ee23b85ad25f3999f18d44cb0c4d3",
+  "runtime_files": {
+    "src/dcc_mcp_paraview/__init__.py": "cb6a9cbc87c6785d940a6af708cd2696105754332fbf9f12c818d252c9925724",
+    "src/dcc_mcp_paraview/bridge.py": "48aaf72e624f365f4c929b22d7797be440b1db160225d768e194b067e445b94d",
+    "src/dcc_mcp_paraview/cli.py": "a0eb04557080aa49e1ec9979031dab78813370dcaf232e7ddde7286e370f2fa1",
+    "src/dcc_mcp_paraview/compatibility.py": "5d52249c9085c4dea502f00700f30e007e243fe3865272c4436930e99e55671c",
+    "src/dcc_mcp_paraview/contracts.py": "b04d1fc0bb089008ae9da82d4829e7c9bd469f857b0a310f2492e4608583ab96",
+    "src/dcc_mcp_paraview/host_driver.py": "c5364c6946666ea6e78f58ca87cfdb2f212d2910c1bf422abdb6c1b043191edc",
+    "src/dcc_mcp_paraview/server.py": "6bcaf8f41d62022c77a645f151ecd7a80dac8b0619a465aa6062086f2b5ebd28",
+    "src/dcc_mcp_paraview/skills/paraview-pipeline/SKILL.md": "567d343a7bdd21209886fb38d71b7418a1e9df42547380f8376c1da22e8004ac",
+    "src/dcc_mcp_paraview/skills/paraview-pipeline/tools.yaml": "2f696f2c891264cf020d837fda1530ea87eb992b1d35374d8848d021fc7d3d43",
+    "src/dcc_mcp_paraview/skills/paraview-pipeline/agents/openai.yaml": "f1bedb0c7f92dfb40ed0b4923403edcc5a8f7341dbd4d26a809aa098c84ea8a0",
+    "src/dcc_mcp_paraview/skills/paraview-pipeline/scripts/clip_plane.py": "8d86768eb31ea6125a613c04cedfefdbbb0d81d4d1fe24fb31edbc32872dc23a",
+    "src/dcc_mcp_paraview/skills/paraview-pipeline/scripts/contour.py": "2a5228c31eec057f0601852448c1b4eee7866fe619cb26f4e97ca8a804e793b8",
+    "src/dcc_mcp_paraview/skills/paraview-pipeline/scripts/create_sphere.py": "11bd6d891c32478e050971c9a99f8aa9422d8852496bf0a06462f62e265f2a45",
+    "src/dcc_mcp_paraview/skills/paraview-pipeline/scripts/edit_sphere.py": "3c7f210a558e1d7e2f068ab10da7bee3d2220470d42b70aac89b1bdde05fb560",
+    "src/dcc_mcp_paraview/skills/paraview-pipeline/scripts/export_dataset.py": "0112519f8ae97c521928d62ac03f99e81eaddedb24db9b39c68292f280d325ad",
+    "src/dcc_mcp_paraview/skills/paraview-pipeline/scripts/get_adapter_info.py": "c16944c46242c5e79a5af0e184e0a6fcaa067bb1c12f7fc79862d82cc51a7dfb",
+    "src/dcc_mcp_paraview/skills/paraview-pipeline/scripts/inspect_pipeline.py": "8405e7590d1396916fcadd3b409f1415abfe2ee7f9d37dfc38794625b90fdede",
+    "src/dcc_mcp_paraview/skills/paraview-pipeline/scripts/open_dataset.py": "0358d9cd1ca02bc1bc1029c6481cc67825674e3901d2208ecce7ed22cebac0f3",
+    "src/dcc_mcp_paraview/skills/paraview-pipeline/scripts/render_preview.py": "cf292e035be2a43899cb1db72b270514123f767a3ce280565118a875eb522421",
+    "src/dcc_mcp_paraview/skills/paraview-pipeline/scripts/reopen_state.py": "24523ef523be3d5b50330dd5005886f29db2511d85479500756304787557402b",
+    "src/dcc_mcp_paraview/skills/paraview-pipeline/scripts/save_state.py": "6a3768f493810a40fe35f355c2dd428ed64eaee31475f8b6cd6f6e4f6b4d370e"
+  },
+  "all_wheel_runtime_files_match_source": true,
+  "source_tests": "68 passed, 1 skipped",
+  "portable_tests": "59 passed, 10 deselected",
+  "installed_wheel_tests": "68 passed, 1 skipped",
+  "reinstalled_wheel_tests": "68 passed, 1 skipped",
+  "source_display_tests": "1 passed",
+  "installed_display_tests": "1 passed",
+  "qualified_profile": {
+    "core": "0.20.39",
+    "server": "0.20.39",
+    "mcp_sdk": "1.30.0",
+    "paraview": "5.13.2",
+    "sidecar_python": "3.12.14",
+    "vendor_python": "3.13.5",
+    "platform": "Linux",
+    "rendering": "DISPLAY-backed --force-offscreen-rendering"
+  }
+}

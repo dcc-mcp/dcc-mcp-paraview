@@ -1,0 +1,56 @@
+name: Test and package
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      native:
+        description: Run qualified self-hosted ParaView and isolated DISPLAY acceptance
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  portable:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.10", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - run: python -m pip install -e '.[dev]'
+      - run: python -m ruff check src tests
+      - run: python -m ruff format --check src tests
+      - run: python -m pytest --strict-markers -m 'not paraview'
+      - run: WHEEL_VALIDATION_ROOT=/tmp/paraview-wheel scripts/validate-wheel.sh -m 'not paraview'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheel-${{ matrix.python }}
+          path: /tmp/paraview-wheel/dist/*
+  native:
+    if: github.event_name == 'workflow_dispatch' && inputs.native
+    runs-on: [self-hosted, linux, dcc-paraview-5.13.2]
+    env:
+      # Runner owners provide a dedicated test display. Never point this at a user's open GUI scene.
+      DISPLAY: ${{ vars.PARAVIEW_TEST_DISPLAY }}
+      PARAVIEW_RENDER_ACCEPTANCE: "1"
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: command -v pvpython && test -n "$DISPLAY"
+      - run: python -m pip install -e '.[dev]'
+      - run: python -m pytest --strict-markers -m paraview
+      - run: WHEEL_VALIDATION_ROOT=/tmp/paraview-native-wheel scripts/validate-wheel.sh -m paraview
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: native-wheel
+          path: /tmp/paraview-native-wheel/dist/*
+  repo-contract:
+    uses: dcc-mcp/.github/.github/workflows/repo-contract.yml@main

@@ -1,0 +1,238 @@
+{
+  "steps": [
+    {
+      "name": "create-venv",
+      "command": [
+        "uv",
+        "venv",
+        "--python",
+        "<baseline-environment>/.venv/bin/python",
+        "<adapter-workspace>/qa-lifecycle/venv"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "baseline-install",
+      "command": [
+        "uv",
+        "pip",
+        "install",
+        "--python",
+        "<adapter-workspace>/qa-lifecycle/venv/bin/python",
+        "<baseline-artifacts>/dcc_mcp_paraview-0.1.0-py3-none-any.whl[dev]"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "fingerprint-2",
+      "command": [
+        "<adapter-workspace>/qa-lifecycle/venv/bin/python",
+        "-I",
+        "-c",
+        "import dcc_mcp_paraview,hashlib,json,importlib.metadata;from pathlib import Path;p=Path(dcc_mcp_paraview.__file__).parent;print(json.dumps({'origin':str(p),'version':importlib.metadata.version('dcc-mcp-paraview'),'files':{str(f.relative_to(p)):hashlib.sha256(f.read_bytes()).hexdigest() for f in sorted(p.rglob('*')) if f.is_file() and '__pycache__' not in f.parts}}))"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "final-upgrade",
+      "command": [
+        "uv",
+        "pip",
+        "install",
+        "--python",
+        "<adapter-workspace>/qa-lifecycle/venv/bin/python",
+        "--reinstall-package",
+        "dcc-mcp-paraview",
+        "<adapter-workspace>/qa-wheel/dist/dcc_mcp_paraview-0.1.0-py3-none-any.whl[dev]"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "fingerprint-4",
+      "command": [
+        "<adapter-workspace>/qa-lifecycle/venv/bin/python",
+        "-I",
+        "-c",
+        "import dcc_mcp_paraview,hashlib,json,importlib.metadata;from pathlib import Path;p=Path(dcc_mcp_paraview.__file__).parent;print(json.dumps({'origin':str(p),'version':importlib.metadata.version('dcc-mcp-paraview'),'files':{str(f.relative_to(p)):hashlib.sha256(f.read_bytes()).hexdigest() for f in sorted(p.rglob('*')) if f.is_file() and '__pycache__' not in f.parts}}))"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "corrupt-upgrade",
+      "command": [
+        "uv",
+        "pip",
+        "install",
+        "--python",
+        "<adapter-workspace>/qa-lifecycle/venv/bin/python",
+        "--reinstall-package",
+        "dcc-mcp-paraview",
+        "<adapter-workspace>/qa-lifecycle/corrupted/dcc_mcp_paraview-0.1.0-py3-none-any.whl"
+      ],
+      "exit_code": 1
+    },
+    {
+      "name": "fingerprint-6",
+      "command": [
+        "<adapter-workspace>/qa-lifecycle/venv/bin/python",
+        "-I",
+        "-c",
+        "import dcc_mcp_paraview,hashlib,json,importlib.metadata;from pathlib import Path;p=Path(dcc_mcp_paraview.__file__).parent;print(json.dumps({'origin':str(p),'version':importlib.metadata.version('dcc-mcp-paraview'),'files':{str(f.relative_to(p)):hashlib.sha256(f.read_bytes()).hexdigest() for f in sorted(p.rglob('*')) if f.is_file() and '__pycache__' not in f.parts}}))"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "uninstall",
+      "command": [
+        "uv",
+        "pip",
+        "uninstall",
+        "--python",
+        "<adapter-workspace>/qa-lifecycle/venv/bin/python",
+        "dcc-mcp-paraview"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "verify-uninstalled",
+      "command": [
+        "<adapter-workspace>/qa-lifecycle/venv/bin/python",
+        "-I",
+        "-c",
+        "import importlib.util; assert importlib.util.find_spec('dcc_mcp_paraview') is None; print('import unavailable')"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "final-reinstall",
+      "command": [
+        "uv",
+        "pip",
+        "install",
+        "--python",
+        "<adapter-workspace>/qa-lifecycle/venv/bin/python",
+        "<adapter-workspace>/qa-wheel/dist/dcc_mcp_paraview-0.1.0-py3-none-any.whl[dev]"
+      ],
+      "exit_code": 0
+    },
+    {
+      "name": "fingerprint-10",
+      "command": [
+        "<adapter-workspace>/qa-lifecycle/venv/bin/python",
+        "-I",
+        "-c",
+        "import dcc_mcp_paraview,hashlib,json,importlib.metadata;from pathlib import Path;p=Path(dcc_mcp_paraview.__file__).parent;print(json.dumps({'origin':str(p),'version':importlib.metadata.version('dcc-mcp-paraview'),'files':{str(f.relative_to(p)):hashlib.sha256(f.read_bytes()).hexdigest() for f in sorted(p.rglob('*')) if f.is_file() and '__pycache__' not in f.parts}}))"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "baseline_sha256": "e0a90cacb15a126ad4e5452d124198f67510b5aa77342592680350f75ab73073",
+  "final_sha256": "b75a0799694b9d15f0b80ad89bac3dff562ee23b85ad25f3999f18d44cb0c4d3",
+  "baseline": {
+    "origin": "<adapter-workspace>/qa-lifecycle/venv/lib/python3.12/site-packages/dcc_mcp_paraview",
+    "version": "0.1.0",
+    "files": {
+      "__init__.py": "cb6a9cbc87c6785d940a6af708cd2696105754332fbf9f12c818d252c9925724",
+      "bridge.py": "0dd22c5152ecfd7653248ee9e9ee166aa20b9fab404140f97bee27cf84f4ddd1",
+      "cli.py": "a0eb04557080aa49e1ec9979031dab78813370dcaf232e7ddde7286e370f2fa1",
+      "contracts.py": "880d9d7749236f978d5ab2e1142b5599bfb9807e873747ac27a09d4d0079af56",
+      "host_driver.py": "f0f8ac26b2d9b3ec0c14b97db917f8d6017775b4a9226ebdefeb597b7989ce2e",
+      "server.py": "375f607fa66fd14b4d4b98056439330c2ba7767348249a177bf71f7c9e0415f2",
+      "skills/paraview-pipeline/SKILL.md": "c240a97354fe2b02900d1d4a74e076c86cab7cb8f59cde4211d60afaee96f6d4",
+      "skills/paraview-pipeline/agents/openai.yaml": "f1bedb0c7f92dfb40ed0b4923403edcc5a8f7341dbd4d26a809aa098c84ea8a0",
+      "skills/paraview-pipeline/scripts/clip_plane.py": "8d86768eb31ea6125a613c04cedfefdbbb0d81d4d1fe24fb31edbc32872dc23a",
+      "skills/paraview-pipeline/scripts/contour.py": "2a5228c31eec057f0601852448c1b4eee7866fe619cb26f4e97ca8a804e793b8",
+      "skills/paraview-pipeline/scripts/create_sphere.py": "11bd6d891c32478e050971c9a99f8aa9422d8852496bf0a06462f62e265f2a45",
+      "skills/paraview-pipeline/scripts/edit_sphere.py": "3c7f210a558e1d7e2f068ab10da7bee3d2220470d42b70aac89b1bdde05fb560",
+      "skills/paraview-pipeline/scripts/export_dataset.py": "0112519f8ae97c521928d62ac03f99e81eaddedb24db9b39c68292f280d325ad",
+      "skills/paraview-pipeline/scripts/get_adapter_info.py": "2b168cc260aaaf5c960afaa2a291dd53af1ee3a46000927b000975ee924ba6bf",
+      "skills/paraview-pipeline/scripts/inspect_pipeline.py": "8405e7590d1396916fcadd3b409f1415abfe2ee7f9d37dfc38794625b90fdede",
+      "skills/paraview-pipeline/scripts/open_dataset.py": "0358d9cd1ca02bc1bc1029c6481cc67825674e3901d2208ecce7ed22cebac0f3",
+      "skills/paraview-pipeline/scripts/render_preview.py": "cf292e035be2a43899cb1db72b270514123f767a3ce280565118a875eb522421",
+      "skills/paraview-pipeline/scripts/reopen_state.py": "24523ef523be3d5b50330dd5005886f29db2511d85479500756304787557402b",
+      "skills/paraview-pipeline/scripts/save_state.py": "6a3768f493810a40fe35f355c2dd428ed64eaee31475f8b6cd6f6e4f6b4d370e",
+      "skills/paraview-pipeline/tools.yaml": "758a6c3186d36ba2d5910a320b15c8a81b69d0a25dab5e9d9a18a71bc3bd5c33"
+    }
+  },
+  "upgraded": {
+    "origin": "<adapter-workspace>/qa-lifecycle/venv/lib/python3.12/site-packages/dcc_mcp_paraview",
+    "version": "0.1.0",
+    "files": {
+      "__init__.py": "cb6a9cbc87c6785d940a6af708cd2696105754332fbf9f12c818d252c9925724",
+      "bridge.py": "48aaf72e624f365f4c929b22d7797be440b1db160225d768e194b067e445b94d",
+      "cli.py": "a0eb04557080aa49e1ec9979031dab78813370dcaf232e7ddde7286e370f2fa1",
+      "compatibility.py": "5d52249c9085c4dea502f00700f30e007e243fe3865272c4436930e99e55671c",
+      "contracts.py": "b04d1fc0bb089008ae9da82d4829e7c9bd469f857b0a310f2492e4608583ab96",
+      "host_driver.py": "c5364c6946666ea6e78f58ca87cfdb2f212d2910c1bf422abdb6c1b043191edc",
+      "server.py": "6bcaf8f41d62022c77a645f151ecd7a80dac8b0619a465aa6062086f2b5ebd28",
+      "skills/paraview-pipeline/SKILL.md": "567d343a7bdd21209886fb38d71b7418a1e9df42547380f8376c1da22e8004ac",
+      "skills/paraview-pipeline/agents/openai.yaml": "f1bedb0c7f92dfb40ed0b4923403edcc5a8f7341dbd4d26a809aa098c84ea8a0",
+      "skills/paraview-pipeline/scripts/clip_plane.py": "8d86768eb31ea6125a613c04cedfefdbbb0d81d4d1fe24fb31edbc32872dc23a",
+      "skills/paraview-pipeline/scripts/contour.py": "2a5228c31eec057f0601852448c1b4eee7866fe619cb26f4e97ca8a804e793b8",
+      "skills/paraview-pipeline/scripts/create_sphere.py": "11bd6d891c32478e050971c9a99f8aa9422d8852496bf0a06462f62e265f2a45",
+      "skills/paraview-pipeline/scripts/edit_sphere.py": "3c7f210a558e1d7e2f068ab10da7bee3d2220470d42b70aac89b1bdde05fb560",
+      "skills/paraview-pipeline/scripts/export_dataset.py": "0112519f8ae97c521928d62ac03f99e81eaddedb24db9b39c68292f280d325ad",
+      "skills/paraview-pipeline/scripts/get_adapter_info.py": "c16944c46242c5e79a5af0e184e0a6fcaa067bb1c12f7fc79862d82cc51a7dfb",
+      "skills/paraview-pipeline/scripts/inspect_pipeline.py": "8405e7590d1396916fcadd3b409f1415abfe2ee7f9d37dfc38794625b90fdede",
+      "skills/paraview-pipeline/scripts/open_dataset.py": "0358d9cd1ca02bc1bc1029c6481cc67825674e3901d2208ecce7ed22cebac0f3",
+      "skills/paraview-pipeline/scripts/render_preview.py": "cf292e035be2a43899cb1db72b270514123f767a3ce280565118a875eb522421",
+      "skills/paraview-pipeline/scripts/reopen_state.py": "24523ef523be3d5b50330dd5005886f29db2511d85479500756304787557402b",
+      "skills/paraview-pipeline/scripts/save_state.py": "6a3768f493810a40fe35f355c2dd428ed64eaee31475f8b6cd6f6e4f6b4d370e",
+      "skills/paraview-pipeline/tools.yaml": "2f696f2c891264cf020d837fda1530ea87eb992b1d35374d8848d021fc7d3d43"
+    }
+  },
+  "after_corrupt": {
+    "origin": "<adapter-workspace>/qa-lifecycle/venv/lib/python3.12/site-packages/dcc_mcp_paraview",
+    "version": "0.1.0",
+    "files": {
+      "__init__.py": "cb6a9cbc87c6785d940a6af708cd2696105754332fbf9f12c818d252c9925724",
+      "bridge.py": "48aaf72e624f365f4c929b22d7797be440b1db160225d768e194b067e445b94d",
+      "cli.py": "a0eb04557080aa49e1ec9979031dab78813370dcaf232e7ddde7286e370f2fa1",
+      "compatibility.py": "5d52249c9085c4dea502f00700f30e007e243fe3865272c4436930e99e55671c",
+      "contracts.py": "b04d1fc0bb089008ae9da82d4829e7c9bd469f857b0a310f2492e4608583ab96",
+      "host_driver.py": "c5364c6946666ea6e78f58ca87cfdb2f212d2910c1bf422abdb6c1b043191edc",
+      "server.py": "6bcaf8f41d62022c77a645f151ecd7a80dac8b0619a465aa6062086f2b5ebd28",
+      "skills/paraview-pipeline/SKILL.md": "567d343a7bdd21209886fb38d71b7418a1e9df42547380f8376c1da22e8004ac",
+      "skills/paraview-pipeline/agents/openai.yaml": "f1bedb0c7f92dfb40ed0b4923403edcc5a8f7341dbd4d26a809aa098c84ea8a0",
+      "skills/paraview-pipeline/scripts/clip_plane.py": "8d86768eb31ea6125a613c04cedfefdbbb0d81d4d1fe24fb31edbc32872dc23a",
+      "skills/paraview-pipeline/scripts/contour.py": "2a5228c31eec057f0601852448c1b4eee7866fe619cb26f4e97ca8a804e793b8",
+      "skills/paraview-pipeline/scripts/create_sphere.py": "11bd6d891c32478e050971c9a99f8aa9422d8852496bf0a06462f62e265f2a45",
+      "skills/paraview-pipeline/scripts/edit_sphere.py": "3c7f210a558e1d7e2f068ab10da7bee3d2220470d42b70aac89b1bdde05fb560",
+      "skills/paraview-pipeline/scripts/export_dataset.py": "0112519f8ae97c521928d62ac03f99e81eaddedb24db9b39c68292f280d325ad",
+      "skills/paraview-pipeline/scripts/get_adapter_info.py": "c16944c46242c5e79a5af0e184e0a6fcaa067bb1c12f7fc79862d82cc51a7dfb",
+      "skills/paraview-pipeline/scripts/inspect_pipeline.py": "8405e7590d1396916fcadd3b409f1415abfe2ee7f9d37dfc38794625b90fdede",
+      "skills/paraview-pipeline/scripts/open_dataset.py": "0358d9cd1ca02bc1bc1029c6481cc67825674e3901d2208ecce7ed22cebac0f3",
+      "skills/paraview-pipeline/scripts/render_preview.py": "cf292e035be2a43899cb1db72b270514123f767a3ce280565118a875eb522421",
+      "skills/paraview-pipeline/scripts/reopen_state.py": "24523ef523be3d5b50330dd5005886f29db2511d85479500756304787557402b",
+      "skills/paraview-pipeline/scripts/save_state.py": "6a3768f493810a40fe35f355c2dd428ed64eaee31475f8b6cd6f6e4f6b4d370e",
+      "skills/paraview-pipeline/tools.yaml": "2f696f2c891264cf020d837fda1530ea87eb992b1d35374d8848d021fc7d3d43"
+    }
+  },
+  "reinstalled": {
+    "origin": "<adapter-workspace>/qa-lifecycle/venv/lib/python3.12/site-packages/dcc_mcp_paraview",
+    "version": "0.1.0",
+    "files": {
+      "__init__.py": "cb6a9cbc87c6785d940a6af708cd2696105754332fbf9f12c818d252c9925724",
+      "bridge.py": "48aaf72e624f365f4c929b22d7797be440b1db160225d768e194b067e445b94d",
+      "cli.py": "a0eb04557080aa49e1ec9979031dab78813370dcaf232e7ddde7286e370f2fa1",
+      "compatibility.py": "5d52249c9085c4dea502f00700f30e007e243fe3865272c4436930e99e55671c",
+      "contracts.py": "b04d1fc0bb089008ae9da82d4829e7c9bd469f857b0a310f2492e4608583ab96",
+      "host_driver.py": "c5364c6946666ea6e78f58ca87cfdb2f212d2910c1bf422abdb6c1b043191edc",
+      "server.py": "6bcaf8f41d62022c77a645f151ecd7a80dac8b0619a465aa6062086f2b5ebd28",
+      "skills/paraview-pipeline/SKILL.md": "567d343a7bdd21209886fb38d71b7418a1e9df42547380f8376c1da22e8004ac",
+      "skills/paraview-pipeline/agents/openai.yaml": "f1bedb0c7f92dfb40ed0b4923403edcc5a8f7341dbd4d26a809aa098c84ea8a0",
+      "skills/paraview-pipeline/scripts/clip_plane.py": "8d86768eb31ea6125a613c04cedfefdbbb0d81d4d1fe24fb31edbc32872dc23a",
+      "skills/paraview-pipeline/scripts/contour.py": "2a5228c31eec057f0601852448c1b4eee7866fe619cb26f4e97ca8a804e793b8",
+      "skills/paraview-pipeline/scripts/create_sphere.py": "11bd6d891c32478e050971c9a99f8aa9422d8852496bf0a06462f62e265f2a45",
+      "skills/paraview-pipeline/scripts/edit_sphere.py": "3c7f210a558e1d7e2f068ab10da7bee3d2220470d42b70aac89b1bdde05fb560",
+      "skills/paraview-pipeline/scripts/export_dataset.py": "0112519f8ae97c521928d62ac03f99e81eaddedb24db9b39c68292f280d325ad",
+      "skills/paraview-pipeline/scripts/get_adapter_info.py": "c16944c46242c5e79a5af0e184e0a6fcaa067bb1c12f7fc79862d82cc51a7dfb",
+      "skills/paraview-pipeline/scripts/inspect_pipeline.py": "8405e7590d1396916fcadd3b409f1415abfe2ee7f9d37dfc38794625b90fdede",
+      "skills/paraview-pipeline/scripts/open_dataset.py": "0358d9cd1ca02bc1bc1029c6481cc67825674e3901d2208ecce7ed22cebac0f3",
+      "skills/paraview-pipeline/scripts/render_preview.py": "cf292e035be2a43899cb1db72b270514123f767a3ce280565118a875eb522421",
+      "skills/paraview-pipeline/scripts/reopen_state.py": "24523ef523be3d5b50330dd5005886f29db2511d85479500756304787557402b",
+      "skills/paraview-pipeline/scripts/save_state.py": "6a3768f493810a40fe35f355c2dd428ed64eaee31475f8b6cd6f6e4f6b4d370e",
+      "skills/paraview-pipeline/tools.yaml": "2f696f2c891264cf020d837fda1530ea87eb992b1d35374d8848d021fc7d3d43"
+    }
+  }
+}

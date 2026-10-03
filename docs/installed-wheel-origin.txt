@@ -1,0 +1,2 @@
+<adapter-workspace>/qa-wheel/venv/lib/python3.12/site-packages/dcc_mcp_paraview/__init__.py
+{'dcc-mcp-core': '0.20.39', 'dcc-mcp-server': '0.20.39', 'mcp': '1.30.0'}

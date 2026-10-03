@@ -1,0 +1,4 @@
+interface:
+  display_name: ParaView pipeline
+  short_description: Bounded scientific pipeline editing and artifact export
+  default_prompt: Inspect the pipeline, start each typed async operation once, and follow its Core job id to terminal status. After timeout query the same job; never replay a mutation automatically.
