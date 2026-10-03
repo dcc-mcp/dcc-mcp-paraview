@@ -653,10 +653,13 @@ def main():
         except Exception as error:
             if not isinstance(request, dict) or "id" not in request or "job_id" not in request:
                 break
+            code = getattr(error, "code", None)
+            if not isinstance(code, str) or not 1 <= len(code) <= 100:
+                code = "host_error"
             response = {
                 "id": request.get("id"),
                 "job_id": request.get("job_id"),
-                "error": {"code": getattr(error, "code", "host_error"), "message": str(error)[:500]},
+                "error": {"code": code, "message": str(error)[:500]},
             }
         try:
             encoded = (json.dumps(response, allow_nan=False) + "\n").encode("utf-8")

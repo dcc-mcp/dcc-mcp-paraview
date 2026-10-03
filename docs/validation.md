@@ -1,6 +1,28 @@
 # Validation and qualification
 
-## Qualified profile, 2026-10-02
+## Core/server 0.20.41 validation and revision boundary
+
+The package currently pins Core/server 0.20.41. Separate delegated Linux
+acceptance measured exact commit `dbde182743f804a8c005d2432e3ab1e8ba97eda9`:
+
+- Native MCP acceptance passed; the source suite reported **111 passed and one
+  opt-in DISPLAY skip** in the ordinary shell lane
+- Subsequent source and fresh installed-wheel render acceptance passed native
+  camera/material/legend readback, relative PVSM relocation with identical PNG
+  reproduction, and owned host/listener cleanup
+- [Pull-request CI run 37100901589](https://github.com/dcc-mcp/dcc-mcp-paraview/actions/runs/37100901589)
+  passed on that exact commit. The native workflow job was skipped; the native
+  measurements above came from separate acceptance runs
+
+These are delegated Linux measurements, not native runs on this editing
+machine. Later review fixes change the host error protocol and render preflight;
+their exact source revision still requires fresh native acceptance and CI.
+Neither the preceding commit's CI nor its native results qualify those changes.
+Windows/macOS native support and automated Install SOP certification remain
+unqualified. [The render evidence index](render-evidence-index.md) identifies
+the older committed JSON records and their producing test revision.
+
+## Historical qualified profile, 2026-10-02, Core/server 0.20.39
 
 - Linux; sidecar Python 3.12.14; ParaView 5.13.2 with vendor Python 3.13.5
 - Released `dcc-mcp-core` and `dcc-mcp-server` **0.20.39**, official MCP SDK **1.30.0**, negotiated protocol **2025-06-18**
@@ -8,7 +30,7 @@
 - Core/server and native host versions are checked before admitting work. This is a narrow measured qualification, not a claim about other versions or operating systems
 - Display-backed rendering uses the supported `pvpython --force-offscreen-rendering` launch option and an existing operator-provided DISPLAY. No Xvfb, desktop capture, resize fallback, display reconfiguration or open-GUI-scene mutation is used
 
-## Final source and installed-code checks
+## Historical source and installed-code checks, Core/server 0.20.39
 
 - Ruff lint and formatting: pass
 - Source suite: **68 passed, 1 skipped**; only the opt-in DISPLAY render test skips in the ordinary shell lane
@@ -19,9 +41,12 @@
 - Source-display acceptance: **1 passed**, including native import, contour, scalar render, PVSM save/reopen and rerender; see [source render evidence](render-source-evidence.json)
 - Post-lifecycle installed-wheel DISPLAY acceptance: **1 passed**, with independently verified site-packages origin and the same native PNG/PVSM assertions; see [installed render evidence](render-installed-evidence.json)
 
-[Source test log](hardened-test.log), [portable test log](portable-test.log), [real MCP evidence](hardened-mcp-evidence.json), [lint](lint-check.log), and [format](format-check.log) are local artifacts. CI workflows are configured; no remote CI run or public release is claimed.
+[Source test log](hardened-test.log), [portable test log](portable-test.log), [real MCP evidence](hardened-mcp-evidence.json), [lint](lint-check.log), and [format](format-check.log) are historical artifacts. No remote CI run or public release was claimed for that 0.20.39 qualification; see the separate 0.20.41 CI status above.
 
-## Rendering evidence
+## Historical rendering evidence, Core/server 0.20.39
+
+The following describes the [historical JSON records](render-evidence-index.md),
+not the later rendering test schema or a rerun of the current review fixes.
 
 The isolated native host imports a synthetic single-file VTI, extracts contours at 4 and 6, and renders 320×240 pixels with the Viridis preset, range [0, 10], camera position [9, 7, 6], target [0, 0, 0] and background [0.1, 0.15, 0.2]. Native ParaView reads back the camera, representation enum, color-array selection, range and transfer-function points. Native VTK decodes the PNG, checks exact dimensions and nonflat RGB pixels. The preview was also inspected visually.
 

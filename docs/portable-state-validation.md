@@ -1,6 +1,6 @@
 # Native portable PVSM acceptance
 
-The native reader-property route has been verified on ParaView5.13.2. SaveState
+The native reader-property route has been verified on ParaView 5.13.2. SaveState
 has no relative-path option in that version; setting its supported reader
 FileName properties while the owned host works in the package directory produces
 relative FileName and FileNameInfo values without serialized-XML edits.
@@ -33,12 +33,17 @@ Only the established Linux host/interpreter/Core profile is qualified. All packa
 copies are synthetic. This extends project portability, not OS compatibility,
 host-complete installation, protocol certification, or general production readiness.
 
-## Measured result
+## Historical measured result, Core/server 0.20.39
 
-The final source and independent fresh installed-wheel suites each pass100 tests
+The historical source and independent fresh installed-wheel suites each pass 100 tests
 with the one explicitly opt-in display test skipped in the shell. That display
 test passes separately against both source and the installed wheel, including
 native portable SaveState, relocated exact reader mappings, and identical PNG
 SHA256 `928e0a09ccaa7874ce1fd0a04a20d67b7e5f59d307f69cfe10db21ef471d5a9f`.
 These repeated runs are not additive unique test counts. The final wheel is
 `81965de11ae7541dfa9dc04a9badb8dec0dcfa018af998bc0441a51818a3fe70`.
+
+These measurements belong to the portable-state revision on Core/server 0.20.39;
+they do not qualify the current 0.20.41 runtime or later source changes. See
+[validation](validation.md) for the separately measured 0.20.41 commit and
+[the render evidence index](render-evidence-index.md) for historical JSON provenance.

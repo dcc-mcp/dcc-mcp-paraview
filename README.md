@@ -46,7 +46,7 @@ See [the installable skill](src/dcc_mcp_paraview/skills/paraview-pipeline/SKILL.
 
 ## Deliberate limits
 
-- The candidate is Linux-only with Python 3.10–3.12 for the sidecar, independently of vendor Python. Historical native qualification used Core/server 0.20.39; repository CI targets 3.10/3.12 but has not run for this upgrade. Windows pipe handling is not implemented; Python 3.7 LTS acceptance is not claimed
+- The candidate is Linux-only with Python 3.10–3.12 for the sidecar, independently of vendor Python. Core/server 0.20.39 evidence is historical; [validation](docs/validation.md) separates the measured 0.20.41 commit and its passing CI from later review fixes awaiting fresh qualification. Windows pipe handling is not implemented; Python 3.7 LTS acceptance is not claimed
 - No attachment to existing GUI pipelines, arbitrary Python, programmable filters, remote servers, distributed MPI, time-series readers or general PVSM imports
 - Native state can contain executable filters. `reopen_state` accepts only unchanged files saved by the same live adapter session. Saved PVSM remains a native editable artifact for ParaView; after an adapter restart use verified datasets or open the native state yourself in ParaView
 - All file operations are confined to one operator-owned workspace. Inputs are limited to 64 MiB and pipelines to 32 sources. Outputs never overwrite; all symlink path components are rejected. This is a single-user tool boundary, not an OS sandbox for hostile concurrent filesystem changes or hostile native file parser inputs

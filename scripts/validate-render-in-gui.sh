@@ -2,6 +2,10 @@
 # Launch only from the operator-coordinated GUI terminal so its DISPLAY is inherited.
 set -euo pipefail
 : "${DISPLAY:?Run this in the existing authorized cloud GUI terminal}"
+command -v pvpython >/dev/null 2>&1 || {
+  printf '%s\n' "pvpython is required for render acceptance" >&2
+  exit 1
+}
 ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 PYTHON="${PARAVIEW_VALIDATION_PYTHON:-python}"
 OUT="${PARAVIEW_RENDER_WORKSPACE:-$(mktemp -d "$ROOT/render-acceptance-XXXXXX")}"

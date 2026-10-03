@@ -1,4 +1,4 @@
-# Typed rendering controls acceptance
+# Historical typed rendering controls acceptance, Core/server 0.20.39
 
 This independent revision extends the frozen Linux hardening candidate. It does
 not broaden the qualified OS/host profile or enable raw execution.
