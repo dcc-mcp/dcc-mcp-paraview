@@ -13,6 +13,9 @@ def main():
         platform="linux",
         dataset_formats=["vti", "vtp", "vtu"],
         max_sources=32,
+        max_slice_points=1000000,
+        max_slice_cells=1000000,
+        presentation_capture_requires_unchanged_readback=True,
         max_file_bytes=67108864,
         host_imported=False,
     )

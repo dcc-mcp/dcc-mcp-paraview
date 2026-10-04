@@ -70,3 +70,29 @@ For a downloaded project in ParaView's GUI, use Load State and select the
 packaged data directory if prompted. Keep original state, package and validation
 hashes. Reproducing the typed recipe in a fresh MCP session is supported; arbitrary
 external PVSM import is not. Workspaces and artifact copies must be operator-owned.
+
+## True sections and existing presentation
+
+Use `slice_plane` for a true polygonal plane section of an existing source, with
+finite origin and nonzero normal. It preserves point arrays, checks native plane
+and input bindings, caps input/output at 1,000,000 points and cells each, and
+deletes a failed new slice. It never opens or creates an implicit input. Export
+sections as `.vtp`; keep the existing 32-source session limit.
+
+`inspect_presentation` is read-only: it inventories existing views, attached
+representations and scalar bars without creating them. Camera, size, material,
+background, scalar selection, actual palette/range and legend are returned.
+Bindings use stable registered source names, so fresh native proxy IDs after
+reopen do not produce false differences. Actual RGB control points are reported;
+a preset label is not inferred. Missing camera clipping-range support is reported
+in `unavailable_properties`; no implicit camera creation is used to fill it.
+
+After configuring a view or reopening a trusted saved state, call
+`inspect_presentation`, then `capture_current_view(path)` to capture the existing
+view with no camera, size or visibility changes. Successful capture verifies
+unchanged measured presentation and decoded native PNG pixels. If ParaView's
+first render resets presentation, the tool returns `presentation_changed`,
+publishes no image and leaves the changed state available for inspection. Never
+call `render_preview` before that capture to hide a restore mismatch. Five
+separately saved viewpoint states are supported; no multi-view authoring tool
+is provided. Native qualification for these additions is pending.

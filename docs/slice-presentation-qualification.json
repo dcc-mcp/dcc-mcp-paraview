@@ -1,0 +1,884 @@
+{
+  "document_type": "Selected public qualification projection",
+  "disclosure": "This is a curated projection of private runtime evidence, not the full unmodified trace or logs. Raw files and native artifact bytes are not included.",
+  "source_identity": {
+    "repository": "https://github.com/dcc-mcp/dcc-mcp-paraview",
+    "base_commit": "4faf7c0a4e447077cf62680cefa19e48315fa373",
+    "base_tree": "37f0c64bfa2580765bfac46a1c7a48ef5b4ff190",
+    "candidate_tree": "61762e29b75e0fda72031f9c25c2c8c4a7d6445e",
+    "source_patch_sha256": "44ce051951d0eed1a9788feafcf6ad1a598c77e15a96702f56ec52d20a5434e1",
+    "tested_wheel_sha256": "24d14dbb2e670f84d7fa79d310255f3a93ab21db81ec58945c7b5eb58ac72d32"
+  },
+  "host_free_checks": {
+    "source": {
+      "passed": 151,
+      "native_graphical_deselected": 18,
+      "selection": "-m 'not paraview'"
+    },
+    "isolated_installed_wheel": {
+      "passed": 151,
+      "native_graphical_deselected": 18,
+      "selection": "-m 'not paraview'",
+      "adapter_bytes_match_wheel": true,
+      "dependency_packages_reused_read_only": true
+    },
+    "independent_review": {
+      "focused_tests_passed": 91,
+      "native_execution": false,
+      "regression": "The missing IndexedLookup Python-attribute failure reproduces on revision 2 and passes on revision 3 for raw and hidden wrapped property fixtures."
+    },
+    "ruff_lint": "passed",
+    "ruff_format": "passed",
+    "shell_syntax": "passed",
+    "clean_package_inventory": "passed"
+  },
+  "selected_native_check": {
+    "selection": "tests/test_slice_render_mcp.py::test_slice_five_saved_presentations_over_real_mcp",
+    "test_cases_executed": 1,
+    "saved_viewpoint_states": 5,
+    "capture_pairs_verified": 5,
+    "result": "passed",
+    "scope": "Only this new five-view native test is covered. This does not claim all 18 deselected native/graphical tests were executed.",
+    "runtime": {
+      "platform": "linux",
+      "sidecar_python": "3.12.14",
+      "core": "0.20.41",
+      "server": "0.20.41",
+      "official_mcp_sdk": "1.30.0",
+      "mcp_protocol": "2025-06-18",
+      "paraview": "5.13.2"
+    },
+    "transport": {
+      "official_sdk_default_configuration": true,
+      "loopback_listener_verified": true,
+      "configured_gateway_port": 0,
+      "configured_gateway_failover": false
+    },
+    "observability": {
+      "file_logging": true,
+      "job_persistence": true,
+      "job_persistence_state": "healthy",
+      "telemetry": false
+    },
+    "native_main_thread_identity_matched": true,
+    "input": {
+      "generator": "Original analytic RadiusSquared = x*x + y*y + z*z on a 7x7x7 integer lattice from -3 to 3",
+      "sha256": "20e7e6e09e18883ea424a84698722b8cb80959a7bef768224eedc9ab7330d22b"
+    },
+    "adapter_files_sha256": {
+      "host_driver.py": "29a10f3a9ddecdfc5feb9bd56cbbdf3268c4298a2d9c132e3a50d76d558d4d41",
+      "contracts.py": "a7b41885da72c2cc03936be139a1f5afb6f505c9c72c28575591b3832fe13a9c",
+      "skills/paraview-pipeline/tools.yaml": "647c20caab3ef4c1c32dec2e96f9fd7edc1f816eae081550afd5cf49357695bb"
+    },
+    "runner_sha256": "6bae0aa624d35724ed7c13dcac98fa3fc52a27de7d85d8fadc14ab621713eecd",
+    "pipeline_sources": [
+      {
+        "name": "Section",
+        "type": "Cut",
+        "points": 49,
+        "cells": 72,
+        "bounds": [
+          0.0,
+          0.0,
+          -3.0,
+          3.0,
+          -3.0,
+          3.0
+        ],
+        "point_arrays": [
+          {
+            "name": "RadiusSquared",
+            "components": 1,
+            "range": [
+              0.0,
+              18.0
+            ]
+          }
+        ],
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "offsets": [
+          0.0
+        ],
+        "crinkle": false,
+        "triangulate": true,
+        "input_bindings": [
+          {
+            "source_names": [
+              "Volume"
+            ],
+            "port": 0
+          }
+        ]
+      },
+      {
+        "name": "Volume",
+        "type": "XMLImageDataReader",
+        "points": 343,
+        "cells": 216,
+        "bounds": [
+          -3.0,
+          3.0,
+          -3.0,
+          3.0,
+          -3.0,
+          3.0
+        ],
+        "point_arrays": [
+          {
+            "name": "RadiusSquared",
+            "components": 1,
+            "range": [
+              0.0,
+              27.0
+            ]
+          }
+        ]
+      }
+    ],
+    "returned_section": {
+      "name": "Section",
+      "type": "Cut",
+      "points": 49,
+      "cells": 72,
+      "bounds": [
+        0.0,
+        0.0,
+        -3.0,
+        3.0,
+        -3.0,
+        3.0
+      ],
+      "point_arrays": [
+        {
+          "name": "RadiusSquared",
+          "components": 1,
+          "range": [
+            0.0,
+            18.0
+          ]
+        }
+      ],
+      "origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "normal": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "offsets": [
+        0.0
+      ],
+      "crinkle": false,
+      "triangulate": true,
+      "input_bindings": [
+        {
+          "source_names": [
+            "Volume"
+          ],
+          "port": 0
+        }
+      ],
+      "input_name": "Volume"
+    },
+    "pipeline_before_after_equal": true,
+    "views": [
+      {
+        "viewpoint": 1,
+        "state_reference": {
+          "filename": "view-1.pvsm",
+          "sha256": "83584bb582131a35ee70c55aa87f89b280b820fd4c03e671b063a5a14639b92c"
+        },
+        "png_pair": [
+          {
+            "filename": "view-1-current.png",
+            "bytes": 19206,
+            "sha256": "e16481653860b43a1d283a63713a8f9d429289df05cbb79e0f4eec2b1f64440f",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          {
+            "filename": "view-1-restored.png",
+            "bytes": 19206,
+            "sha256": "e16481653860b43a1d283a63713a8f9d429289df05cbb79e0f4eec2b1f64440f",
+            "dimensions": [
+              320,
+              240
+            ]
+          }
+        ],
+        "png_bytes_identical": true,
+        "native_decoded_pixel_ranges": [
+          [
+            10.0,
+            255.0
+          ],
+          [
+            1.0,
+            255.0
+          ],
+          [
+            24.0,
+            255.0
+          ]
+        ],
+        "measured_presentations_equal": true,
+        "complete_measured_presentation_sha256": "5b4d00e1ffeb9acb291201b3481092c50d72632fe7956b931a1eebc0d3f24c36",
+        "selected_view_properties": {
+          "type": "RenderView",
+          "camera_position": [
+            12.0,
+            6.0,
+            6.0
+          ],
+          "camera_target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "camera_view_up": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "camera_parallel_projection": true,
+          "camera_parallel_scale": 3.9000000000000004,
+          "camera_view_angle": 30.0,
+          "view_size": [
+            320,
+            240
+          ],
+          "background": [
+            0.04,
+            0.06,
+            0.1
+          ],
+          "show_orientation_axes": false,
+          "unavailable_properties": [
+            "camera_clipping_range"
+          ],
+          "visible_bindings": [
+            {
+              "source_names": [
+                "Section"
+              ],
+              "port": 0
+            }
+          ],
+          "visible_scalar_coloring": [
+            {
+              "bindings": [
+                {
+                  "source_names": [
+                    "Section"
+                  ],
+                  "port": 0
+                }
+              ],
+              "color_array": [
+                "POINTS",
+                "RadiusSquared"
+              ],
+              "color_range": [
+                0.0,
+                27.0
+              ]
+            }
+          ],
+          "visible_legends": [
+            {
+              "title": "RadiusSquared",
+              "component_title": "",
+              "visible": true,
+              "color_range": [
+                0.0,
+                27.0
+              ],
+              "bindings": [
+                {
+                  "source_names": [
+                    "Section"
+                  ],
+                  "port": 0
+                }
+              ]
+            }
+          ]
+        },
+        "restore_operations": [
+          "reopen_state",
+          "inspect_presentation",
+          "capture_current_view"
+        ],
+        "no_parameter_reapply": true
+      },
+      {
+        "viewpoint": 2,
+        "state_reference": {
+          "filename": "view-2.pvsm",
+          "sha256": "9361e231e30385ec810f3a394ff0a60f761f0540250a18b82006616ddca0dea3"
+        },
+        "png_pair": [
+          {
+            "filename": "view-2-current.png",
+            "bytes": 19623,
+            "sha256": "a8b4f1ab1c7397a5e37fd4a8e38cff484d5e93d5f4acf6f89accb742a006e685",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          {
+            "filename": "view-2-restored.png",
+            "bytes": 19623,
+            "sha256": "a8b4f1ab1c7397a5e37fd4a8e38cff484d5e93d5f4acf6f89accb742a006e685",
+            "dimensions": [
+              320,
+              240
+            ]
+          }
+        ],
+        "png_bytes_identical": true,
+        "native_decoded_pixel_ranges": [
+          [
+            10.0,
+            255.0
+          ],
+          [
+            1.0,
+            255.0
+          ],
+          [
+            24.0,
+            255.0
+          ]
+        ],
+        "measured_presentations_equal": true,
+        "complete_measured_presentation_sha256": "ca494db4ed7fcbbf112a424d3be94f9942e287907b9ad6c8dc1fee2fb0b69bf2",
+        "selected_view_properties": {
+          "type": "RenderView",
+          "camera_position": [
+            12.0,
+            -6.0,
+            6.0
+          ],
+          "camera_target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "camera_view_up": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "camera_parallel_projection": true,
+          "camera_parallel_scale": 3.9000000000000004,
+          "camera_view_angle": 30.0,
+          "view_size": [
+            320,
+            240
+          ],
+          "background": [
+            0.04,
+            0.06,
+            0.1
+          ],
+          "show_orientation_axes": false,
+          "unavailable_properties": [
+            "camera_clipping_range"
+          ],
+          "visible_bindings": [
+            {
+              "source_names": [
+                "Section"
+              ],
+              "port": 0
+            }
+          ],
+          "visible_scalar_coloring": [
+            {
+              "bindings": [
+                {
+                  "source_names": [
+                    "Section"
+                  ],
+                  "port": 0
+                }
+              ],
+              "color_array": [
+                "POINTS",
+                "RadiusSquared"
+              ],
+              "color_range": [
+                0.0,
+                27.0
+              ]
+            }
+          ],
+          "visible_legends": [
+            {
+              "title": "RadiusSquared",
+              "component_title": "",
+              "visible": true,
+              "color_range": [
+                0.0,
+                27.0
+              ],
+              "bindings": [
+                {
+                  "source_names": [
+                    "Section"
+                  ],
+                  "port": 0
+                }
+              ]
+            }
+          ]
+        },
+        "restore_operations": [
+          "reopen_state",
+          "inspect_presentation",
+          "capture_current_view"
+        ],
+        "no_parameter_reapply": true
+      },
+      {
+        "viewpoint": 3,
+        "state_reference": {
+          "filename": "view-3.pvsm",
+          "sha256": "e9541c7c1769680be7e64a56397548a1251ab106f4d4ef450a03277d868991aa"
+        },
+        "png_pair": [
+          {
+            "filename": "view-3-current.png",
+            "bytes": 18171,
+            "sha256": "83e485048f45bb623dadde3ecd7440e5e6413a0277bf4b165cf6133ae7a7aa58",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          {
+            "filename": "view-3-restored.png",
+            "bytes": 18171,
+            "sha256": "83e485048f45bb623dadde3ecd7440e5e6413a0277bf4b165cf6133ae7a7aa58",
+            "dimensions": [
+              320,
+              240
+            ]
+          }
+        ],
+        "png_bytes_identical": true,
+        "native_decoded_pixel_ranges": [
+          [
+            10.0,
+            255.0
+          ],
+          [
+            1.0,
+            255.0
+          ],
+          [
+            24.0,
+            255.0
+          ]
+        ],
+        "measured_presentations_equal": true,
+        "complete_measured_presentation_sha256": "401f7bd835131a307792255ccd4d0e99985e74b46acc361b2a36868fc9da20bf",
+        "selected_view_properties": {
+          "type": "RenderView",
+          "camera_position": [
+            12.0,
+            0.0,
+            1.7999999999999998
+          ],
+          "camera_target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "camera_view_up": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "camera_parallel_projection": true,
+          "camera_parallel_scale": 3.9000000000000004,
+          "camera_view_angle": 30.0,
+          "view_size": [
+            320,
+            240
+          ],
+          "background": [
+            0.04,
+            0.06,
+            0.1
+          ],
+          "show_orientation_axes": false,
+          "unavailable_properties": [
+            "camera_clipping_range"
+          ],
+          "visible_bindings": [
+            {
+              "source_names": [
+                "Section"
+              ],
+              "port": 0
+            }
+          ],
+          "visible_scalar_coloring": [
+            {
+              "bindings": [
+                {
+                  "source_names": [
+                    "Section"
+                  ],
+                  "port": 0
+                }
+              ],
+              "color_array": [
+                "POINTS",
+                "RadiusSquared"
+              ],
+              "color_range": [
+                0.0,
+                27.0
+              ]
+            }
+          ],
+          "visible_legends": [
+            {
+              "title": "RadiusSquared",
+              "component_title": "",
+              "visible": true,
+              "color_range": [
+                0.0,
+                27.0
+              ],
+              "bindings": [
+                {
+                  "source_names": [
+                    "Section"
+                  ],
+                  "port": 0
+                }
+              ]
+            }
+          ]
+        },
+        "restore_operations": [
+          "reopen_state",
+          "inspect_presentation",
+          "capture_current_view"
+        ],
+        "no_parameter_reapply": true
+      },
+      {
+        "viewpoint": 4,
+        "state_reference": {
+          "filename": "view-4.pvsm",
+          "sha256": "c9296dd0d12727ef3ae9623d2388eeca3382bf0bafcfa9daeee3e32e0731a18f"
+        },
+        "png_pair": [
+          {
+            "filename": "view-4-current.png",
+            "bytes": 16197,
+            "sha256": "5ba7c6d9e7e33ecb10191e83f6c784400b60dcfb47b76358546bbe35b0f99ad8",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          {
+            "filename": "view-4-restored.png",
+            "bytes": 16197,
+            "sha256": "5ba7c6d9e7e33ecb10191e83f6c784400b60dcfb47b76358546bbe35b0f99ad8",
+            "dimensions": [
+              320,
+              240
+            ]
+          }
+        ],
+        "png_bytes_identical": true,
+        "native_decoded_pixel_ranges": [
+          [
+            10.0,
+            255.0
+          ],
+          [
+            0.0,
+            255.0
+          ],
+          [
+            24.0,
+            255.0
+          ]
+        ],
+        "measured_presentations_equal": true,
+        "complete_measured_presentation_sha256": "2e84b1c44ddd720343f4f38807f95bcc14465da13da70591d6d5bb807f9d3efd",
+        "selected_view_properties": {
+          "type": "RenderView",
+          "camera_position": [
+            12.0,
+            6.0,
+            12.0
+          ],
+          "camera_target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "camera_view_up": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "camera_parallel_projection": true,
+          "camera_parallel_scale": 3.9000000000000004,
+          "camera_view_angle": 30.0,
+          "view_size": [
+            320,
+            240
+          ],
+          "background": [
+            0.04,
+            0.06,
+            0.1
+          ],
+          "show_orientation_axes": false,
+          "unavailable_properties": [
+            "camera_clipping_range"
+          ],
+          "visible_bindings": [
+            {
+              "source_names": [
+                "Section"
+              ],
+              "port": 0
+            }
+          ],
+          "visible_scalar_coloring": [
+            {
+              "bindings": [
+                {
+                  "source_names": [
+                    "Section"
+                  ],
+                  "port": 0
+                }
+              ],
+              "color_array": [
+                "POINTS",
+                "RadiusSquared"
+              ],
+              "color_range": [
+                0.0,
+                27.0
+              ]
+            }
+          ],
+          "visible_legends": [
+            {
+              "title": "RadiusSquared",
+              "component_title": "",
+              "visible": true,
+              "color_range": [
+                0.0,
+                27.0
+              ],
+              "bindings": [
+                {
+                  "source_names": [
+                    "Section"
+                  ],
+                  "port": 0
+                }
+              ]
+            }
+          ]
+        },
+        "restore_operations": [
+          "reopen_state",
+          "inspect_presentation",
+          "capture_current_view"
+        ],
+        "no_parameter_reapply": true
+      },
+      {
+        "viewpoint": 5,
+        "state_reference": {
+          "filename": "view-5.pvsm",
+          "sha256": "4a9645a94b46965c89e5a98c2187cf1f7c9ff5f43bd8b7add4201d568fba9f19"
+        },
+        "png_pair": [
+          {
+            "filename": "view-5-current.png",
+            "bytes": 17879,
+            "sha256": "5cac3944e00616e2343215276ca648249b43a49115c5ca455934dfa2c461540f",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          {
+            "filename": "view-5-restored.png",
+            "bytes": 17879,
+            "sha256": "5cac3944e00616e2343215276ca648249b43a49115c5ca455934dfa2c461540f",
+            "dimensions": [
+              320,
+              240
+            ]
+          }
+        ],
+        "png_bytes_identical": true,
+        "native_decoded_pixel_ranges": [
+          [
+            10.0,
+            255.0
+          ],
+          [
+            1.0,
+            255.0
+          ],
+          [
+            24.0,
+            255.0
+          ]
+        ],
+        "measured_presentations_equal": true,
+        "complete_measured_presentation_sha256": "d3afd786151d01b6a727b28337ab125c06a8bd1a01128f424c93765fe23125bd",
+        "selected_view_properties": {
+          "type": "RenderView",
+          "camera_position": [
+            12.0,
+            -12.0,
+            3.0
+          ],
+          "camera_target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "camera_view_up": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "camera_parallel_projection": true,
+          "camera_parallel_scale": 3.9000000000000004,
+          "camera_view_angle": 30.0,
+          "view_size": [
+            320,
+            240
+          ],
+          "background": [
+            0.04,
+            0.06,
+            0.1
+          ],
+          "show_orientation_axes": false,
+          "unavailable_properties": [
+            "camera_clipping_range"
+          ],
+          "visible_bindings": [
+            {
+              "source_names": [
+                "Section"
+              ],
+              "port": 0
+            }
+          ],
+          "visible_scalar_coloring": [
+            {
+              "bindings": [
+                {
+                  "source_names": [
+                    "Section"
+                  ],
+                  "port": 0
+                }
+              ],
+              "color_array": [
+                "POINTS",
+                "RadiusSquared"
+              ],
+              "color_range": [
+                0.0,
+                27.0
+              ]
+            }
+          ],
+          "visible_legends": [
+            {
+              "title": "RadiusSquared",
+              "component_title": "",
+              "visible": true,
+              "color_range": [
+                0.0,
+                27.0
+              ],
+              "bindings": [
+                {
+                  "source_names": [
+                    "Section"
+                  ],
+                  "port": 0
+                }
+              ]
+            }
+          ]
+        },
+        "restore_operations": [
+          "reopen_state",
+          "inspect_presentation",
+          "capture_current_view"
+        ],
+        "no_parameter_reapply": true
+      }
+    ],
+    "sdk_trace": {
+      "record_count": 429,
+      "raw_trace_sha256": "f92a4a47ccfa3087cc4221ff2db33d96b7b41d44579ca6bafcbb61b9dfd227c9",
+      "included": false,
+      "record_scope": "Actual SDK request/result model and notification records; correlation sequences are not wire JSON-RPC IDs.",
+      "tool_call_counts": {
+        "capture_current_view": 10,
+        "inspect_pipeline": 3,
+        "inspect_presentation": 16,
+        "jobs_get_status": 163,
+        "load_skill": 1,
+        "open_dataset": 1,
+        "render_preview": 5,
+        "reopen_state": 5,
+        "save_state": 5,
+        "slice_plane": 1
+      }
+    },
+    "raw_evidence_json_sha256": "56c96691bcca0d8197c18033ef2fcafc49a2d6617db8a308e335fd685fc21621",
+    "owned_resource_cleanup": {
+      "host_exited": true,
+      "pump_stopped": true,
+      "listener_closed": true
+    }
+  },
+  "limits": [
+    "Only the measured bounded Surface presentation subset is compared; not every possible ParaView property or plugin state.",
+    "ParaView 5.13.2 does not expose CameraClippingRange through this view property interface. It is explicitly reported unavailable; no camera creation or getter fallback is used.",
+    "Native monolithic timeout/cancellation closes the owned host. Forced termination may leave staging files, and an already-published artifact cannot be rolled back. No transactional cancellation/publication guarantee or cross-restart recovery is claimed.",
+    "No attachment to existing GUI sessions, arbitrary Python, arbitrary external PVSM, multi-view authoring or software release is included."
+  ]
+}

@@ -18,7 +18,15 @@ pytestmark = pytest.mark.mcp
 
 @pytest.mark.skipif(sys.platform != "linux", reason="Linux-only adapter runtime and POSIX protocol fixture")
 @pytest.mark.parametrize("cancel", [False, True])
-def test_core_http_timeout_or_cancel_prevents_late_host_mutation(tmp_path, cancel):
+@pytest.mark.parametrize(
+    "operation,arguments",
+    [
+        ("create_sphere", {"name": "Deferred"}),
+        ("slice_plane", {"name": "Section", "input_name": "Volume"}),
+        ("capture_current_view", {"path": "capture.png"}),
+    ],
+)
+def test_core_http_timeout_or_cancel_prevents_late_host_mutation(tmp_path, cancel, operation, arguments):
     marker = tmp_path / "late-native-mutation"
     started = tmp_path / "native-started"
     body = (
@@ -51,7 +59,7 @@ def test_core_http_timeout_or_cancel_prevents_late_host_mutation(tmp_path, cance
                         cursor = page.nextCursor
                         if cursor is None:
                             break
-                    launch = payload(await client.call_tool("create_sphere", {"name": "Deferred"}))
+                    launch = payload(await client.call_tool(operation, arguments))
                     job_id = launch["job_id"]
                     assert isinstance(job_id, str) and job_id
                     deadline = time.monotonic() + 5
