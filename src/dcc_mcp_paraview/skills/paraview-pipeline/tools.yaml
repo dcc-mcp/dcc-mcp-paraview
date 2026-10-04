@@ -851,13 +851,107 @@
           "show_orientation_axes": {
             "type": "boolean",
             "default": false
+          },
+          "line_width": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 8,
+            "description": "Native line width in pixels; omitted leaves existing behavior unchanged."
+          },
+          "scalar_bar_title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80,
+            "pattern": "^[ -~]*$",
+            "not": {
+              "pattern": "[$\\\\{}\\x00-\\x1f\\x7f]"
+            },
+            "description": "Plain ASCII legend title; no markup or format controls. Requires scalar."
+          },
+          "scalar_bar_position": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "minItems": 2,
+            "maxItems": 2,
+            "description": "Normalized manual anchor [x,y] for a vertical legend; requires scalar."
+          },
+          "scalar_bar_length": {
+            "type": "number",
+            "minimum": 0.05,
+            "maximum": 0.9,
+            "description": "Legend length as a fraction of view height for the vertical legend. Requires scalar."
+          },
+          "scalar_bar_thickness": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 64,
+            "description": "Legend color-bar thickness in native points, as for font size; actual pixel extent depends on the host, font and DPI. Requires scalar."
+          },
+          "scalar_bar_title_font_size": {
+            "type": "integer",
+            "minimum": 6,
+            "maximum": 48,
+            "description": "Native legend title font size. Requires scalar."
+          },
+          "scalar_bar_label_font_size": {
+            "type": "integer",
+            "minimum": 6,
+            "maximum": 48,
+            "description": "Native legend label font size. Requires scalar."
           }
         },
         "required": [
           "name",
           "path"
         ],
-        "additionalProperties": false
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "anyOf": [
+                {
+                  "required": [
+                    "scalar_bar_title"
+                  ]
+                },
+                {
+                  "required": [
+                    "scalar_bar_position"
+                  ]
+                },
+                {
+                  "required": [
+                    "scalar_bar_length"
+                  ]
+                },
+                {
+                  "required": [
+                    "scalar_bar_thickness"
+                  ]
+                },
+                {
+                  "required": [
+                    "scalar_bar_title_font_size"
+                  ]
+                },
+                {
+                  "required": [
+                    "scalar_bar_label_font_size"
+                  ]
+                }
+              ]
+            },
+            "then": {
+              "required": [
+                "scalar"
+              ]
+            }
+          }
+        ]
       },
       "output_schema": {
         "type": "object",

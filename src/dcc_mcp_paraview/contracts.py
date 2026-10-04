@@ -6,6 +6,15 @@ import re
 MAX_SLICE_POINTS = 1_000_000
 MAX_SLICE_CELLS = 1_000_000
 
+SCALAR_BAR_CONTROLS = {
+    "scalar_bar_title",
+    "scalar_bar_position",
+    "scalar_bar_length",
+    "scalar_bar_thickness",
+    "scalar_bar_title_font_size",
+    "scalar_bar_label_font_size",
+}
+
 OPERATIONS = {
     "inspect_pipeline": (set(), set()),
     "inspect_presentation": (set(), set()),
@@ -40,6 +49,8 @@ OPERATIONS = {
             "diffuse",
             "specular",
             "specular_power",
+            "line_width",
+            *SCALAR_BAR_CONTROLS,
         },
     ),
 }
@@ -105,6 +116,34 @@ def validate(operation, params):
     for key, low, high in (("resolution", 8, 128), ("width", 64, 2048), ("height", 64, 2048)):
         if key in params and (type(params[key]) is not int or not low <= params[key] <= high):
             raise OperationError("invalid_input", "%s must be an integer in [%d, %d]" % (key, low, high))
+    for key, low, high in (
+        ("scalar_bar_thickness", 1, 64),
+        ("scalar_bar_title_font_size", 6, 48),
+        ("scalar_bar_label_font_size", 6, 48),
+    ):
+        if key in params and (type(params[key]) is not int or not low <= params[key] <= high):
+            raise OperationError("invalid_input", "%s must be an integer in [%d, %d]" % (key, low, high))
+    if "scalar_bar_title" in params:
+        title = params["scalar_bar_title"]
+        if (
+            not isinstance(title, str)
+            or not 1 <= len(title) <= 80
+            or any(ord(c) < 32 or ord(c) > 126 or c in "$\\{}" for c in title)
+        ):
+            raise OperationError("invalid_input", "Legend title must be 1-80 plain ASCII characters without markup")
+    if "scalar_bar_position" in params:
+        position = params["scalar_bar_position"]
+        if (
+            not isinstance(position, list)
+            or len(position) != 2
+            or any(
+                isinstance(n, bool) or not isinstance(n, (int, float)) or not 0 <= n <= 1 or not math.isfinite(n)
+                for n in position
+            )
+        ):
+            raise OperationError("invalid_input", "Legend position must contain two finite numbers in [0, 1]")
+    if SCALAR_BAR_CONTROLS.intersection(params) and "scalar" not in params:
+        raise OperationError("invalid_input", "Legend controls require scalar coloring")
     if "invert" in params and type(params["invert"]) is not bool:
         raise OperationError("invalid_input", "invert must be a boolean")
     if "scalar" in params and (
@@ -151,6 +190,8 @@ def validate(operation, params):
         ("diffuse", 0, 1),
         ("specular", 0, 1),
         ("specular_power", 1, 128),
+        ("line_width", 1, 8),
+        ("scalar_bar_length", 0.05, 0.9),
     ):
         if key in params:
             value = params[key]
@@ -161,6 +202,9 @@ def validate(operation, params):
                 or not math.isfinite(value)
             ):
                 raise OperationError("invalid_input", "%s must be finite and in [%s, %s]" % (key, low, high))
+    if "scalar_bar_position" in params and "scalar_bar_length" in params:
+        if params["scalar_bar_position"][1] + params["scalar_bar_length"] > 1:
+            raise OperationError("invalid_input", "Vertical legend position plus length must fit inside the view")
     if "color_range" in params and "scalar" not in params:
         raise OperationError("invalid_input", "color_range requires a scalar")
     if params.get("camera_position") is not None and params.get("camera_target") is not None:

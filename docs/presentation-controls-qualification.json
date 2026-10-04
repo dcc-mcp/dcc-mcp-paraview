@@ -1,0 +1,1911 @@
+{
+  "document_type": "Selected public qualification projection",
+  "disclosure": "Curated projections of runtime evidence, not full unmodified traces or logs. Raw files, artwork, native states and dataset bytes are excluded.",
+  "source_identity": {
+    "repository": "https://github.com/dcc-mcp/dcc-mcp-paraview",
+    "base_kind": "Exact public merged R3 commit; documentation overlay preserved",
+    "base_commit": "6863d0f705cd8579676542d59a7f0afd52e25827",
+    "base_tree": "70b9beb5525f74b8eca21dc3deda490d9b7dc4fa",
+    "candidate_tree": "e5b4a3f1726c4a729afc177e185edaf48513d9bf",
+    "source_patch_sha256": "add2e75e070feaa42702d61fd92fd845dc1bea7737eeee203982995e87108a9b",
+    "native_tested_implementation_tree": "68a2d09ff6c70ed00066016986ef99253c7f6fbd",
+    "native_tested_wheel_sha256": "b8f01b645683f6eeb91350f2672a9852768bc0a6e65da1452bbeee67ed4117fb",
+    "original_frozen_r3_tree": "61762e29b75e0fda72031f9c25c2c8c4a7d6445e",
+    "original_r4_delta_sha256": "81b105af10f1ae27d9c64619566060ae6ac90f0db1eb5b5a4a925422209f760d"
+  },
+  "timing": "The source was frozen with native qualification pending. The selected native and production evidence below was collected later for those same source and wheel bytes; it does not alter the source patch.",
+  "host_free_checks": {
+    "source": {
+      "passed": 196,
+      "native_graphical_deselected": 18,
+      "selection": "-m 'not paraview'"
+    },
+    "isolated_installed_wheel": {
+      "passed": 196,
+      "native_graphical_deselected": 18,
+      "selection": "-m 'not paraview'",
+      "adapter_bytes_match_wheel": true
+    },
+    "independent_review": {
+      "focused_tests_passed": 136,
+      "exact_tree_and_delta_reviewed": true,
+      "native_execution": false
+    },
+    "new_control_fixtures": 45,
+    "ruff_lint": "passed",
+    "ruff_format": "passed",
+    "shell_syntax": "passed",
+    "clean_package_inventory": "passed",
+    "tested_source_tree": "68a2d09ff6c70ed00066016986ef99253c7f6fbd",
+    "tested_wheel_sha256": "b8f01b645683f6eeb91350f2672a9852768bc0a6e65da1452bbeee67ed4117fb"
+  },
+  "selected_native_check": {
+    "selection": "tests/test_slice_render_mcp.py::test_slice_five_saved_presentations_over_real_mcp",
+    "launcher": "scripts/validate-presentation-controls-in-gui.sh",
+    "environment_flag": "PARAVIEW_PRESENTATION_CONTROLS_ACCEPTANCE=1",
+    "test_cases_executed": 1,
+    "result": "passed",
+    "saved_viewpoint_states": 5,
+    "capture_pairs_verified": 5,
+    "scope": "Only this selected installed-wheel five-view test ran; no claim that all 18 native/graphical cases were executed.",
+    "runtime": {
+      "platform": "linux",
+      "core": "0.20.41",
+      "server": "0.20.41",
+      "official_mcp_sdk": "1.30.0",
+      "mcp_protocol": "2025-06-18",
+      "paraview": "5.13.2"
+    },
+    "transport": {
+      "official_sdk_default_configuration": true,
+      "configured_gateway_port": 0,
+      "configured_gateway_failover": false
+    },
+    "observability": {
+      "file_logging": true,
+      "job_persistence": true,
+      "job_persistence_state": "healthy",
+      "telemetry": false
+    },
+    "native_main_thread_identity_matched": true,
+    "input": {
+      "generator": "Original analytic RadiusSquared = x*x + y*y + z*z on a 7x7x7 integer lattice from -3 to 3",
+      "sha256": "20e7e6e09e18883ea424a84698722b8cb80959a7bef768224eedc9ab7330d22b",
+      "title_caveat": "Time (s) exercises the title property only; the analytic RadiusSquared test field does not measure time."
+    },
+    "presentation_controls": {
+      "line_width": 2,
+      "scalar_bar_title": "Time (s)",
+      "scalar_bar_position": [
+        0.89,
+        0.18
+      ],
+      "scalar_bar_length": 0.6,
+      "scalar_bar_thickness": 12,
+      "scalar_bar_title_font_size": 16,
+      "scalar_bar_label_font_size": 14
+    },
+    "adapter_files_sha256": {
+      "host_driver.py": "7bd5b1ee4fe29e8699651a0a92ad88b86527ce550d5ec16ef0772cf610149259",
+      "contracts.py": "569c9a15c46eb14eea94c88056cd2ecaa3159447dc12ee18b6d600e94b000aa1",
+      "skills/paraview-pipeline/tools.yaml": "a0115a0b72aa48c7e5d2c03ed0beba398cbbb82cd3080695db76f2f2d840b4e1"
+    },
+    "runner_sha256": "cc7076b8269e69bd2439cb742545e12e98678d59c112500bf9089c03503aff7e",
+    "pipeline_sources": [
+      {
+        "name": "Section",
+        "type": "Cut",
+        "points": 49,
+        "cells": 72,
+        "bounds": [
+          0.0,
+          0.0,
+          -3.0,
+          3.0,
+          -3.0,
+          3.0
+        ],
+        "point_arrays": [
+          {
+            "name": "RadiusSquared",
+            "components": 1,
+            "range": [
+              0.0,
+              18.0
+            ]
+          }
+        ],
+        "origin": [
+          0.0,
+          0.0,
+          0.0
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "offsets": [
+          0.0
+        ],
+        "crinkle": false,
+        "triangulate": true,
+        "input_bindings": [
+          {
+            "source_names": [
+              "Volume"
+            ],
+            "port": 0
+          }
+        ]
+      },
+      {
+        "name": "Volume",
+        "type": "XMLImageDataReader",
+        "points": 343,
+        "cells": 216,
+        "bounds": [
+          -3.0,
+          3.0,
+          -3.0,
+          3.0,
+          -3.0,
+          3.0
+        ],
+        "point_arrays": [
+          {
+            "name": "RadiusSquared",
+            "components": 1,
+            "range": [
+              0.0,
+              27.0
+            ]
+          }
+        ]
+      }
+    ],
+    "returned_section": {
+      "name": "Section",
+      "type": "Cut",
+      "points": 49,
+      "cells": 72,
+      "bounds": [
+        0.0,
+        0.0,
+        -3.0,
+        3.0,
+        -3.0,
+        3.0
+      ],
+      "point_arrays": [
+        {
+          "name": "RadiusSquared",
+          "components": 1,
+          "range": [
+            0.0,
+            18.0
+          ]
+        }
+      ],
+      "origin": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "normal": [
+        1.0,
+        0.0,
+        0.0
+      ],
+      "offsets": [
+        0.0
+      ],
+      "crinkle": false,
+      "triangulate": true,
+      "input_bindings": [
+        {
+          "source_names": [
+            "Volume"
+          ],
+          "port": 0
+        }
+      ],
+      "input_name": "Volume"
+    },
+    "pipeline_before_after_equal": true,
+    "views": [
+      {
+        "viewpoint": 1,
+        "state": {
+          "filename": "view-1.pvsm",
+          "sha256": "d5ad9636de4ac49b79701799df2a965cfe3daab0e72a767f4b5f883ded116469"
+        },
+        "png_pair": [
+          {
+            "filename": "view-1-current.png",
+            "bytes": 15605,
+            "sha256": "3ff4abd3dea16bc67f47d1e02f244b4fcf2ba8dc6f29bbe63db186629de47a11",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          {
+            "filename": "view-1-restored.png",
+            "bytes": 15605,
+            "sha256": "3ff4abd3dea16bc67f47d1e02f244b4fcf2ba8dc6f29bbe63db186629de47a11",
+            "dimensions": [
+              320,
+              240
+            ]
+          }
+        ],
+        "png_bytes_identical": true,
+        "measured_presentations_equal": true,
+        "complete_measured_presentation_sha256": "f34477a2564691095b8e593d7c2ea703306fb9ab23538a9bf11b4489fad2970a",
+        "selected_view_properties": {
+          "type": "RenderView",
+          "view_size": [
+            320,
+            240
+          ],
+          "camera_position": [
+            12.0,
+            6.0,
+            6.0
+          ],
+          "camera_target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "camera_view_up": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "camera_parallel_projection": true,
+          "camera_parallel_scale": 3.9000000000000004,
+          "camera_view_angle": 30.0,
+          "background": [
+            0.04,
+            0.06,
+            0.1
+          ],
+          "show_orientation_axes": false,
+          "unavailable_properties": [
+            "camera_clipping_range"
+          ],
+          "visible_bindings": [
+            {
+              "source_names": [
+                "Section"
+              ],
+              "port": 0
+            }
+          ],
+          "visible_representations": [
+            {
+              "bindings": [
+                {
+                  "source_names": [
+                    "Section"
+                  ],
+                  "port": 0
+                }
+              ],
+              "line_width": 2.0,
+              "color_array": [
+                "POINTS",
+                "RadiusSquared"
+              ],
+              "color_range": [
+                0.0,
+                27.0
+              ]
+            }
+          ],
+          "visible_legends": [
+            {
+              "title": "Time (s)",
+              "component_title": "",
+              "position": [
+                0.89,
+                0.18
+              ],
+              "length": 0.6,
+              "thickness": 12.0,
+              "title_font_size": 16.0,
+              "label_font_size": 14.0,
+              "orientation": "Vertical",
+              "window_location": "Any Location",
+              "bindings": [
+                {
+                  "source_names": [
+                    "Section"
+                  ],
+                  "port": 0
+                }
+              ],
+              "color_range": [
+                0.0,
+                27.0
+              ]
+            }
+          ]
+        },
+        "restore_operations": [
+          "reopen_state",
+          "inspect_presentation",
+          "capture_current_view"
+        ],
+        "no_parameter_reapply": true
+      },
+      {
+        "viewpoint": 2,
+        "state": {
+          "filename": "view-2.pvsm",
+          "sha256": "1afb52809428da5146c027a1bd4dece0a55c1fd20888dbec62a2e1e555c1d293"
+        },
+        "png_pair": [
+          {
+            "filename": "view-2-current.png",
+            "bytes": 15959,
+            "sha256": "99f3724b9ea8e2c4616cce170b0ed15bc48d7c45097efdf123dee609d90219dd",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          {
+            "filename": "view-2-restored.png",
+            "bytes": 15959,
+            "sha256": "99f3724b9ea8e2c4616cce170b0ed15bc48d7c45097efdf123dee609d90219dd",
+            "dimensions": [
+              320,
+              240
+            ]
+          }
+        ],
+        "png_bytes_identical": true,
+        "measured_presentations_equal": true,
+        "complete_measured_presentation_sha256": "92dc066d86207dc9257508224b2e32ddcf7497765a64c0a3e76bd6b6e042ac3c",
+        "selected_view_properties": {
+          "type": "RenderView",
+          "view_size": [
+            320,
+            240
+          ],
+          "camera_position": [
+            12.0,
+            -6.0,
+            6.0
+          ],
+          "camera_target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "camera_view_up": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "camera_parallel_projection": true,
+          "camera_parallel_scale": 3.9000000000000004,
+          "camera_view_angle": 30.0,
+          "background": [
+            0.04,
+            0.06,
+            0.1
+          ],
+          "show_orientation_axes": false,
+          "unavailable_properties": [
+            "camera_clipping_range"
+          ],
+          "visible_bindings": [
+            {
+              "source_names": [
+                "Section"
+              ],
+              "port": 0
+            }
+          ],
+          "visible_representations": [
+            {
+              "bindings": [
+                {
+                  "source_names": [
+                    "Section"
+                  ],
+                  "port": 0
+                }
+              ],
+              "line_width": 2.0,
+              "color_array": [
+                "POINTS",
+                "RadiusSquared"
+              ],
+              "color_range": [
+                0.0,
+                27.0
+              ]
+            }
+          ],
+          "visible_legends": [
+            {
+              "title": "Time (s)",
+              "component_title": "",
+              "position": [
+                0.89,
+                0.18
+              ],
+              "length": 0.6,
+              "thickness": 12.0,
+              "title_font_size": 16.0,
+              "label_font_size": 14.0,
+              "orientation": "Vertical",
+              "window_location": "Any Location",
+              "bindings": [
+                {
+                  "source_names": [
+                    "Section"
+                  ],
+                  "port": 0
+                }
+              ],
+              "color_range": [
+                0.0,
+                27.0
+              ]
+            }
+          ]
+        },
+        "restore_operations": [
+          "reopen_state",
+          "inspect_presentation",
+          "capture_current_view"
+        ],
+        "no_parameter_reapply": true
+      },
+      {
+        "viewpoint": 3,
+        "state": {
+          "filename": "view-3.pvsm",
+          "sha256": "c8dc0ffe437f7f1329c647f6905036262b20341833887e16006e2532b641b91b"
+        },
+        "png_pair": [
+          {
+            "filename": "view-3-current.png",
+            "bytes": 14345,
+            "sha256": "49973d3efed6a9baeb2b2da242ea064e3bf7a411ce3002abdc626de2ee50b108",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          {
+            "filename": "view-3-restored.png",
+            "bytes": 14345,
+            "sha256": "49973d3efed6a9baeb2b2da242ea064e3bf7a411ce3002abdc626de2ee50b108",
+            "dimensions": [
+              320,
+              240
+            ]
+          }
+        ],
+        "png_bytes_identical": true,
+        "measured_presentations_equal": true,
+        "complete_measured_presentation_sha256": "81d5e468fbdbb6091f7d9da4805b501c28f3b29c7a9be37f58b02524fe8dfb87",
+        "selected_view_properties": {
+          "type": "RenderView",
+          "view_size": [
+            320,
+            240
+          ],
+          "camera_position": [
+            12.0,
+            0.0,
+            1.7999999999999998
+          ],
+          "camera_target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "camera_view_up": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "camera_parallel_projection": true,
+          "camera_parallel_scale": 3.9000000000000004,
+          "camera_view_angle": 30.0,
+          "background": [
+            0.04,
+            0.06,
+            0.1
+          ],
+          "show_orientation_axes": false,
+          "unavailable_properties": [
+            "camera_clipping_range"
+          ],
+          "visible_bindings": [
+            {
+              "source_names": [
+                "Section"
+              ],
+              "port": 0
+            }
+          ],
+          "visible_representations": [
+            {
+              "bindings": [
+                {
+                  "source_names": [
+                    "Section"
+                  ],
+                  "port": 0
+                }
+              ],
+              "line_width": 2.0,
+              "color_array": [
+                "POINTS",
+                "RadiusSquared"
+              ],
+              "color_range": [
+                0.0,
+                27.0
+              ]
+            }
+          ],
+          "visible_legends": [
+            {
+              "title": "Time (s)",
+              "component_title": "",
+              "position": [
+                0.89,
+                0.18
+              ],
+              "length": 0.6,
+              "thickness": 12.0,
+              "title_font_size": 16.0,
+              "label_font_size": 14.0,
+              "orientation": "Vertical",
+              "window_location": "Any Location",
+              "bindings": [
+                {
+                  "source_names": [
+                    "Section"
+                  ],
+                  "port": 0
+                }
+              ],
+              "color_range": [
+                0.0,
+                27.0
+              ]
+            }
+          ]
+        },
+        "restore_operations": [
+          "reopen_state",
+          "inspect_presentation",
+          "capture_current_view"
+        ],
+        "no_parameter_reapply": true
+      },
+      {
+        "viewpoint": 4,
+        "state": {
+          "filename": "view-4.pvsm",
+          "sha256": "cec2b676067c0a925dfa3756cbe89b6b71390f5c559e651ed34041a54cf309dc"
+        },
+        "png_pair": [
+          {
+            "filename": "view-4-current.png",
+            "bytes": 12547,
+            "sha256": "2840f925c9895c7a7d380c1e40d192e68be3db9a1d47057d807d685618d092a3",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          {
+            "filename": "view-4-restored.png",
+            "bytes": 12547,
+            "sha256": "2840f925c9895c7a7d380c1e40d192e68be3db9a1d47057d807d685618d092a3",
+            "dimensions": [
+              320,
+              240
+            ]
+          }
+        ],
+        "png_bytes_identical": true,
+        "measured_presentations_equal": true,
+        "complete_measured_presentation_sha256": "b83557f2c88d985d7935b9b90b3772868180a868e45189b25a36d415419323d1",
+        "selected_view_properties": {
+          "type": "RenderView",
+          "view_size": [
+            320,
+            240
+          ],
+          "camera_position": [
+            12.0,
+            6.0,
+            12.0
+          ],
+          "camera_target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "camera_view_up": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "camera_parallel_projection": true,
+          "camera_parallel_scale": 3.9000000000000004,
+          "camera_view_angle": 30.0,
+          "background": [
+            0.04,
+            0.06,
+            0.1
+          ],
+          "show_orientation_axes": false,
+          "unavailable_properties": [
+            "camera_clipping_range"
+          ],
+          "visible_bindings": [
+            {
+              "source_names": [
+                "Section"
+              ],
+              "port": 0
+            }
+          ],
+          "visible_representations": [
+            {
+              "bindings": [
+                {
+                  "source_names": [
+                    "Section"
+                  ],
+                  "port": 0
+                }
+              ],
+              "line_width": 2.0,
+              "color_array": [
+                "POINTS",
+                "RadiusSquared"
+              ],
+              "color_range": [
+                0.0,
+                27.0
+              ]
+            }
+          ],
+          "visible_legends": [
+            {
+              "title": "Time (s)",
+              "component_title": "",
+              "position": [
+                0.89,
+                0.18
+              ],
+              "length": 0.6,
+              "thickness": 12.0,
+              "title_font_size": 16.0,
+              "label_font_size": 14.0,
+              "orientation": "Vertical",
+              "window_location": "Any Location",
+              "bindings": [
+                {
+                  "source_names": [
+                    "Section"
+                  ],
+                  "port": 0
+                }
+              ],
+              "color_range": [
+                0.0,
+                27.0
+              ]
+            }
+          ]
+        },
+        "restore_operations": [
+          "reopen_state",
+          "inspect_presentation",
+          "capture_current_view"
+        ],
+        "no_parameter_reapply": true
+      },
+      {
+        "viewpoint": 5,
+        "state": {
+          "filename": "view-5.pvsm",
+          "sha256": "4d924aae22566db768fc66e582049f8ed8883a1bf24c0b2ff61d05fa58b552a9"
+        },
+        "png_pair": [
+          {
+            "filename": "view-5-current.png",
+            "bytes": 14648,
+            "sha256": "add2cbdf90d47d21c7c56f2697984790f3433063e4a3b01a90e3241244c8b646",
+            "dimensions": [
+              320,
+              240
+            ]
+          },
+          {
+            "filename": "view-5-restored.png",
+            "bytes": 14648,
+            "sha256": "add2cbdf90d47d21c7c56f2697984790f3433063e4a3b01a90e3241244c8b646",
+            "dimensions": [
+              320,
+              240
+            ]
+          }
+        ],
+        "png_bytes_identical": true,
+        "measured_presentations_equal": true,
+        "complete_measured_presentation_sha256": "b779018764ee90ba33300cf4cb262f4ffb088b83c626ba529ed8ba7cbb16b705",
+        "selected_view_properties": {
+          "type": "RenderView",
+          "view_size": [
+            320,
+            240
+          ],
+          "camera_position": [
+            12.0,
+            -12.0,
+            3.0
+          ],
+          "camera_target": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "camera_view_up": [
+            0.0,
+            0.0,
+            1.0
+          ],
+          "camera_parallel_projection": true,
+          "camera_parallel_scale": 3.9000000000000004,
+          "camera_view_angle": 30.0,
+          "background": [
+            0.04,
+            0.06,
+            0.1
+          ],
+          "show_orientation_axes": false,
+          "unavailable_properties": [
+            "camera_clipping_range"
+          ],
+          "visible_bindings": [
+            {
+              "source_names": [
+                "Section"
+              ],
+              "port": 0
+            }
+          ],
+          "visible_representations": [
+            {
+              "bindings": [
+                {
+                  "source_names": [
+                    "Section"
+                  ],
+                  "port": 0
+                }
+              ],
+              "line_width": 2.0,
+              "color_array": [
+                "POINTS",
+                "RadiusSquared"
+              ],
+              "color_range": [
+                0.0,
+                27.0
+              ]
+            }
+          ],
+          "visible_legends": [
+            {
+              "title": "Time (s)",
+              "component_title": "",
+              "position": [
+                0.89,
+                0.18
+              ],
+              "length": 0.6,
+              "thickness": 12.0,
+              "title_font_size": 16.0,
+              "label_font_size": 14.0,
+              "orientation": "Vertical",
+              "window_location": "Any Location",
+              "bindings": [
+                {
+                  "source_names": [
+                    "Section"
+                  ],
+                  "port": 0
+                }
+              ],
+              "color_range": [
+                0.0,
+                27.0
+              ]
+            }
+          ]
+        },
+        "restore_operations": [
+          "reopen_state",
+          "inspect_presentation",
+          "capture_current_view"
+        ],
+        "no_parameter_reapply": true
+      }
+    ],
+    "sdk_trace": {
+      "record_count": 443,
+      "record_types": {
+        "request": 221,
+        "result": 221,
+        "notification": 1
+      },
+      "raw_trace_sha256": "e4885d7605d2c84386f793423fc341bfcdf3bfb816f9c0cd7c1ed39362c3d729",
+      "included": false,
+      "record_scope": "Actual SDK request/result models and notification records; correlation sequences are not wire JSON-RPC IDs.",
+      "tool_call_counts": {
+        "capture_current_view": 10,
+        "inspect_pipeline": 3,
+        "inspect_presentation": 16,
+        "jobs_get_status": 170,
+        "load_skill": 1,
+        "open_dataset": 1,
+        "render_preview": 5,
+        "reopen_state": 5,
+        "save_state": 5,
+        "slice_plane": 1
+      }
+    },
+    "raw_evidence_json_sha256": "70f3ff00bf8909fe2c0915dfbbab27de3d7e1906a61f3f3d87e2fa7fec843711",
+    "owned_resource_cleanup": {
+      "host_exited": true,
+      "pump_stopped": true,
+      "listener_closed": true
+    },
+    "tested_source_tree": "68a2d09ff6c70ed00066016986ef99253c7f6fbd",
+    "tested_wheel_sha256": "b8f01b645683f6eeb91350f2672a9852768bc0a6e65da1452bbeee67ed4117fb"
+  },
+  "selected_production_provenance": {
+    "scope": "Selected native five-panel authoring pass using the same installed wheel; separate from the selected pytest case and from final artwork acceptance.",
+    "result": "passed native authoring and reopen/capture checks",
+    "synthetic_disclaimer": "Analytic illustration; illustrative units, no measured seismic data, no PDE or physics validation.",
+    "input": {
+      "sha256": "43ade20b1f2b78149e7d948894568b599db55f5aa8f9a5ceb62050e970e93d9d",
+      "grid_dimensions": [
+        81,
+        65,
+        97
+      ],
+      "spacing": [
+        0.05,
+        0.05,
+        0.025
+      ],
+      "origin": [
+        -2,
+        -1.6,
+        0
+      ],
+      "dataset_bytes_included": false
+    },
+    "source_readback": [
+      {
+        "name": "SyntheticLens",
+        "type": "XMLImageDataReader",
+        "points": 510705,
+        "cells": 491520,
+        "bounds": [
+          -2.0,
+          2.0,
+          -1.6,
+          1.6,
+          0.0,
+          2.4000000000000004
+        ],
+        "point_arrays": [
+          {
+            "name": "SyntheticDelay_ms",
+            "components": 1,
+            "range": [
+              6.729617055e-11,
+              220.0
+            ]
+          },
+          {
+            "name": "SyntheticTime_s",
+            "components": 1,
+            "range": [
+              0.599999977,
+              1.724
+            ]
+          }
+        ]
+      },
+      {
+        "name": "SectionX",
+        "type": "Cut",
+        "points": 6305,
+        "cells": 12288,
+        "bounds": [
+          0.20000000298023224,
+          0.20000000298023224,
+          -1.600000023841858,
+          1.600000023841858,
+          0.0,
+          2.4000000953674316
+        ],
+        "point_arrays": [
+          {
+            "name": "SyntheticDelay_ms",
+            "components": 1,
+            "range": [
+              2.64870702e-08,
+              220.0
+            ]
+          },
+          {
+            "name": "SyntheticTime_s",
+            "components": 1,
+            "range": [
+              0.6009999758,
+              1.625
+            ]
+          }
+        ],
+        "origin": [
+          0.2,
+          -0.1,
+          1.2
+        ],
+        "normal": [
+          1.0,
+          0.0,
+          0.0
+        ],
+        "offsets": [
+          0.0
+        ],
+        "crinkle": false,
+        "triangulate": true,
+        "input_bindings": [
+          {
+            "source_names": [
+              "SyntheticLens"
+            ],
+            "port": 0
+          }
+        ],
+        "input_name": "SyntheticLens"
+      },
+      {
+        "name": "SectionY",
+        "type": "Cut",
+        "points": 7857,
+        "cells": 15360,
+        "bounds": [
+          -2.0,
+          2.0,
+          -0.10000000149011612,
+          -0.10000000149011612,
+          0.0,
+          2.4000000953674316
+        ],
+        "point_arrays": [
+          {
+            "name": "SyntheticDelay_ms",
+            "components": 1,
+            "range": [
+              6.290242658e-08,
+              220.0
+            ]
+          },
+          {
+            "name": "SyntheticTime_s",
+            "components": 1,
+            "range": [
+              0.6002499764,
+              1.66025
+            ]
+          }
+        ],
+        "origin": [
+          0.2,
+          -0.1,
+          1.2
+        ],
+        "normal": [
+          0.0,
+          1.0,
+          0.0
+        ],
+        "offsets": [
+          0.0
+        ],
+        "crinkle": false,
+        "triangulate": true,
+        "input_bindings": [
+          {
+            "source_names": [
+              "SyntheticLens"
+            ],
+            "port": 0
+          }
+        ],
+        "input_name": "SyntheticLens"
+      },
+      {
+        "name": "SectionZ",
+        "type": "Cut",
+        "points": 5265,
+        "cells": 10240,
+        "bounds": [
+          -2.0,
+          2.0,
+          -1.600000023841858,
+          1.600000023841858,
+          1.2000000476837158,
+          1.2000000476837158
+        ],
+        "point_arrays": [
+          {
+            "name": "SyntheticDelay_ms",
+            "components": 1,
+            "range": [
+              0.0005980012092,
+              220.0
+            ]
+          },
+          {
+            "name": "SyntheticTime_s",
+            "components": 1,
+            "range": [
+              0.86125,
+              1.243999402
+            ]
+          }
+        ],
+        "origin": [
+          0.2,
+          -0.1,
+          1.2
+        ],
+        "normal": [
+          0.0,
+          0.0,
+          1.0
+        ],
+        "offsets": [
+          0.0
+        ],
+        "crinkle": false,
+        "triangulate": true,
+        "input_bindings": [
+          {
+            "source_names": [
+              "SyntheticLens"
+            ],
+            "port": 0
+          }
+        ],
+        "input_name": "SyntheticLens"
+      },
+      {
+        "name": "Delay80",
+        "type": "Contour",
+        "points": 210,
+        "cells": 210,
+        "bounds": [
+          -0.7053437829017639,
+          1.1053438186645508,
+          -0.10000000149011612,
+          -0.10000000149011612,
+          0.8981907367706299,
+          1.5018092393875122
+        ],
+        "point_arrays": [
+          {
+            "name": "SyntheticDelay_ms",
+            "components": 1,
+            "range": [
+              80.0,
+              80.0
+            ]
+          },
+          {
+            "name": "SyntheticTime_s",
+            "components": 1,
+            "range": [
+              0.8802805294915221,
+              1.1224569796082644
+            ]
+          }
+        ],
+        "scalar": "SyntheticDelay_ms",
+        "values": [
+          80.0
+        ]
+      },
+      {
+        "name": "Delay150",
+        "type": "Contour",
+        "points": 130,
+        "cells": 130,
+        "bounds": [
+          -0.3569244146347046,
+          0.7569244503974915,
+          -0.10000000149011612,
+          -0.10000000149011612,
+          1.014432668685913,
+          1.385567307472229
+        ],
+        "point_arrays": [
+          {
+            "name": "SyntheticDelay_ms",
+            "components": 1,
+            "range": [
+              150.0,
+              150.0
+            ]
+          },
+          {
+            "name": "SyntheticTime_s",
+            "components": 1,
+            "range": [
+              0.8568849614991894,
+              1.0057400385793613
+            ]
+          }
+        ],
+        "scalar": "SyntheticDelay_ms",
+        "values": [
+          150.0
+        ]
+      }
+    ],
+    "shared_native_time_range_s": [
+      0.599999977,
+      1.724
+    ],
+    "delay_levels_ms": [
+      80,
+      150
+    ],
+    "paraview": "5.13.2",
+    "native_main_thread_identity_matched": true,
+    "panels": [
+      {
+        "source_name": "SectionX",
+        "render_controls": {
+          "scalar_bar_title": "Time (s)",
+          "scalar_bar_position": [
+            0.85,
+            0.16
+          ],
+          "scalar_bar_length": 0.6,
+          "scalar_bar_thickness": 12,
+          "scalar_bar_title_font_size": 16,
+          "scalar_bar_label_font_size": 14
+        },
+        "state": {
+          "filename": "panel-x.pvsm",
+          "sha256": "d500bbcc485fdbbac8204fc215fa14f2e654d25e80c583470092b0157c5e96e5"
+        },
+        "png_pair": [
+          {
+            "filename": "panel-x.png",
+            "bytes": 41538,
+            "sha256": "b1c92c184250afa422d7ddd717f128af85afd75886d31c842f15f739b43106d9",
+            "dimensions": [
+              720,
+              480
+            ]
+          },
+          {
+            "filename": "panel-x-reopened.png",
+            "bytes": 41538,
+            "sha256": "b1c92c184250afa422d7ddd717f128af85afd75886d31c842f15f739b43106d9",
+            "dimensions": [
+              720,
+              480
+            ]
+          }
+        ],
+        "png_bytes_identical": true,
+        "measured_presentations_equal": true,
+        "complete_measured_presentation_sha256": "02c5cbab8e454a121e1274c04049939a201cbf6c2bd918e8108c8b68898c811d",
+        "selected_view_properties": {
+          "type": "RenderView",
+          "view_size": [
+            720,
+            480
+          ],
+          "camera_position": [
+            -5.8,
+            -0.1,
+            1.2
+          ],
+          "camera_target": [
+            0.2,
+            -0.1,
+            1.2
+          ],
+          "camera_view_up": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "camera_parallel_projection": true,
+          "camera_parallel_scale": 1.65,
+          "camera_view_angle": 30.0,
+          "background": [
+            0.043137254901960784,
+            0.06274509803921569,
+            0.09019607843137255
+          ],
+          "show_orientation_axes": false,
+          "unavailable_properties": [
+            "camera_clipping_range"
+          ],
+          "visible_bindings": [
+            {
+              "source_names": [
+                "SectionX"
+              ],
+              "port": 0
+            }
+          ],
+          "visible_representations": [
+            {
+              "bindings": [
+                {
+                  "source_names": [
+                    "SectionX"
+                  ],
+                  "port": 0
+                }
+              ],
+              "line_width": 1.0,
+              "color_array": [
+                "POINTS",
+                "SyntheticTime_s"
+              ],
+              "color_range": [
+                0.599999977,
+                1.724
+              ]
+            }
+          ],
+          "visible_legends": [
+            {
+              "title": "Time (s)",
+              "component_title": "",
+              "position": [
+                0.85,
+                0.16
+              ],
+              "length": 0.6,
+              "thickness": 12.0,
+              "title_font_size": 16.0,
+              "label_font_size": 14.0,
+              "orientation": "Vertical",
+              "window_location": "Any Location",
+              "bindings": [
+                {
+                  "source_names": [
+                    "SectionX"
+                  ],
+                  "port": 0
+                }
+              ],
+              "color_range": [
+                0.599999977,
+                1.724
+              ]
+            }
+          ]
+        },
+        "native_decoded_pixel_ranges": [
+          [
+            11.0,
+            255.0
+          ],
+          [
+            1.0,
+            255.0
+          ],
+          [
+            23.0,
+            255.0
+          ]
+        ]
+      },
+      {
+        "source_name": "SectionY",
+        "render_controls": {
+          "scalar_bar_title": "Time (s)",
+          "scalar_bar_position": [
+            0.85,
+            0.16
+          ],
+          "scalar_bar_length": 0.6,
+          "scalar_bar_thickness": 12,
+          "scalar_bar_title_font_size": 16,
+          "scalar_bar_label_font_size": 14
+        },
+        "state": {
+          "filename": "panel-y.pvsm",
+          "sha256": "69bd828c0944f9e29b874f613f217cbe8bd3519712cde7e6b938553f640f8e02"
+        },
+        "png_pair": [
+          {
+            "filename": "panel-y.png",
+            "bytes": 44640,
+            "sha256": "87c33c9d1892c967e95801ccfb48e84bc77bce7a4a3a6103cacb941c3a5d9eb3",
+            "dimensions": [
+              720,
+              480
+            ]
+          },
+          {
+            "filename": "panel-y-reopened.png",
+            "bytes": 44640,
+            "sha256": "87c33c9d1892c967e95801ccfb48e84bc77bce7a4a3a6103cacb941c3a5d9eb3",
+            "dimensions": [
+              720,
+              480
+            ]
+          }
+        ],
+        "png_bytes_identical": true,
+        "measured_presentations_equal": true,
+        "complete_measured_presentation_sha256": "131507655eca99ece358208abf86f90004c1d6d3e55dfab83644425dedc11498",
+        "selected_view_properties": {
+          "type": "RenderView",
+          "view_size": [
+            720,
+            480
+          ],
+          "camera_position": [
+            0.2,
+            5.9,
+            1.2
+          ],
+          "camera_target": [
+            0.2,
+            -0.1,
+            1.2
+          ],
+          "camera_view_up": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "camera_parallel_projection": true,
+          "camera_parallel_scale": 1.8,
+          "camera_view_angle": 30.0,
+          "background": [
+            0.043137254901960784,
+            0.06274509803921569,
+            0.09019607843137255
+          ],
+          "show_orientation_axes": false,
+          "unavailable_properties": [
+            "camera_clipping_range"
+          ],
+          "visible_bindings": [
+            {
+              "source_names": [
+                "SectionY"
+              ],
+              "port": 0
+            }
+          ],
+          "visible_representations": [
+            {
+              "bindings": [
+                {
+                  "source_names": [
+                    "SectionY"
+                  ],
+                  "port": 0
+                }
+              ],
+              "line_width": 1.0,
+              "color_array": [
+                "POINTS",
+                "SyntheticTime_s"
+              ],
+              "color_range": [
+                0.599999977,
+                1.724
+              ]
+            }
+          ],
+          "visible_legends": [
+            {
+              "title": "Time (s)",
+              "component_title": "",
+              "position": [
+                0.85,
+                0.16
+              ],
+              "length": 0.6,
+              "thickness": 12.0,
+              "title_font_size": 16.0,
+              "label_font_size": 14.0,
+              "orientation": "Vertical",
+              "window_location": "Any Location",
+              "bindings": [
+                {
+                  "source_names": [
+                    "SectionX"
+                  ],
+                  "port": 0
+                },
+                {
+                  "source_names": [
+                    "SectionY"
+                  ],
+                  "port": 0
+                }
+              ],
+              "color_range": [
+                0.599999977,
+                1.724
+              ]
+            }
+          ]
+        },
+        "native_decoded_pixel_ranges": [
+          [
+            11.0,
+            255.0
+          ],
+          [
+            1.0,
+            255.0
+          ],
+          [
+            23.0,
+            255.0
+          ]
+        ]
+      },
+      {
+        "source_name": "SectionZ",
+        "render_controls": {
+          "scalar_bar_title": "Time (s)",
+          "scalar_bar_position": [
+            0.85,
+            0.16
+          ],
+          "scalar_bar_length": 0.6,
+          "scalar_bar_thickness": 12,
+          "scalar_bar_title_font_size": 16,
+          "scalar_bar_label_font_size": 14
+        },
+        "state": {
+          "filename": "panel-z.pvsm",
+          "sha256": "1d62b78d8242934ed8b3f596cd79d891998b7c9ad26b6b8aa33c9ece6ec534ef"
+        },
+        "png_pair": [
+          {
+            "filename": "panel-z.png",
+            "bytes": 41689,
+            "sha256": "04da32bf7d10ff2dfd9d1f4cb25c363e98622f4fb036dc9efff6fea450969b1c",
+            "dimensions": [
+              720,
+              480
+            ]
+          },
+          {
+            "filename": "panel-z-reopened.png",
+            "bytes": 41689,
+            "sha256": "04da32bf7d10ff2dfd9d1f4cb25c363e98622f4fb036dc9efff6fea450969b1c",
+            "dimensions": [
+              720,
+              480
+            ]
+          }
+        ],
+        "png_bytes_identical": true,
+        "measured_presentations_equal": true,
+        "complete_measured_presentation_sha256": "7d5f4c64531ddebaab1cc6de642b1b0bce56d4889671ea1ac5595b668af2cb94",
+        "selected_view_properties": {
+          "type": "RenderView",
+          "view_size": [
+            720,
+            480
+          ],
+          "camera_position": [
+            0.2,
+            -0.1,
+            7.2
+          ],
+          "camera_target": [
+            0.2,
+            -0.1,
+            1.2
+          ],
+          "camera_view_up": [
+            0.0,
+            1.0,
+            0.0
+          ],
+          "camera_parallel_projection": true,
+          "camera_parallel_scale": 2.0,
+          "camera_view_angle": 30.0,
+          "background": [
+            0.043137254901960784,
+            0.06274509803921569,
+            0.09019607843137255
+          ],
+          "show_orientation_axes": false,
+          "unavailable_properties": [
+            "camera_clipping_range"
+          ],
+          "visible_bindings": [
+            {
+              "source_names": [
+                "SectionZ"
+              ],
+              "port": 0
+            }
+          ],
+          "visible_representations": [
+            {
+              "bindings": [
+                {
+                  "source_names": [
+                    "SectionZ"
+                  ],
+                  "port": 0
+                }
+              ],
+              "line_width": 1.0,
+              "color_array": [
+                "POINTS",
+                "SyntheticTime_s"
+              ],
+              "color_range": [
+                0.599999977,
+                1.724
+              ]
+            }
+          ],
+          "visible_legends": [
+            {
+              "title": "Time (s)",
+              "component_title": "",
+              "position": [
+                0.85,
+                0.16
+              ],
+              "length": 0.6,
+              "thickness": 12.0,
+              "title_font_size": 16.0,
+              "label_font_size": 14.0,
+              "orientation": "Vertical",
+              "window_location": "Any Location",
+              "bindings": [
+                {
+                  "source_names": [
+                    "SectionX"
+                  ],
+                  "port": 0
+                },
+                {
+                  "source_names": [
+                    "SectionY"
+                  ],
+                  "port": 0
+                },
+                {
+                  "source_names": [
+                    "SectionZ"
+                  ],
+                  "port": 0
+                }
+              ],
+              "color_range": [
+                0.599999977,
+                1.724
+              ]
+            }
+          ]
+        },
+        "native_decoded_pixel_ranges": [
+          [
+            11.0,
+            255.0
+          ],
+          [
+            1.0,
+            255.0
+          ],
+          [
+            23.0,
+            255.0
+          ]
+        ]
+      },
+      {
+        "source_name": "Delay80",
+        "render_controls": {
+          "line_width": 2.5
+        },
+        "state": {
+          "filename": "isoline-80.pvsm",
+          "sha256": "3dd9f1f10e1f76e15475971a22b1b6e8e95e3cd6cd02a7e522aa279d035cfbf7"
+        },
+        "png_pair": [
+          {
+            "filename": "isoline-80.png",
+            "bytes": 6988,
+            "sha256": "b57e5df7f9261eb108d071c99f863faf2cde30bbf74a51ae2c4e5c329c2dfd72",
+            "dimensions": [
+              1060,
+              340
+            ]
+          },
+          {
+            "filename": "isoline-80-reopened.png",
+            "bytes": 6988,
+            "sha256": "b57e5df7f9261eb108d071c99f863faf2cde30bbf74a51ae2c4e5c329c2dfd72",
+            "dimensions": [
+              1060,
+              340
+            ]
+          }
+        ],
+        "png_bytes_identical": true,
+        "measured_presentations_equal": true,
+        "complete_measured_presentation_sha256": "3a093a414b406e2eafb8b6fee54d32f7a23888d839ae2c63462863b8316d5e29",
+        "selected_view_properties": {
+          "type": "RenderView",
+          "view_size": [
+            1060,
+            340
+          ],
+          "camera_position": [
+            0.2,
+            5.9,
+            1.2
+          ],
+          "camera_target": [
+            0.2,
+            -0.1,
+            1.2
+          ],
+          "camera_view_up": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "camera_parallel_projection": true,
+          "camera_parallel_scale": 0.5,
+          "camera_view_angle": 30.0,
+          "background": [
+            0.043137254901960784,
+            0.06274509803921569,
+            0.09019607843137255
+          ],
+          "show_orientation_axes": false,
+          "unavailable_properties": [
+            "camera_clipping_range"
+          ],
+          "visible_bindings": [
+            {
+              "source_names": [
+                "Delay80"
+              ],
+              "port": 0
+            }
+          ],
+          "visible_representations": [
+            {
+              "bindings": [
+                {
+                  "source_names": [
+                    "Delay80"
+                  ],
+                  "port": 0
+                }
+              ],
+              "line_width": 2.5,
+              "color_array": [
+                "POINTS",
+                ""
+              ]
+            }
+          ],
+          "visible_legends": []
+        },
+        "native_decoded_pixel_ranges": [
+          [
+            11.0,
+            59.0
+          ],
+          [
+            16.0,
+            196.0
+          ],
+          [
+            23.0,
+            219.0
+          ]
+        ]
+      },
+      {
+        "source_name": "Delay150",
+        "render_controls": {
+          "line_width": 2.5
+        },
+        "state": {
+          "filename": "isoline-150.pvsm",
+          "sha256": "faad34b9b608f50a05ac88f27abe16dc41af2bdb37ffa716c12def4d06a3b90b"
+        },
+        "png_pair": [
+          {
+            "filename": "isoline-150.png",
+            "bytes": 5470,
+            "sha256": "157d01a9b833c073c6475cf7db477515d2054dcf30ff2f5f0a007dfd3e7e5e46",
+            "dimensions": [
+              1060,
+              340
+            ]
+          },
+          {
+            "filename": "isoline-150-reopened.png",
+            "bytes": 5470,
+            "sha256": "157d01a9b833c073c6475cf7db477515d2054dcf30ff2f5f0a007dfd3e7e5e46",
+            "dimensions": [
+              1060,
+              340
+            ]
+          }
+        ],
+        "png_bytes_identical": true,
+        "measured_presentations_equal": true,
+        "complete_measured_presentation_sha256": "07eec6e900bb00ec83727ca955d24abbefe570e212964ddd11c8179b787d5690",
+        "selected_view_properties": {
+          "type": "RenderView",
+          "view_size": [
+            1060,
+            340
+          ],
+          "camera_position": [
+            0.2,
+            5.9,
+            1.2
+          ],
+          "camera_target": [
+            0.2,
+            -0.1,
+            1.2
+          ],
+          "camera_view_up": [
+            0.0,
+            0.0,
+            -1.0
+          ],
+          "camera_parallel_projection": true,
+          "camera_parallel_scale": 0.5,
+          "camera_view_angle": 30.0,
+          "background": [
+            0.043137254901960784,
+            0.06274509803921569,
+            0.09019607843137255
+          ],
+          "show_orientation_axes": false,
+          "unavailable_properties": [
+            "camera_clipping_range"
+          ],
+          "visible_bindings": [
+            {
+              "source_names": [
+                "Delay150"
+              ],
+              "port": 0
+            }
+          ],
+          "visible_representations": [
+            {
+              "bindings": [
+                {
+                  "source_names": [
+                    "Delay150"
+                  ],
+                  "port": 0
+                }
+              ],
+              "line_width": 2.5,
+              "color_array": [
+                "POINTS",
+                ""
+              ]
+            }
+          ],
+          "visible_legends": []
+        },
+        "native_decoded_pixel_ranges": [
+          [
+            11.0,
+            232.0
+          ],
+          [
+            16.0,
+            181.0
+          ],
+          [
+            23.0,
+            68.0
+          ]
+        ]
+      }
+    ],
+    "saved_states": 5,
+    "capture_pairs_verified": 5,
+    "restore_operations": [
+      "reopen_state",
+      "inspect_presentation",
+      "capture_current_view"
+    ],
+    "no_parameter_reapply_between_reopen_and_capture": true,
+    "trace": {
+      "record_count": 149,
+      "raw_trace_sha256": "ceb81f69340f3eba1235825e3791219332155ccb2eaf08cebe416e0f4ea07545",
+      "included": false,
+      "record_scope": "Production SDK call/response records and three discovery/initialization records; not the native test JSONL event format.",
+      "tool_call_counts": {
+        "capture_current_view": 5,
+        "contour": 2,
+        "get_skill_info": 1,
+        "inspect_pipeline": 1,
+        "inspect_presentation": 10,
+        "jobs_get_status": 106,
+        "load_skill": 1,
+        "open_dataset": 1,
+        "render_preview": 5,
+        "reopen_state": 5,
+        "save_state": 5,
+        "search_skills": 1,
+        "slice_plane": 3
+      }
+    },
+    "raw_manifest_sha256": "8e06d530344e2c79428e915066a9ffd597d3e34f52dc68f3fb31d1925c46f04e",
+    "owned_resource_cleanup": {
+      "server_stopped": true,
+      "pump_stopped": true,
+      "gateway_port": 0,
+      "failover": false
+    },
+    "tested_source_tree": "68a2d09ff6c70ed00066016986ef99253c7f6fbd",
+    "tested_wheel_sha256": "b8f01b645683f6eeb91350f2672a9852768bc0a6e65da1452bbeee67ed4117fb"
+  },
+  "limits": [
+    "Only the measured bounded Surface presentation subset is compared; not every possible ParaView property or plugin state.",
+    "ParaView 5.13.2 does not expose CameraClippingRange through this view property interface. It is explicitly unavailable, with no camera creation or getter fallback.",
+    "Native timeout/cancellation closes the owned host. Forced termination can leave staging files and cannot undo an artifact already published. No transactional cancellation/publication or cross-restart recovery guarantee is claimed.",
+    "Control bounds constrain resources but do not guarantee title fit or avoid overlap at every viewport; composition still requires visual review.",
+    "Selected production evidence concerns native panel authoring and state retention only. It is not scientific validation or acceptance of a finished artwork."
+  ],
+  "base_relation": "BASE_RELATION.json records the exact public merge base and complete non-documentation byte/mode comparison. The original test and native receipts apply to unchanged implementation bytes; they are not a rerun on a new distribution archive."
+}

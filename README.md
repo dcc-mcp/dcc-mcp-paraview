@@ -67,3 +67,5 @@ test is recorded in [the selected qualification](docs/slice-presentation-qualifi
 It supplements the frozen candidate's development record. Publication checks
 are separate host-free runs and exact-head CI; they do not rerun that native
 or GUI evidence or qualify every possible presentation property.
+
+The separate [line and legend controls candidate](docs/presentation-controls-candidate.md) adds optional bounded placement, text/font and line-width controls. Its [selected qualification](docs/presentation-controls-qualification.md) records later source-author native evidence, source identity and the correction of legend-thickness units. Publication validation runs host-free checks separately.

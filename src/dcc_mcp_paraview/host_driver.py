@@ -11,7 +11,7 @@ import uuid
 from pathlib import Path
 from xml.etree import ElementTree
 
-from contracts import MAX_SLICE_CELLS, MAX_SLICE_POINTS, OperationError, validate
+from contracts import MAX_SLICE_CELLS, MAX_SLICE_POINTS, SCALAR_BAR_CONTROLS, OperationError, validate
 
 MAX_FILE_BYTES = 64 * 1024 * 1024
 
@@ -744,6 +744,42 @@ class Host:
         # is surfaced by the verifier and is never silently repaired or published.
         return {"artifact": self.publish(output, lambda p: self.pv.SaveScreenshot(p, self.view), verify)}
 
+    @staticmethod
+    def _apply_legend_controls(scalar_bar, controls):
+        # Only explicitly supplied controls are written; omission keeps the existing native behavior.
+        for key, native in {
+            "scalar_bar_title": "Title",
+            "scalar_bar_length": "ScalarBarLength",
+            "scalar_bar_thickness": "ScalarBarThickness",
+            "scalar_bar_title_font_size": "TitleFontSize",
+            "scalar_bar_label_font_size": "LabelFontSize",
+        }.items():
+            if key in controls:
+                setattr(scalar_bar, native, controls[key])
+        if "scalar_bar_position" in controls:
+            scalar_bar.WindowLocation = "Any Location"
+            scalar_bar.Orientation = "Vertical"
+            scalar_bar.Position = controls["scalar_bar_position"]
+
+    def _legend_control_readback(self, scalar_bar, controls):
+        properties = {
+            "scalar_bar_title": ("Title", "string"),
+            "scalar_bar_position": ("Position", "vector"),
+            "scalar_bar_length": ("ScalarBarLength", "float"),
+            "scalar_bar_thickness": ("ScalarBarThickness", "float"),
+            "scalar_bar_title_font_size": ("TitleFontSize", "float"),
+            "scalar_bar_label_font_size": ("LabelFontSize", "float"),
+        }
+        selected = {key: value for key, value in properties.items() if key in controls}
+        if "scalar_bar_position" in controls:
+            selected.update(
+                scalar_bar_orientation=("Orientation", "enum"), scalar_bar_window_location=("WindowLocation", "enum")
+            )
+        actual = self._presentation_properties(scalar_bar, selected)
+        if set(actual) != set(selected):
+            raise OperationError("verification_failed", "Native legend control property is unavailable")
+        return actual
+
     def render_preview(
         self,
         name,
@@ -766,7 +802,29 @@ class Host:
         diffuse=1,
         specular=0,
         specular_power=100,
+        line_width=None,
+        scalar_bar_title=None,
+        scalar_bar_position=None,
+        scalar_bar_length=None,
+        scalar_bar_thickness=None,
+        scalar_bar_title_font_size=None,
+        scalar_bar_label_font_size=None,
     ):
+        optional_controls = {
+            "line_width": line_width,
+            "scalar_bar_title": scalar_bar_title,
+            "scalar_bar_position": scalar_bar_position,
+            "scalar_bar_length": scalar_bar_length,
+            "scalar_bar_thickness": scalar_bar_thickness,
+            "scalar_bar_title_font_size": scalar_bar_title_font_size,
+            "scalar_bar_label_font_size": scalar_bar_label_font_size,
+        }
+        controls = {key: value for key, value in optional_controls.items() if value is not None}
+        # Validate new controls before source/view/visibility/legend mutations, including direct host calls.
+        validate(
+            "render_preview",
+            {"name": name, "path": path, **controls, **({"scalar": scalar} if scalar is not None else {})},
+        )
         if not os.environ.get("DISPLAY"):
             raise OperationError("render_unavailable", "This adapter requires DISPLAY for this ParaView rendering lane")
         source = self.source(name)
@@ -789,6 +847,8 @@ class Host:
         display.Diffuse = diffuse
         display.Specular = specular
         display.SpecularPower = specular_power
+        if line_width is not None:
+            display.LineWidth = line_width
         if scalar is not None:
             self.pv.ColorBy(display, ("POINTS", scalar))
             lookup = self.pv.GetColorTransferFunction(scalar)
@@ -799,6 +859,7 @@ class Host:
             scalar_bar = self.pv.GetScalarBar(lookup, view)
             display.SetScalarBarVisibility(view, show_scalar_bar)
             scalar_bar.Visibility = int(show_scalar_bar)
+            self._apply_legend_controls(scalar_bar, controls)
         else:
             self.pv.ColorBy(display, None)
             display.DiffuseColor = solid_color or [0.25, 0.70, 0.90]
@@ -861,6 +922,18 @@ class Host:
                     "show_scalar_bar": show_scalar_bar if scalar is not None else False,
                 }
             )
+            if line_width is not None:
+                line_readback = self._presentation_properties(display, {"line_width": ("LineWidth", "float")})
+                if "line_width" not in line_readback:
+                    raise OperationError("verification_failed", "Native line width property is unavailable")
+                actual.update(line_readback)
+                expected["line_width"] = line_width
+            if SCALAR_BAR_CONTROLS.intersection(controls):
+                legend_readback = self._legend_control_readback(scalar_bar, controls)
+                actual.update(legend_readback)
+                expected.update({key: value for key, value in controls.items() if key in SCALAR_BAR_CONTROLS})
+                if scalar_bar_position is not None:
+                    expected.update(scalar_bar_orientation="Vertical", scalar_bar_window_location="Any Location")
             if camera_parallel_scale is not None:
                 expected["camera_parallel_scale"] = camera_parallel_scale
             if camera_position is not None:
