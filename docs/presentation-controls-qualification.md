@@ -72,7 +72,7 @@ and state retention. It does not establish final artwork acceptance, measured
 seismic data, a PDE solution or scientific validation.
 
 Together the two distinct reported runs contain ten saved-state/capture pairs.
-PC8 publication and current PR CI run host-free source and newly built wheel
+Publisher validation and current PR CI run host-free source and newly built wheel
 checks; they do not repeat native, GUI or synthetic production execution.
 
 ## Limits
