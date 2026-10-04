@@ -3,8 +3,14 @@
 import math
 import re
 
+MAX_SLICE_POINTS = 1_000_000
+MAX_SLICE_CELLS = 1_000_000
+
 OPERATIONS = {
     "inspect_pipeline": (set(), set()),
+    "inspect_presentation": (set(), set()),
+    "capture_current_view": ({"path"}, set()),
+    "slice_plane": ({"name", "input_name"}, {"origin", "normal"}),
     "create_sphere": ({"name"}, {"radius", "center", "resolution"}),
     "edit_sphere": ({"name", "radius"}, {"center", "resolution"}),
     "clip_plane": ({"name", "input_name"}, {"origin", "normal", "invert"}),
@@ -93,7 +99,8 @@ def validate(operation, params):
                 )
             ):
                 raise OperationError("invalid_input", "Vectors must contain three bounded finite numbers")
-            if key in {"normal", "camera_view_up"} and sum(n * n for n in value) < 1e-12:
+            zero_vector = not any(value) if operation == "slice_plane" else sum(n * n for n in value) < 1e-12
+            if key in {"normal", "camera_view_up"} and zero_vector:
                 raise OperationError("invalid_input", "Plane normal must be nonzero")
     for key, low, high in (("resolution", 8, 128), ("width", 64, 2048), ("height", 64, 2048)):
         if key in params and (type(params[key]) is not int or not low <= params[key] <= high):

@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+import math
 import os
 import re
 import sys
@@ -10,7 +11,7 @@ import uuid
 from pathlib import Path
 from xml.etree import ElementTree
 
-from contracts import OperationError, validate
+from contracts import MAX_SLICE_CELLS, MAX_SLICE_POINTS, OperationError, validate
 
 MAX_FILE_BYTES = 64 * 1024 * 1024
 
@@ -98,6 +99,15 @@ class Host:
             result.update(
                 origin=list(source.ClipType.Origin), normal=list(source.ClipType.Normal), invert=bool(source.Invert)
             )
+        if result["type"] == "Cut":
+            result.update(
+                origin=list(source.SliceType.Origin),
+                normal=list(source.SliceType.Normal),
+                offsets=list(source.SliceOffsetValues),
+                crinkle=bool(source.Crinkleslice),
+                triangulate=bool(source.Triangulatetheslice),
+                input_bindings=self._bindings(source, self.pv.GetSources()),
+            )
         return result
 
     def inspect_pipeline(self):
@@ -161,6 +171,65 @@ class Host:
         if actual["invert"] != invert:
             raise OperationError("verification_failed", "Clip inversion readback differs")
         return {"source": actual}
+
+    def slice_plane(self, name, input_name, origin=None, normal=None):
+        # Repeat the complete contract for direct host calls before any native mutation.
+        params = {"name": name, "input_name": input_name}
+        if origin is not None:
+            params["origin"] = origin
+        if normal is not None:
+            params["normal"] = normal
+        validate("slice_plane", params)
+        self.new_name(name)
+        source = self.source(input_name)
+        before = self.info(input_name, source)
+        if before["points"] > MAX_SLICE_POINTS or before["cells"] > MAX_SLICE_CELLS:
+            raise OperationError("resource_limit", "Slice input exceeds the bounded geometry limit")
+        if len(source.PointData.keys()) > 32:
+            raise OperationError("resource_limit", "Slice supports at most 32 point arrays")
+        expected_arrays = {a["name"]: a["components"] for a in before["point_arrays"]}
+        plane_origin, plane_normal = origin or [0, 0, 0], normal or [1, 0, 0]
+        active = self.pv.GetActiveSource()
+        output = None
+        try:
+            output = self.pv.Slice(registrationName=name, Input=source)
+            output.SliceType = "Plane"
+            output.SliceType.Origin = plane_origin
+            output.SliceType.Normal = plane_normal
+            output.SliceOffsetValues = [0.0]
+            output.Crinkleslice = 0
+            output.Triangulatetheslice = 1
+            actual = self.info(name, output)
+            if (
+                actual.get("origin") != plane_origin
+                or actual.get("normal") != plane_normal
+                or actual.get("offsets") != [0.0]
+                or actual.get("crinkle") is not False
+                or actual.get("triangulate") is not True
+                or actual.get("input_bindings") != [{"source_names": [input_name], "port": 0}]
+            ):
+                raise OperationError("verification_failed", "Native slice plane readback differs")
+            if actual["points"] > MAX_SLICE_POINTS or actual["cells"] > MAX_SLICE_CELLS:
+                raise OperationError("resource_limit", "Slice output exceeds the bounded geometry limit")
+            if not actual["points"] or not actual["cells"]:
+                raise OperationError("empty_slice", "The plane does not intersect a nonempty section")
+            if output.GetDataInformation().GetDataSetType() != 0:  # VTK_POLY_DATA
+                raise OperationError("verification_failed", "Slice output is not polygonal section data")
+            arrays = {a["name"]: a["components"] for a in actual["point_arrays"]}
+            if arrays != expected_arrays or any(not math.isfinite(v) for v in actual["bounds"]):
+                raise OperationError("verification_failed", "Slice point arrays or bounds differ")
+            if any(not math.isfinite(v) for a in actual["point_arrays"] for v in a["range"]):
+                raise OperationError("verification_failed", "Slice point array ranges are not finite")
+            actual["input_name"] = actual["input_bindings"][0]["source_names"][0]
+            return {"source": actual}
+        except BaseException:
+            # A native constructor may register a proxy before raising.
+            created = output if output is not None else self.pv.FindSource(name)
+            if created is not None:
+                self.pv.Delete(created)
+            raise
+        finally:
+            self.pv.SetActiveSource(active)
 
     def scalar(self, source, scalar):
         source.UpdatePipeline()
@@ -424,6 +493,256 @@ class Host:
         except Exception:
             self.pv.Delete(reader)
             raise
+
+    @staticmethod
+    def _presentation_properties(proxy, properties):
+        """Read existing properties only; never create a proxy or update the pipeline."""
+        result = {}
+        for key, (native, kind) in properties.items():
+            prop = proxy.GetProperty(native)
+            if prop is None:
+                continue
+            count = prop.GetNumberOfElements()
+            if count > 4096:
+                raise OperationError("resource_limit", "Presentation property exceeds its element limit")
+            if kind != "vector" and count != 1:
+                raise OperationError("verification_failed", "Presentation scalar property has unexpected cardinality")
+            # Internal SM properties can exist without Python attribute accessors
+            # (e.g. IndexedLookup in 5.13.2). Read the existing property directly.
+            # Wrapped GetData preserves ArraySelectionProperty's [association, name].
+            read_data = getattr(prop, "GetData", None)
+            if read_data is not None:
+                value = read_data()
+            else:
+                value = [prop.GetElement(i) for i in range(count)] if kind == "vector" else prop.GetElement(0)
+            if kind == "vector":
+                value = [] if value is None else list(value) if isinstance(value, (list, tuple)) else [value]
+                if len(value) > 4096:
+                    raise OperationError("resource_limit", "Presentation property exceeds its element limit")
+            elif kind == "enum":
+                value = prop.GetElement(0)
+                # A raw vtkSMProperty has no Python EnumerationProperty conversion.
+                domain = prop.FindDomain("vtkSMEnumerationDomain")
+                if domain is not None and not isinstance(value, str):
+                    for index in range(domain.GetNumberOfEntries()):
+                        if domain.GetEntryValue(index) == value:
+                            value = domain.GetEntryText(index)
+                            break
+            elif kind == "bool":
+                value = bool(value)
+            elif kind == "float":
+                value = float(value)
+            elif kind == "string":
+                value = str(value)
+                if len(value) > 4096:
+                    raise OperationError("resource_limit", "Presentation text exceeds its length limit")
+            result[key] = value
+        return result
+
+    def _palette(self, lookup):
+        if lookup is None:
+            return None
+        result = self._presentation_properties(
+            lookup,
+            {
+                "rgb_points": ("RGBPoints", "vector"),
+                "color_space": ("ColorSpace", "enum"),
+                "nan_color": ("NanColor", "vector"),
+                "use_log_scale": ("UseLogScale", "bool"),
+                "indexed_lookup": ("IndexedLookup", "bool"),
+                "vector_mode": ("VectorMode", "enum"),
+                "vector_component": ("VectorComponent", "float"),
+                "below_range_color": ("BelowRangeColor", "vector"),
+                "above_range_color": ("AboveRangeColor", "vector"),
+                "use_below_range_color": ("UseBelowRangeColor", "bool"),
+                "use_above_range_color": ("UseAboveRangeColor", "bool"),
+            },
+        )
+        points = result.get("rgb_points", [])
+        if points:
+            if len(points) < 4 or len(points) % 4:
+                raise OperationError("verification_failed", "Existing palette has invalid RGB control points")
+            result["range"] = [points[0], points[-4]]
+        return result
+
+    def _bindings(self, representation, sources):
+        prop = representation.GetProperty("Input")
+        if prop is None:
+            return []
+        native = prop.SMProperty
+        if native.GetNumberOfProxies() > 32:
+            raise OperationError("resource_limit", "Representation input count exceeds its limit")
+        bindings = []
+        for i in range(native.GetNumberOfProxies()):
+            source_proxy = native.GetProxy(i)
+            names = sorted(name for (name, _), source in sources.items() if source.SMProxy == source_proxy)
+            if not names:
+                raise OperationError("verification_failed", "Representation input has no registered source name")
+            bindings.append({"source_names": names, "port": native.GetOutputPortForConnection(i)})
+        return bindings
+
+    def inspect_presentation(self):
+        """Inventory existing views and attached representations without creating anything."""
+        sources = self.pv.GetSources()
+        views = list(self.pv.GetViews())
+        if len(sources) > 32 or len(views) > 16:
+            raise OperationError("resource_limit", "Existing presentation exceeds bounded inventory limits")
+        records = []
+        for view in views:
+            record = {"type": view.SMProxy.GetXMLName()}
+            record.update(
+                self._presentation_properties(
+                    view,
+                    {
+                        "camera_position": ("CameraPosition", "vector"),
+                        "camera_target": ("CameraFocalPoint", "vector"),
+                        "camera_view_up": ("CameraViewUp", "vector"),
+                        "camera_parallel_projection": ("CameraParallelProjection", "bool"),
+                        "camera_parallel_scale": ("CameraParallelScale", "float"),
+                        "camera_view_angle": ("CameraViewAngle", "float"),
+                        "camera_clipping_range": ("CameraClippingRange", "vector"),
+                        "view_size": ("ViewSize", "vector"),
+                        "view_time": ("ViewTime", "float"),
+                        "background": ("Background", "vector"),
+                        "background2": ("Background2", "vector"),
+                        "background_color_mode": ("BackgroundColorMode", "enum"),
+                        "use_color_palette_for_background": ("UseColorPaletteForBackground", "bool"),
+                        "show_orientation_axes": ("OrientationAxesVisibility", "bool"),
+                    },
+                )
+            )
+            record["unavailable_properties"] = [] if "camera_clipping_range" in record else ["camera_clipping_range"]
+            reps = list(view.Representations)
+            if len(reps) > 256:
+                raise OperationError("resource_limit", "Existing representation count exceeds its limit")
+            representations, scalar_bars = [], []
+            for rep in reps:
+                item = {"type": rep.SMProxy.GetXMLName()}
+                item.update(self._presentation_properties(rep, {"visible": ("Visibility", "bool")}))
+                lookup = rep.LookupTable if rep.GetProperty("LookupTable") is not None else None
+                if item["type"] == "ScalarBarWidgetRepresentation":
+                    item.update(
+                        self._presentation_properties(
+                            rep,
+                            {
+                                "title": ("Title", "string"),
+                                "component_title": ("ComponentTitle", "string"),
+                                "position": ("Position", "vector"),
+                                "orientation": ("Orientation", "enum"),
+                                "window_location": ("WindowLocation", "enum"),
+                                "length": ("ScalarBarLength", "float"),
+                                "thickness": ("ScalarBarThickness", "float"),
+                                "title_color": ("TitleColor", "vector"),
+                                "label_color": ("LabelColor", "vector"),
+                                "title_font_size": ("TitleFontSize", "float"),
+                                "label_font_size": ("LabelFontSize", "float"),
+                                "automatic_label_format": ("AutomaticLabelFormat", "bool"),
+                                "label_format": ("LabelFormat", "string"),
+                                "range_label_format": ("RangeLabelFormat", "string"),
+                                "draw_tick_labels": ("DrawTickLabels", "bool"),
+                                "use_custom_labels": ("UseCustomLabels", "bool"),
+                                "custom_labels": ("CustomLabels", "vector"),
+                            },
+                        )
+                    )
+                    item["palette"] = self._palette(lookup)
+                    item["bindings"] = sorted(
+                        [
+                            binding
+                            for candidate in reps
+                            if candidate.GetProperty("Input") is not None
+                            and candidate.GetProperty("LookupTable") is not None
+                            and candidate.LookupTable == lookup
+                            for binding in self._bindings(candidate, sources)
+                        ],
+                        key=lambda x: json.dumps(x, sort_keys=True),
+                    )
+                    scalar_bars.append(item)
+                else:
+                    item["bindings"] = self._bindings(rep, sources)
+                    item.update(
+                        self._presentation_properties(
+                            rep,
+                            {
+                                "representation": ("Representation", "enum"),
+                                "color_array": ("ColorArrayName", "vector"),
+                                "diffuse_color": ("DiffuseColor", "vector"),
+                                "ambient_color": ("AmbientColor", "vector"),
+                                "ambient": ("Ambient", "float"),
+                                "diffuse": ("Diffuse", "float"),
+                                "specular": ("Specular", "float"),
+                                "specular_power": ("SpecularPower", "float"),
+                                "opacity": ("Opacity", "float"),
+                                "line_width": ("LineWidth", "float"),
+                                "point_size": ("PointSize", "float"),
+                                "lighting": ("Lighting", "bool"),
+                            },
+                        )
+                    )
+                    item["palette"] = self._palette(lookup)
+                    representations.append(item)
+            record["representations"] = sorted(representations, key=lambda x: json.dumps(x, sort_keys=True))
+            record["scalar_bars"] = sorted(scalar_bars, key=lambda x: json.dumps(x, sort_keys=True))
+            record["visible_bindings"] = [
+                b for r in record["representations"] if r.get("visible") for b in r["bindings"]
+            ]
+            records.append((record, view == self.view))
+        try:
+            records.sort(key=lambda x: json.dumps(x[0], sort_keys=True, allow_nan=False))
+            result = {
+                "views": [r for r, _ in records],
+                "current_view_index": next((i for i, (_, current) in enumerate(records) if current), None),
+            }
+            if len(json.dumps(result, allow_nan=False).encode()) > 512 * 1024:
+                raise OperationError("resource_limit", "Presentation inventory exceeds its byte limit")
+        except (ValueError, TypeError):
+            raise OperationError("verification_failed", "Presentation is not bounded finite JSON") from None
+        return result
+
+    @staticmethod
+    def _verify_png(path, dimensions):
+        data = path.read_bytes()
+        actual = [int.from_bytes(data[16:20], "big"), int.from_bytes(data[20:24], "big")]
+        if data[:8] != b"\x89PNG\r\n\x1a\n" or actual != dimensions:
+            raise OperationError("verification_failed", "PNG header or dimensions differ")
+        from vtkmodules.vtkIOImage import vtkPNGReader
+
+        reader = vtkPNGReader()
+        reader.SetFileName(str(path))
+        reader.Update()
+        pixels = reader.GetOutput()
+        if list(pixels.GetDimensions()) != dimensions + [1]:
+            raise OperationError("verification_failed", "Native PNG decode dimensions differ")
+        scalars = pixels.GetPointData().GetScalars()
+        if scalars is None or scalars.GetNumberOfComponents() not in (3, 4):
+            raise OperationError("verification_failed", "Native PNG has no RGB pixel data")
+        ranges = [list(scalars.GetRange(channel)) for channel in range(3)]
+        if all(low == high for low, high in ranges):
+            raise OperationError("verification_failed", "Native PNG contains only a flat color")
+        return {"dimensions": actual, "pixel_ranges": ranges}
+
+    def capture_current_view(self, path):
+        validate("capture_current_view", {"path": path})
+        output = self.path(path, ".png", output=True)
+        if not os.environ.get("DISPLAY"):
+            raise OperationError("render_unavailable", "This adapter requires DISPLAY for this ParaView rendering lane")
+        before = self.inspect_presentation()
+        index = before["current_view_index"]
+        if index is None or before["views"][index]["type"] != "RenderView":
+            raise OperationError("view_not_found", "No configured current render view exists")
+        dimensions = before["views"][index].get("view_size", [])
+        if len(dimensions) != 2 or any(type(n) is not int or not 64 <= n <= 2048 for n in dimensions):
+            raise OperationError("resource_limit", "Current view size must be within [64, 2048] per axis")
+
+        def verify(staged):
+            after = self.inspect_presentation()
+            if after != before:
+                raise OperationError("presentation_changed", "Native capture changed presentation; no image published")
+            return {**self._verify_png(staged, dimensions), "presentation": after, "presentation_unchanged": True}
+
+        # No Render/ResetCamera/Show/configuration helpers. A native first-render reset
+        # is surfaced by the verifier and is never silently repaired or published.
+        return {"artifact": self.publish(output, lambda p: self.pv.SaveScreenshot(p, self.view), verify)}
 
     def render_preview(
         self,

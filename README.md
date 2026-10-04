@@ -36,6 +36,9 @@ On the historically tested Core 0.20.39, `tools/list` exposes short names such a
 | `inspect_pipeline` | Source geometry, point arrays and exact host-thread identity |
 | `create_sphere`, `edit_sphere` | Bounded sphere parameters, verified after writes |
 | `clip_plane` | Native plane clip of an existing input |
+| `slice_plane` | Bounded true polygonal section of an existing input |
+| `inspect_presentation` | Read existing cameras, displays, palettes and legends |
+| `capture_current_view` | Export the configured view only if presentation stays unchanged |
 | `open_dataset` | Local single-file VTI, VTP or VTU import |
 | `contour` | At most eight isosurfaces of a named point scalar |
 | `export_dataset` | VTI/VTP/VTU export with native geometry/array readback |
@@ -54,3 +57,13 @@ See [the installable skill](src/dcc_mcp_paraview/skills/paraview-pipeline/SKILL.
 - Native calls are monolithic. Timeout/cancellation terminates the owned host, discards its unsaved state and permanently closes that session. A file operation already published before interruption may remain. No rollback or cross-restart job recovery is claimed
 
 [Architecture](docs/architecture.md) · [Installation and removal](install.md) · [Validation evidence](docs/validation.md)
+
+The [slice and presentation candidate](docs/slice-presentation-candidate.md) adds native plane sections and capture that detects first-render camera resets. The development record retains its earlier pending-qualification wording.
+
+## Selected Slice qualification
+
+The later source-author report for one installed-wheel Linux native five-view
+test is recorded in [the selected qualification](docs/slice-presentation-qualification.md).
+It supplements the frozen candidate's development record. Publication checks
+are separate host-free runs and exact-head CI; they do not rerun that native
+or GUI evidence or qualify every possible presentation property.

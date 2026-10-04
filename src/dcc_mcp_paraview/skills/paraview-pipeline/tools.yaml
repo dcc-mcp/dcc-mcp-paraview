@@ -1066,6 +1066,241 @@
         "open_world_hint": false,
         "deferred_hint": false
       }
+    },
+    {
+      "name": "slice_plane",
+      "description": "Create one true polygonal plane section of an existing source; verify bounded geometry and preserved point arrays, rolling back failure.",
+      "source_file": "scripts/slice_plane.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+          },
+          "input_name": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+          },
+          "origin": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": -1000000.0,
+              "maximum": 1000000.0
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "normal": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": -1000000.0,
+              "maximum": 1000000.0
+            },
+            "minItems": 3,
+            "maxItems": 3,
+            "not": {
+              "items": {
+                "const": 0
+              }
+            }
+          }
+        },
+        "required": [
+          "name",
+          "input_name"
+        ],
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "context": {
+            "type": "object"
+          },
+          "job_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "running",
+              "completed",
+              "failed",
+              "cancelled",
+              "interrupted"
+            ]
+          }
+        },
+        "anyOf": [
+          {
+            "required": [
+              "job_id",
+              "status"
+            ]
+          },
+          {
+            "required": [
+              "success",
+              "context"
+            ]
+          }
+        ]
+      },
+      "execution": "async",
+      "job_strategy": "monolithic",
+      "affinity": "main",
+      "enforce_thread_affinity": true,
+      "timeout_hint_secs": 65,
+      "annotations": {
+        "read_only_hint": false,
+        "destructive_hint": true,
+        "idempotent_hint": false,
+        "open_world_hint": false,
+        "deferred_hint": true
+      },
+      "next-tools": {
+        "on-failure": [
+          "inspect_pipeline"
+        ]
+      }
+    },
+    {
+      "name": "inspect_presentation",
+      "description": "Read only existing views, representations, source-name bindings, cameras, materials, scalar palettes and legends; never creates display state.",
+      "source_file": "scripts/inspect_presentation.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "context": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "success",
+          "context"
+        ]
+      },
+      "execution": "sync",
+      "job_strategy": "monolithic",
+      "affinity": "main",
+      "enforce_thread_affinity": true,
+      "timeout_hint_secs": 65,
+      "annotations": {
+        "read_only_hint": true,
+        "destructive_hint": false,
+        "idempotent_hint": true,
+        "open_world_hint": false,
+        "deferred_hint": false
+      }
+    },
+    {
+      "name": "capture_current_view",
+      "description": "Atomically capture the configured view without changing presentation. Fail without publication if native capture resets camera or other measured state.",
+      "source_file": "scripts/capture_current_view.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          }
+        },
+        "required": [
+          "path"
+        ],
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "context": {
+            "type": "object"
+          },
+          "job_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "running",
+              "completed",
+              "failed",
+              "cancelled",
+              "interrupted"
+            ]
+          }
+        },
+        "anyOf": [
+          {
+            "required": [
+              "job_id",
+              "status"
+            ]
+          },
+          {
+            "required": [
+              "success",
+              "context"
+            ]
+          }
+        ]
+      },
+      "execution": "async",
+      "job_strategy": "monolithic",
+      "affinity": "main",
+      "enforce_thread_affinity": true,
+      "timeout_hint_secs": 65,
+      "annotations": {
+        "read_only_hint": false,
+        "destructive_hint": true,
+        "idempotent_hint": false,
+        "open_world_hint": false,
+        "deferred_hint": true
+      },
+      "next-tools": {
+        "on-failure": [
+          "inspect_presentation"
+        ]
+      }
     }
   ]
 }
