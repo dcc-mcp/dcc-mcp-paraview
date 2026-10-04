@@ -116,6 +116,19 @@ def test_slice_five_saved_presentations_over_real_mcp(tmp_path):
         # Original analytic test volume: RadiusSquared = x*x + y*y + z*z.
         write_vti(input_path)
     scalar = os.environ.get("PARAVIEW_SLICE_SCALAR", "RadiusSquared")
+    presentation_controls = (
+        {
+            "line_width": 2,
+            "scalar_bar_title": "Time (s)",
+            "scalar_bar_position": [0.89, 0.18],
+            "scalar_bar_length": 0.6,
+            "scalar_bar_thickness": 12,
+            "scalar_bar_title_font_size": 16,
+            "scalar_bar_label_font_size": 14,
+        }
+        if os.environ.get("PARAVIEW_PRESENTATION_CONTROLS_ACCEPTANCE") == "1"
+        else {}
+    )
     adapter_dir = Path(dcc_mcp_paraview.__file__).parent
     evidence = {
         "core": version("dcc-mcp-core"),
@@ -128,6 +141,7 @@ def test_slice_five_saved_presentations_over_real_mcp(tmp_path):
         },
         "runner_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
         "analytic_fixture": analytic,
+        "presentation_controls": presentation_controls,
         "views": [],
         "native_qualified": False,
     }
@@ -212,7 +226,7 @@ def test_slice_five_saved_presentations_over_real_mcp(tmp_path):
                 for index, direction in enumerate(([2, 1, 1], [2, -1, 1], [2, 0, 0.3], [2, 1, 2], [2, -2, 0.5])):
                     stem = "view-%d" % (index + 1)
                     position = [center[i] + span * direction[i] for i in range(3)]
-                    await verified(
+                    configured = await verified(
                         "render_preview",
                         {
                             "name": "Section",
@@ -228,9 +242,29 @@ def test_slice_five_saved_presentations_over_real_mcp(tmp_path):
                             "camera_parallel_scale": span * 0.65,
                             "show_scalar_bar": True,
                             "background": [0.04, 0.06, 0.1],
+                            **presentation_controls,
                         },
                     )
+                    for key, value in presentation_controls.items():
+                        assert configured["artifact"]["view"][key] == value
                     before = await verified("inspect_presentation", {})
+                    if presentation_controls:
+                        view = before["views"][before["current_view_index"]]
+                        displayed = [rep for rep in view["representations"] if rep.get("visible")]
+                        legends = [bar for bar in view["scalar_bars"] if bar.get("visible")]
+                        assert len(displayed) == len(legends) == 1
+                        assert displayed[0]["line_width"] == 2
+                        legend = legends[0]
+                        assert (
+                            legend["title"],
+                            legend["position"],
+                            legend["length"],
+                            legend["thickness"],
+                            legend["title_font_size"],
+                            legend["label_font_size"],
+                            legend["orientation"],
+                            legend["window_location"],
+                        ) == ("Time (s)", [0.89, 0.18], 0.6, 12, 16, 14, "Vertical", "Any Location")
                     assert before == await verified("inspect_presentation", {})
                     await verified("save_state", {"path": stem + ".pvsm", "data_directory": "data"})
                     captured = (await verified("capture_current_view", {"path": stem + "-current.png"}))["artifact"]

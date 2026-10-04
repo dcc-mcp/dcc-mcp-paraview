@@ -1,0 +1,259 @@
+{
+  "source_identity": {
+    "repository": "https://github.com/dcc-mcp/dcc-mcp-paraview",
+    "base_kind": "Exact public merged R3 commit; documentation overlay preserved",
+    "base_commit": "6863d0f705cd8579676542d59a7f0afd52e25827",
+    "base_tree": "70b9beb5525f74b8eca21dc3deda490d9b7dc4fa",
+    "candidate_tree": "e5b4a3f1726c4a729afc177e185edaf48513d9bf",
+    "source_patch_sha256": "add2e75e070feaa42702d61fd92fd845dc1bea7737eeee203982995e87108a9b",
+    "native_tested_implementation_tree": "68a2d09ff6c70ed00066016986ef99253c7f6fbd",
+    "native_tested_wheel_sha256": "b8f01b645683f6eeb91350f2672a9852768bc0a6e65da1452bbeee67ed4117fb",
+    "original_frozen_r3_tree": "61762e29b75e0fda72031f9c25c2c8c4a7d6445e",
+    "original_r4_delta_sha256": "81b105af10f1ae27d9c64619566060ae6ac90f0db1eb5b5a4a925422209f760d"
+  },
+  "public_base_verification": "An ordinary anonymous public fetch of main resolved to the stated merge commit and tree.",
+  "prerequisite_pr": "https://github.com/dcc-mcp/dcc-mcp-paraview/pull/2",
+  "public_r3_differs_from_frozen_r3_only_in": [
+    "README.md",
+    "docs/slice-presentation-candidate.md",
+    "docs/slice-presentation-discovered-schemas.json",
+    "docs/slice-presentation-qualification.json",
+    "docs/slice-presentation-qualification.md"
+  ],
+  "rebased_r4_differs_from_native_tested_r4_only_in": [
+    "README.md",
+    "docs/slice-presentation-candidate.md",
+    "docs/slice-presentation-discovered-schemas.json",
+    "docs/slice-presentation-qualification.json",
+    "docs/slice-presentation-qualification.md"
+  ],
+  "same_non_documentation_file_count": 51,
+  "all_runtime_schema_test_script_packaging_configuration_bytes_and_modes_identical": true,
+  "comparison_method": "Compared complete Git tree inventories by filename, blob ID and mode. All files other than README and documentation match the frozen tested R4 tree.",
+  "identical_non_documentation_files": [
+    {
+      "filename": ".github/workflows/ci.yml",
+      "git_tree_entry": "100644 blob 01d1f5624ca296f89da582e14f755f631528f104"
+    },
+    {
+      "filename": ".gitignore",
+      "git_tree_entry": "100644 blob 23d4ef1c14cfaf55456e0537182f7ad83ea5cdbf"
+    },
+    {
+      "filename": ".pre-commit-config.yaml",
+      "git_tree_entry": "100644 blob ce22893f0d59f1d6fb56a64f2b5f39fbe29a9407"
+    },
+    {
+      "filename": "AGENTS.md",
+      "git_tree_entry": "100644 blob ed178381e13b14a8b9ad8f796c265a1bf67bfc85"
+    },
+    {
+      "filename": "LICENSE",
+      "git_tree_entry": "100644 blob b13e59724b91dfdbb6bd619c81ad8681411a1fe1"
+    },
+    {
+      "filename": "install.md",
+      "git_tree_entry": "100644 blob 2d07976bca2c28d3aa9f22dc729446c26eda5f42"
+    },
+    {
+      "filename": "pyproject.toml",
+      "git_tree_entry": "100644 blob 901c160104a36aa4665d3b5010c859dbf3a3d5e0"
+    },
+    {
+      "filename": "scripts/validate-presentation-controls-in-gui.sh",
+      "git_tree_entry": "100755 blob 404366f71a2195e4a9d193732d5f45664db42c4c"
+    },
+    {
+      "filename": "scripts/validate-render-in-gui.sh",
+      "git_tree_entry": "100755 blob 2d34659ff70b96e121363e959a68da393ada4335"
+    },
+    {
+      "filename": "scripts/validate-slice-in-gui.sh",
+      "git_tree_entry": "100755 blob bccdfdb5b81312448d09294936873890800c557a"
+    },
+    {
+      "filename": "scripts/validate-wheel.sh",
+      "git_tree_entry": "100755 blob c5b2bb94ed115292707984f7b675fd127a649e4d"
+    },
+    {
+      "filename": "src/dcc_mcp_paraview/__init__.py",
+      "git_tree_entry": "100644 blob e3c4364f82e68791ab989d394f9469ca4dcea0e2"
+    },
+    {
+      "filename": "src/dcc_mcp_paraview/bridge.py",
+      "git_tree_entry": "100644 blob ea5e95c0466d79a1b8f055bb69cb836de76ac435"
+    },
+    {
+      "filename": "src/dcc_mcp_paraview/cli.py",
+      "git_tree_entry": "100644 blob aa1ed9b9bd831c390690dcf657e91d1f896b12b3"
+    },
+    {
+      "filename": "src/dcc_mcp_paraview/compatibility.py",
+      "git_tree_entry": "100644 blob 494ad65c8d39411734ac3b0da1897861b362656c"
+    },
+    {
+      "filename": "src/dcc_mcp_paraview/contracts.py",
+      "git_tree_entry": "100644 blob 075a015ec67aca815b235e2775547d6c346f4819"
+    },
+    {
+      "filename": "src/dcc_mcp_paraview/host_driver.py",
+      "git_tree_entry": "100644 blob 78a01de1861a4e9ee944aee5a13b917ff1439df3"
+    },
+    {
+      "filename": "src/dcc_mcp_paraview/server.py",
+      "git_tree_entry": "100644 blob a5624c390f22f4df9595704fae483ad7ec8fdeac"
+    },
+    {
+      "filename": "src/dcc_mcp_paraview/skills/paraview-pipeline/SKILL.md",
+      "git_tree_entry": "100644 blob 20011e964aac1f25a76ff5157117d94a2af5d216"
+    },
+    {
+      "filename": "src/dcc_mcp_paraview/skills/paraview-pipeline/agents/openai.yaml",
+      "git_tree_entry": "100644 blob 0e74842155e04ba24fc6e0d0c0a45621016bad56"
+    },
+    {
+      "filename": "src/dcc_mcp_paraview/skills/paraview-pipeline/scripts/capture_current_view.py",
+      "git_tree_entry": "100644 blob a9febc8b53787463c357ca206a77f881d90a5da5"
+    },
+    {
+      "filename": "src/dcc_mcp_paraview/skills/paraview-pipeline/scripts/clip_plane.py",
+      "git_tree_entry": "100644 blob 2bbc60dc005c70ca727b36bcc90ad205ea8edb3e"
+    },
+    {
+      "filename": "src/dcc_mcp_paraview/skills/paraview-pipeline/scripts/contour.py",
+      "git_tree_entry": "100644 blob 65e97f5e9eb2f5d3e2a14c1fdb12d727f455136c"
+    },
+    {
+      "filename": "src/dcc_mcp_paraview/skills/paraview-pipeline/scripts/create_sphere.py",
+      "git_tree_entry": "100644 blob fe02250820302ec8f359be3ab71146b88a0b5612"
+    },
+    {
+      "filename": "src/dcc_mcp_paraview/skills/paraview-pipeline/scripts/edit_sphere.py",
+      "git_tree_entry": "100644 blob 9a2bd954d9314ced6a1ca01d8e1a4130d99a5d8d"
+    },
+    {
+      "filename": "src/dcc_mcp_paraview/skills/paraview-pipeline/scripts/export_dataset.py",
+      "git_tree_entry": "100644 blob 2ba0a28e9caa58a877df0053e6c33d3c2d4f7824"
+    },
+    {
+      "filename": "src/dcc_mcp_paraview/skills/paraview-pipeline/scripts/get_adapter_info.py",
+      "git_tree_entry": "100644 blob 3c36f428d21622341e7d24c331679ab29195b5d9"
+    },
+    {
+      "filename": "src/dcc_mcp_paraview/skills/paraview-pipeline/scripts/inspect_pipeline.py",
+      "git_tree_entry": "100644 blob 9e2ba2952653282e5147cf69b654e84bfb1708a3"
+    },
+    {
+      "filename": "src/dcc_mcp_paraview/skills/paraview-pipeline/scripts/inspect_presentation.py",
+      "git_tree_entry": "100644 blob 8ac489c549cc638fc6c7046a91bc0a13fc94c390"
+    },
+    {
+      "filename": "src/dcc_mcp_paraview/skills/paraview-pipeline/scripts/open_dataset.py",
+      "git_tree_entry": "100644 blob 0a71d7a937c7a65b0d31551b19c1463819519916"
+    },
+    {
+      "filename": "src/dcc_mcp_paraview/skills/paraview-pipeline/scripts/render_preview.py",
+      "git_tree_entry": "100644 blob 904a8b876e3c717c9cbf0269157fe036baab289e"
+    },
+    {
+      "filename": "src/dcc_mcp_paraview/skills/paraview-pipeline/scripts/reopen_state.py",
+      "git_tree_entry": "100644 blob f231cd8c920e44ff041d16823fef5bed583e0d35"
+    },
+    {
+      "filename": "src/dcc_mcp_paraview/skills/paraview-pipeline/scripts/save_state.py",
+      "git_tree_entry": "100644 blob 37636231f1450f79d144224eff5fd5a7480c428a"
+    },
+    {
+      "filename": "src/dcc_mcp_paraview/skills/paraview-pipeline/scripts/slice_plane.py",
+      "git_tree_entry": "100644 blob c92f91b478f4bb7123139949eb4b313568ed147e"
+    },
+    {
+      "filename": "src/dcc_mcp_paraview/skills/paraview-pipeline/tools.yaml",
+      "git_tree_entry": "100644 blob 8a886ea409c0a87329d23e03690c1db089dacd49"
+    },
+    {
+      "filename": "tests/conftest.py",
+      "git_tree_entry": "100644 blob d76d97b7cb1e5865b580f0d02257f39c2f95f253"
+    },
+    {
+      "filename": "tests/test_bridge.py",
+      "git_tree_entry": "100644 blob 53067007f098cba396b16218ab8465f4733b9207"
+    },
+    {
+      "filename": "tests/test_contracts.py",
+      "git_tree_entry": "100644 blob 59284b4727da880fe11c118a6b9032c32401042c"
+    },
+    {
+      "filename": "tests/test_host_error_protocol.py",
+      "git_tree_entry": "100644 blob 42e0cb930cb1d675d3426052d6df870213c26a0e"
+    },
+    {
+      "filename": "tests/test_host_files.py",
+      "git_tree_entry": "100644 blob 6d13addfa4b63c037eb035fb16dc4d7f79278602"
+    },
+    {
+      "filename": "tests/test_lifecycle.py",
+      "git_tree_entry": "100644 blob 1615afaa0c9900a6dfe949df3c007877662961b9"
+    },
+    {
+      "filename": "tests/test_lifecycle_races.py",
+      "git_tree_entry": "100644 blob 501559c0ecb73afb663525f6c42726664eb26350"
+    },
+    {
+      "filename": "tests/test_mcp.py",
+      "git_tree_entry": "100644 blob a50f300a7383e053894466f4562170d324bf3255"
+    },
+    {
+      "filename": "tests/test_mcp_recovery.py",
+      "git_tree_entry": "100644 blob a6a854875631cbf46b56818ff803dc6d22e1ca11"
+    },
+    {
+      "filename": "tests/test_native.py",
+      "git_tree_entry": "100644 blob 158c24156badc5ecf719e3782d3cce1ba03c3360"
+    },
+    {
+      "filename": "tests/test_presentation_controls.py",
+      "git_tree_entry": "100644 blob a48a7c7478418538403b1b7a0c354c8bcd24491d"
+    },
+    {
+      "filename": "tests/test_render_mcp.py",
+      "git_tree_entry": "100644 blob da18bd2f2b606e308255433c9a68a7ea90ef5a2a"
+    },
+    {
+      "filename": "tests/test_slice_presentation.py",
+      "git_tree_entry": "100644 blob b2d12b131bd8a1a9fb26cc2a0c6665ea55003b59"
+    },
+    {
+      "filename": "tests/test_slice_render_mcp.py",
+      "git_tree_entry": "100644 blob fc96d6df8a6828a13d22f904977b26c76422a6fe"
+    },
+    {
+      "filename": "tests/test_slice_runner_trace.py",
+      "git_tree_entry": "100644 blob 83976ab0e79a7b215fdf1917b6c573475ea00dd3"
+    },
+    {
+      "filename": "vx.toml",
+      "git_tree_entry": "100644 blob d5cce1adee3bf9a4186ff2e31eea21bc3c854720"
+    }
+  ],
+  "preserved_public_documentation": [
+    {
+      "filename": "docs/slice-presentation-candidate.md",
+      "git_tree_entry": "100644 blob d7acb4d4e78659709b055d58f3a7e95b49926793"
+    },
+    {
+      "filename": "docs/slice-presentation-discovered-schemas.json",
+      "git_tree_entry": "100644 blob e8888eafa935621788f2af794cedfb935f8dacc5"
+    },
+    {
+      "filename": "docs/slice-presentation-qualification.json",
+      "git_tree_entry": "100644 blob 363cb9b752c0a3d5ca31a8e816467b4356968858"
+    },
+    {
+      "filename": "docs/slice-presentation-qualification.md",
+      "git_tree_entry": "100644 blob 94e9392bb04ed3d714dd638840795445d1609850"
+    }
+  ],
+  "readme_resolution": "Retained the complete public-base README byte prefix, then appended the same two-line R4 addition from the original delta.",
+  "qualification_scope": "Tests and native evidence were recorded on the frozen implementation tree and its original wheel. No runtime changed in the merged-base tree. This relation is byte verification, not another native execution or a claim that a newly built wheel was tested."
+}

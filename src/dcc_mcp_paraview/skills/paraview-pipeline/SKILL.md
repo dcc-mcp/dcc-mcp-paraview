@@ -96,3 +96,18 @@ publishes no image and leaves the changed state available for inspection. Never
 call `render_preview` before that capture to hide a restore mismatch. Five
 separately saved viewpoint states are supported; no multi-view authoring tool
 is provided. Native qualification for these additions is pending.
+
+## Optional line and vertical legend placement
+
+`render_preview` also accepts finite `line_width` from 1 to 8 pixels. With scalar
+coloring, optional `scalar_bar_title` is 1–80 plain ASCII characters without
+control characters or markup. `scalar_bar_position` is normalized `[x,y]` in
+[0,1] and selects a manual vertical legend. `scalar_bar_length` is 0.05–0.9 of
+view height, `scalar_bar_thickness` is an integer 1–64 native points, as for font size, and
+`scalar_bar_title_font_size` / `scalar_bar_label_font_size` are integers 6–48.
+Rendered legend thickness in pixels depends on the host, font and DPI.
+When position and length are both supplied, `y + length` must not exceed 1.
+The native values are read back and participate in presentation capture checks.
+Omitting a control leaves its existing native behavior unchanged. No label or
+range-format string inputs are supported. The bounded controls still require
+visual QA for title fit, legend placement and actual line appearance.

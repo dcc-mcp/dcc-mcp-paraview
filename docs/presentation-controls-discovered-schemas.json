@@ -1,0 +1,463 @@
+{
+  "disclosure": "Four selected actual MCP tools/list declarations from the selected native run; not a full trace.",
+  "raw_trace_sha256": "e4885d7605d2c84386f793423fc341bfcdf3bfb816f9c0cd7c1ed39362c3d729",
+  "tools": [
+    {
+      "name": "capture_current_view",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          }
+        },
+        "required": [
+          "path"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "context": {
+            "type": "object"
+          },
+          "job_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "running",
+              "completed",
+              "failed",
+              "cancelled",
+              "interrupted"
+            ]
+          }
+        },
+        "anyOf": [
+          {
+            "required": [
+              "job_id",
+              "status"
+            ]
+          },
+          {
+            "required": [
+              "success",
+              "context"
+            ]
+          }
+        ]
+      },
+      "annotations": {
+        "title": null,
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      },
+      "execution": null
+    },
+    {
+      "name": "inspect_presentation",
+      "inputSchema": {
+        "type": "object",
+        "properties": {},
+        "required": [],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "context": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "success",
+          "context"
+        ]
+      },
+      "annotations": {
+        "title": null,
+        "readOnlyHint": true,
+        "destructiveHint": false,
+        "idempotentHint": true,
+        "openWorldHint": false
+      },
+      "execution": null
+    },
+    {
+      "name": "render_preview",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          },
+          "width": {
+            "type": "integer",
+            "minimum": 64,
+            "maximum": 2048,
+            "default": 800
+          },
+          "height": {
+            "type": "integer",
+            "minimum": 64,
+            "maximum": 2048,
+            "default": 600
+          },
+          "scalar": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9 _-]{0,63}$"
+          },
+          "color_range": {
+            "type": "array",
+            "minItems": 2,
+            "maxItems": 2,
+            "items": {
+              "type": "number",
+              "minimum": -1000000000.0,
+              "maximum": 1000000000.0
+            }
+          },
+          "preset": {
+            "type": "string",
+            "enum": [
+              "Cool to Warm (Extended)",
+              "Viridis (matplotlib)",
+              "Inferno (matplotlib)",
+              "Black-Body Radiation"
+            ],
+            "default": "Cool to Warm (Extended)"
+          },
+          "camera_position": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": -1000000.0,
+              "maximum": 1000000.0
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "camera_target": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": -1000000.0,
+              "maximum": 1000000.0
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "background": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "solid_color": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "description": "Solid RGB surface color; mutually exclusive with scalar."
+          },
+          "show_scalar_bar": {
+            "type": "boolean",
+            "default": true
+          },
+          "camera_view_up": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": {
+              "type": "number",
+              "minimum": -1000000.0,
+              "maximum": 1000000.0
+            },
+            "description": "Nonzero view-up vector; must not be parallel to camera direction."
+          },
+          "camera_parallel_scale": {
+            "type": "number",
+            "minimum": 0.001,
+            "maximum": 1000000.0,
+            "description": "When supplied, enable orthographic projection with this half-height; otherwise perspective projection."
+          },
+          "camera_view_angle": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 120,
+            "default": 30
+          },
+          "ambient": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0
+          },
+          "diffuse": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 1
+          },
+          "specular": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "default": 0
+          },
+          "specular_power": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 128,
+            "default": 100
+          },
+          "show_orientation_axes": {
+            "type": "boolean",
+            "default": false
+          },
+          "line_width": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 8,
+            "description": "Native line width in pixels; omitted leaves existing behavior unchanged."
+          },
+          "scalar_bar_title": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80,
+            "pattern": "^[ -~]*$",
+            "description": "Plain ASCII legend title; no markup or format controls. Requires scalar."
+          },
+          "scalar_bar_position": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "minItems": 2,
+            "maxItems": 2,
+            "description": "Normalized manual anchor [x,y] for a vertical legend; requires scalar."
+          },
+          "scalar_bar_length": {
+            "type": "number",
+            "minimum": 0.05,
+            "maximum": 0.9,
+            "description": "Legend length as a fraction of view height for the vertical legend. Requires scalar."
+          },
+          "scalar_bar_thickness": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 64,
+            "description": "Legend color-bar thickness in pixels. Requires scalar."
+          },
+          "scalar_bar_title_font_size": {
+            "type": "integer",
+            "minimum": 6,
+            "maximum": 48,
+            "description": "Native legend title font size. Requires scalar."
+          },
+          "scalar_bar_label_font_size": {
+            "type": "integer",
+            "minimum": 6,
+            "maximum": 48,
+            "description": "Native legend label font size. Requires scalar."
+          }
+        },
+        "required": [
+          "name",
+          "path"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "context": {
+            "type": "object"
+          },
+          "job_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "running",
+              "completed",
+              "failed",
+              "cancelled",
+              "interrupted"
+            ]
+          }
+        },
+        "anyOf": [
+          {
+            "required": [
+              "job_id",
+              "status"
+            ]
+          },
+          {
+            "required": [
+              "success",
+              "context"
+            ]
+          }
+        ]
+      },
+      "annotations": {
+        "title": null,
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      },
+      "execution": null
+    },
+    {
+      "name": "slice_plane",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+          },
+          "input_name": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+          },
+          "origin": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": -1000000.0,
+              "maximum": 1000000.0
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "normal": {
+            "type": "array",
+            "items": {
+              "type": "number",
+              "minimum": -1000000.0,
+              "maximum": 1000000.0
+            },
+            "minItems": 3,
+            "maxItems": 3
+          }
+        },
+        "required": [
+          "name",
+          "input_name"
+        ],
+        "additionalProperties": false
+      },
+      "outputSchema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "context": {
+            "type": "object"
+          },
+          "job_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "running",
+              "completed",
+              "failed",
+              "cancelled",
+              "interrupted"
+            ]
+          }
+        },
+        "anyOf": [
+          {
+            "required": [
+              "job_id",
+              "status"
+            ]
+          },
+          {
+            "required": [
+              "success",
+              "context"
+            ]
+          }
+        ]
+      },
+      "annotations": {
+        "title": null,
+        "readOnlyHint": false,
+        "destructiveHint": true,
+        "idempotentHint": false,
+        "openWorldHint": false
+      },
+      "execution": null
+    }
+  ]
+}
