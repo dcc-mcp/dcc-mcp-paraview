@@ -20,7 +20,7 @@ class ImageOutput:
     No published destination is ever removed by cleanup.
     """
 
-    def __init__(self, root, output, token):
+    def __init__(self, root, output, token, expected_directory=None):
         root, output = Path(root), Path(output)
         output = root / output if not output.is_absolute() else output
         try:
@@ -46,6 +46,13 @@ class ImageOutput:
                 descriptor = child
             self.fd = descriptor
             descriptor = None
+            metadata = os.fstat(self.fd)
+            self.directory_identity = {"device": metadata.st_dev, "inode": metadata.st_ino}
+            if expected_directory is not None:
+                if not valid_directory_identity(expected_directory):
+                    raise ImageDataError("Invalid internal output directory identity")
+                if self.directory_identity != expected_directory:
+                    raise ImageDataError("Output directory changed after sidecar preflight", "path_denied")
             for name in (output.name, *self.names):
                 try:
                     os.stat(name, dir_fd=self.fd, follow_symlinks=False)
@@ -112,3 +119,14 @@ class ImageOutput:
                 self.files.clear()
                 os.close(self.fd)
                 self.fd = None
+
+
+def valid_directory_identity(value):
+    return (
+        isinstance(value, dict)
+        and set(value) == {"device", "inode"}
+        and type(value["device"]) is int
+        and 0 <= value["device"] < 2**64
+        and type(value["inode"]) is int
+        and 0 < value["inode"] < 2**64
+    )

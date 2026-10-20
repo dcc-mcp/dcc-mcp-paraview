@@ -266,3 +266,145 @@ def test_rejected_file_preflight_keeps_healthy_session(tmp_path):
         assert not list(tmp_path.glob(".dcc-mcp-image-*.vti"))
     finally:
         session.close()
+
+
+@pytest.mark.parametrize(
+    "expression, origin",
+    [
+        ("(x**8+x)-x**8", [999998, 0, 0]),
+        ("x*x*x*x-x**4", [999998, 0, 0]),
+        ("-x", [0, 0, 0]),
+    ],
+)
+def test_controlled_integer_and_float_requests_match_independent_float64_oracle(
+    host,
+    native_doubles,
+    expression,
+    origin,
+):
+    import hashlib
+    import struct
+
+    results = []
+    for index, number in enumerate((int, float)):
+        params = parameters(
+            name="Volume" + str(index),
+            path="volume%d.vti" % index,
+            dimensions=[2, 2, 2],
+            origin=[number(value) for value in origin],
+            spacing=[number(1)] * 3,
+            fields=[{"name": "Value", "dtype": "float64", "expression": expression}],
+        )
+        results.append(host.call("create_image_data", params))
+    expected = hashlib.sha256()
+    for _z in range(2):
+        for _y in range(2):
+            for ix in range(2):
+                x = float(origin[0]) + ix * 1.0
+                if expression == "(x**8+x)-x**8":
+                    value = (x**8 + x) - x**8
+                elif expression == "x*x*x*x-x**4":
+                    value = x * x * x * x - x**4
+                else:
+                    value = -x
+                expected.update(struct.pack("<d", value))
+    assert all(result["image_data"]["arrays"][0]["sha256_le_float64"] == expected.hexdigest() for result in results)
+    assert all(type(value) is float for value in results[0]["image_data"]["origin"])
+
+
+def test_host_rejects_mismatched_directory_before_native_allocation(host, native_doubles, tmp_path):
+    from dcc_mcp_paraview.image_files import ImageOutput
+
+    parent = tmp_path / "destination"
+    parent.mkdir()
+    sidecar = ImageOutput(tmp_path, "destination/volume.vti", "c" * 32)
+    host.output_directory = sidecar.directory_identity
+    host.request_id = "c" * 32
+    parent.rename(tmp_path / "old-destination")
+    parent.mkdir()
+    try:
+        with pytest.raises(OperationError) as error:
+            host.call("create_image_data", parameters(path="destination/volume.vti"))
+        assert error.value.code == "path_denied"
+        assert native_doubles.reads == native_doubles.writes == 0
+        assert host.pv.sources == {}
+        assert not list(tmp_path.glob("**/.dcc-mcp-image-*.vti"))
+    finally:
+        sidecar.close()
+
+
+def test_bridge_sends_its_pinned_directory_identity(tmp_path, monkeypatch):
+    session = ParaViewSession(tmp_path, executable=sys.executable)
+    sent = []
+    monkeypatch.setattr(session, "start", lambda: None)
+    monkeypatch.setattr(session, "_write_frame", lambda frame, deadline: sent.append(json.loads(frame)))
+    monkeypatch.setattr(
+        session,
+        "_read_frame",
+        lambda deadline: {
+            "id": sent[-1]["id"],
+            "job_id": sent[-1]["job_id"],
+            "result": {},
+        },
+    )
+    try:
+        session.request("create_image_data", parameters())
+        metadata = tmp_path.stat()
+        assert sent[0]["output_directory"] == {"device": metadata.st_dev, "inode": metadata.st_ino}
+        assert set(sent[0]) == {"id", "job_id", "operation", "params", "output_directory"}
+        assert "output_directory" not in sent[0]["params"]
+        assert session._image_output is None
+    finally:
+        session.close()
+
+
+@pytest.mark.parametrize(
+    "identity",
+    [
+        None,
+        {},
+        {"device": True, "inode": 1},
+        {"device": 1, "inode": 0},
+        {"device": -1, "inode": 2},
+        {"device": 1, "inode": 2, "path": "/outside"},
+        {"device": 1, "inode": 2},
+    ],
+)
+def test_host_wire_requires_typed_image_directory_identity(tmp_path, monkeypatch, identity):
+    import importlib.util
+    import io
+
+    import dcc_mcp_paraview
+    from dcc_mcp_paraview import contracts
+
+    monkeypatch.setitem(sys.modules, "contracts", contracts)
+    path = Path(dcc_mcp_paraview.__file__).with_name("host_driver.py")
+    spec = importlib.util.spec_from_file_location("paraview_image_wire_test", path)
+    driver = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(driver)
+    calls = []
+
+    class ControlledHost:
+        version = "5.13.2"
+
+        def __init__(self, root):
+            pass
+
+        def call(self, operation, params):
+            calls.append((operation, self.output_directory))
+            return {}
+
+    request = {"id": "d" * 32, "job_id": None, "operation": "create_image_data", "params": parameters()}
+    if identity is not None:
+        request["output_directory"] = identity
+    incoming, wire = io.BytesIO((json.dumps(request) + "\n").encode()), io.StringIO()
+    with monkeypatch.context() as patch:
+        patch.setattr(driver, "Host", ControlledHost)
+        patch.setattr(driver.sys, "argv", [str(path), str(tmp_path)])
+        patch.setattr(driver.sys, "stdout", sys.stdout)
+        patch.setattr(driver.os, "dup", lambda descriptor: descriptor)
+        patch.setattr(driver.os, "fdopen", lambda descriptor, mode, **kwargs: wire if mode == "w" else incoming)
+        driver.main()
+    valid = identity == {"device": 1, "inode": 2} and type(identity.get("device")) is int
+    assert calls == ([("create_image_data", identity)] if valid else [])
+    assert len(wire.getvalue().splitlines()) == (2 if valid else 1)

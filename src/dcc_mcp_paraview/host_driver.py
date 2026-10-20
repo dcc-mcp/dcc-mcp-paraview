@@ -161,13 +161,20 @@ class Host:
             params["significant_digits"] = significant_digits
         validate("create_image_data", params)
         plan = image_data.plan_image_data(params)
+        origin, spacing = plan["origin"], plan["spacing"]
+        params.update(origin=origin, spacing=spacing)
         self.new_name(name)
         output = self.path(path, ".vti", output=True)
         active = self.pv.GetActiveSource()
         reader = None
         publication = None
         try:
-            publication = image_files.ImageOutput(self.root, output, getattr(self, "request_id", uuid.uuid4().hex))
+            publication = image_files.ImageOutput(
+                self.root,
+                output,
+                getattr(self, "request_id", uuid.uuid4().hex),
+                expected_directory=getattr(self, "output_directory", None),
+            )
             # All native imports and calls remain in this owned host's main-thread module.
             from vtkmodules.vtkCommonCore import vtkDoubleArray
             from vtkmodules.vtkCommonDataModel import vtkImageData
@@ -1271,7 +1278,16 @@ def main():
             request = json.loads(line)
             if (
                 not isinstance(request, dict)
-                or set(request) != {"id", "job_id", "operation", "params"}
+                or set(request)
+                != (
+                    {"id", "job_id", "operation", "params", "output_directory"}
+                    if request.get("operation") == "create_image_data"
+                    else {"id", "job_id", "operation", "params"}
+                )
+                or (
+                    request.get("operation") == "create_image_data"
+                    and not image_files.valid_directory_identity(request.get("output_directory"))
+                )
                 or not isinstance(request["id"], str)
                 or not re.fullmatch(r"[a-f0-9]{32}", request["id"])
                 or (
@@ -1281,6 +1297,7 @@ def main():
             ):
                 break
             host.request_id = request["id"]
+            host.output_directory = request.get("output_directory")
             context = host.call(request["operation"], request["params"])
             response = {"id": request["id"], "job_id": request.get("job_id"), "result": context}
         except Exception as error:
