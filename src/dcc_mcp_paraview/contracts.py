@@ -3,6 +3,13 @@
 import math
 import re
 
+if __package__:
+    from . import image_data
+    from . import image_files as image_files
+else:  # The owned pvpython runs host_driver.py as a standalone package-owned script.
+    import image_data
+    import image_files as image_files
+
 MAX_SLICE_POINTS = 1_000_000
 MAX_SLICE_CELLS = 1_000_000
 
@@ -20,6 +27,10 @@ OPERATIONS = {
     "inspect_presentation": (set(), set()),
     "capture_current_view": ({"path"}, set()),
     "slice_plane": ({"name", "input_name"}, {"origin", "normal"}),
+    "create_image_data": (
+        {"name", "path", "dimensions", "origin", "spacing", "fields"},
+        {"active_scalar", "significant_digits", "serialization"},
+    ),
     "create_sphere": ({"name"}, {"radius", "center", "resolution"}),
     "edit_sphere": ({"name", "radius"}, {"center", "resolution"}),
     "clip_plane": ({"name", "input_name"}, {"origin", "normal", "invert"}),
@@ -210,4 +221,9 @@ def validate(operation, params):
     if params.get("camera_position") is not None and params.get("camera_target") is not None:
         if sum((a - b) ** 2 for a, b in zip(params["camera_position"], params["camera_target"])) < 1e-12:
             raise OperationError("invalid_input", "Camera position and target must differ")
+    if operation == "create_image_data":
+        try:
+            image_data.plan_image_data(params)
+        except image_data.ImageDataError as error:
+            raise OperationError(error.code, str(error)) from None
     return params

@@ -1,6 +1,7 @@
 """Serialized IPC to one adapter-owned pvpython main thread; no ParaView imports."""
 
 import contextvars
+import importlib.metadata
 import json
 import os
 import select
@@ -18,7 +19,7 @@ from dcc_mcp_core.cancellation import current_job_id
 from dcc_mcp_core.skills_helper import check_dcc_cancelled, skill_error, skill_success
 
 from .compatibility import HOST_VERSIONS
-from .contracts import OperationError, validate
+from .contracts import OperationError, image_data, image_files, validate
 
 _current_session = contextvars.ContextVar("paraview_session", default=None)
 
@@ -64,6 +65,7 @@ class ParaViewSession:
         self._cleanup_done = False
         self.identity = {}
         self.last_request = None
+        self._image_output = None
 
     def start(self):
         with self._lock:
@@ -185,6 +187,16 @@ class ParaViewSession:
             check_dcc_cancelled()
             self.start()
             self.last_request = request
+            # Rejected file preflight is not an interrupted wire exchange and must
+            # not close an otherwise healthy native session.
+            if operation == "create_image_data":
+                with self._state_lock:
+                    if self._closed:
+                        raise OperationError("session_closed", "Owned ParaView session was stopped")
+                    try:
+                        self._image_output = image_files.ImageOutput(self.workspace, params["path"], request["id"])
+                    except image_data.ImageDataError as error:
+                        raise OperationError(error.code, str(error)) from None
             try:
                 deadline = time.monotonic() + self.timeout
                 self._write_frame(frame, deadline)
@@ -224,6 +236,11 @@ class ParaViewSession:
                 # Never replay mutations or reuse interrupted/malformed streams.
                 self.close()
                 raise
+            finally:
+                with self._state_lock:
+                    if self._image_output is not None:
+                        self._image_output.close()
+                        self._image_output = None
             if "error" in response:
                 raise OperationError(response["error"]["code"], response["error"]["message"])
             return response["result"]
@@ -252,6 +269,9 @@ class ParaViewSession:
                 for stream in (self.process.stdin, self.process.stdout):
                     if stream is not None:
                         stream.close()
+            if self._image_output is not None:
+                self._image_output.close()
+                self._image_output = None
             if self.stderr is not None:
                 self.stderr.close()
             self._cleanup_done = True
@@ -321,6 +341,12 @@ def call(operation, **params):
         return skill_error("No ParaView execution bridge is bound", "host_not_bound")
     try:
         result = session.request(operation, params)
+        if operation == "create_image_data":
+            result["runtime"] = {
+                "adapter": "0.1.0",
+                "core": importlib.metadata.version("dcc-mcp-core"),
+                "server": importlib.metadata.version("dcc-mcp-server"),
+            }
         if operation == "inspect_pipeline":
             return skill_success("ParaView pipeline inspected", **result)
         return skill_success(
