@@ -9,6 +9,10 @@ on:
         description: Run qualified self-hosted ParaView and isolated DISPLAY acceptance
         type: boolean
         default: false
+      runtime_download_preflight:
+        description: Download and hash official 5.13.2 archive only; never execute it
+        type: boolean
+        default: false
 permissions:
   contents: read
 jobs:
@@ -33,6 +37,27 @@ jobs:
         with:
           name: wheel-${{ matrix.python }}
           path: /tmp/paraview-wheel/dist/*
+  runtime-download-preflight:
+    if: github.event_name == 'workflow_dispatch' && inputs.runtime_download_preflight
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12.14"
+      - name: Download, verify official legacy checksum and freeze SHA256
+        run: python scripts/qualify-runtime-download.py "$RUNNER_TEMP/paraview-runtime-preflight"
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: paraview-runtime-download-metadata
+          path: |
+            ${{ runner.temp }}/paraview-runtime-preflight/download-provenance.json
+            ${{ runner.temp }}/paraview-runtime-preflight/official-md5sum.txt
+          if-no-files-found: warn
   native:
     if: github.event_name == 'workflow_dispatch' && inputs.native
     runs-on: [self-hosted, linux, dcc-paraview-5.13.2]
