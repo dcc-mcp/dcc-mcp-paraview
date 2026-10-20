@@ -13,6 +13,10 @@ on:
         description: Download and hash official 5.13.2 archive only; never execute it
         type: boolean
         default: false
+      hosted_coarse_qualification:
+        description: Run one bounded new coarse comparison on an isolated GitHub-hosted display
+        type: boolean
+        default: false
 permissions:
   contents: read
 jobs:
@@ -57,6 +61,76 @@ jobs:
           path: |
             ${{ runner.temp }}/paraview-runtime-preflight/download-provenance.json
             ${{ runner.temp }}/paraview-runtime-preflight/official-md5sum.txt
+          if-no-files-found: warn
+  hosted-coarse-qualification:
+    if: github.event_name == 'workflow_dispatch' && inputs.hosted_coarse_qualification
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      PYTHONNOUSERSITE: "1"
+      LIBGL_ALWAYS_SOFTWARE: "1"
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065
+        with:
+          python-version: "3.12.14"
+      - name: Verify and extract the previously qualified official runtime
+        run: |
+          python scripts/qualify-runtime-download.py "$RUNNER_TEMP/coarse-download"
+          python scripts/prepare-qualified-runtime.py \
+            "$RUNNER_TEMP/coarse-download/ParaView-5.13.2-MPI-Linux-Python3.10-x86_64.tar.gz" \
+            "$RUNNER_TEMP/coarse-runtime"
+      - name: Build and install the exact candidate wheel with pinned Core and SDK
+        run: |
+          python -m pip install build
+          python -m build --wheel --outdir "$RUNNER_TEMP/coarse-wheel"
+          python -m pip download --only-binary=:all: --no-deps \
+            dcc-mcp-core==0.20.41 dcc-mcp-server==0.20.41 -d "$RUNNER_TEMP/coarse-core"
+          cd "$RUNNER_TEMP/coarse-core"
+          python - <<'PY'
+          import hashlib
+          from pathlib import Path
+          expected = {
+              "dcc_mcp_core": "2d0ffc7f7ac5e14ac1644c017130bfab2b07575eec8bc103a25475da28dccbd3",
+              "dcc_mcp_server": "7a3db4e233caa2cb4562ed2ebb31ca8090163ae45ec855e73ad22f1c7a28a53f",
+          }
+          wheels = list(Path(".").glob("*.whl"))
+          assert len(wheels) == 2
+          for prefix, digest in expected.items():
+              matches = [p for p in wheels if p.name.startswith(prefix + "-")]
+              assert len(matches) == 1
+              assert hashlib.sha256(matches[0].read_bytes()).hexdigest() == digest
+          PY
+          python -m venv "$RUNNER_TEMP/coarse-venv"
+          "$RUNNER_TEMP/coarse-venv/bin/python" -m pip install \
+            "$RUNNER_TEMP"/coarse-core/*.whl "$RUNNER_TEMP"/coarse-wheel/*.whl \
+            mcp==1.30.0 Pillow jsonschema
+          "$RUNNER_TEMP/coarse-venv/bin/python" -m pip freeze > "$RUNNER_TEMP/coarse-wheel/installed-requirements.txt"
+      - name: One real typed coarse slice render, save and reopen
+        run: |
+          command -v Xvfb
+          command -v xvfb-run
+          WHEEL="$(find "$RUNNER_TEMP/coarse-wheel" -maxdepth 1 -name '*.whl' -print)"
+          WHEEL_SHA="$(sha256sum "$WHEEL" | cut -d ' ' -f 1)"
+          xvfb-run -a -s "-screen 0 1280x1024x24 -nolisten tcp" \
+            "$RUNNER_TEMP/coarse-venv/bin/python" -I scripts/hosted_coarse_candidate.py \
+            --run-dir "$RUNNER_TEMP/coarse-01" \
+            --wheel "$WHEEL" --wheel-sha256 "$WHEEL_SHA" \
+            --paraview-root "$RUNNER_TEMP/coarse-runtime/ParaView-5.13.2-MPI-Linux-Python3.10-x86_64" \
+            --runtime-provenance "$RUNNER_TEMP/coarse-download/download-provenance.json" \
+            --runtime-archive "$RUNNER_TEMP/coarse-download/ParaView-5.13.2-MPI-Linux-Python3.10-x86_64.tar.gz" \
+            --hosted-window-confirmed
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        if: always()
+        with:
+          name: paraview-hosted-coarse-qualification
+          path: |
+            ${{ runner.temp }}/coarse-01
+            ${{ runner.temp }}/coarse-wheel
+            ${{ runner.temp }}/coarse-download/download-provenance.json
+            ${{ runner.temp }}/coarse-runtime/extraction.json
           if-no-files-found: warn
   native:
     if: github.event_name == 'workflow_dispatch' && inputs.native

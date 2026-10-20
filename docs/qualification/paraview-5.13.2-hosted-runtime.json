@@ -1,0 +1,18 @@
+{
+  "status": "download_verified_not_executed",
+  "official_url": "https://www.paraview.org/files/v5.13/ParaView-5.13.2-MPI-Linux-Python3.10-x86_64.tar.gz",
+  "final_url": "https://www.paraview.org/files/v5.13/ParaView-5.13.2-MPI-Linux-Python3.10-x86_64.tar.gz",
+  "official_checksum_url": "https://www.paraview.org/files/v5.13/md5sum.txt",
+  "official_checksum_file_sha256": "232822c8c5938016327d139a2e274e15a569b2165eb910490b6378f1e0e623ed",
+  "bytes": 688873467,
+  "sha256": "815978cef3f02522c9cbb6d77b354aa3071a6c9808b0ce5954e337baf44e9329",
+  "md5": "65af356984e1a9054007f8398a671af2",
+  "archive_extracted": false,
+  "native_executed": false,
+  "native_release": "ParaView 5.13.2 MPI Linux x86_64 Python3.10",
+  "not_claimed": "This is not the locally qualified distro Python3.13 build. MD5 is a legacy consistency check; first-computed SHA256 is a reproducibility binding, not an independent publisher signature.",
+  "github_run_id": "39483508573",
+  "github_commit": "a5f7617fb7cae4b72067e6679905c5a93488cc1e",
+  "wall_seconds": 113.359722851,
+  "provenance_run_url": "https://github.com/dcc-mcp/dcc-mcp-paraview/actions/runs/39483508573"
+}
