@@ -1,0 +1,1742 @@
+{
+  "schema": "qualified-native-evidence-projection-v1",
+  "executed_source_commit": "9100157ebc60bc30e8f49fce0ce887058377059e",
+  "built_wheel_sha256": "f11071f03ad382cac491a60e7c243fcac0a40f5c2be2452523dda05d80f21a26",
+  "source_manifest_files_verified": 27,
+  "runtime": {
+    "core": "0.20.41",
+    "server": "0.20.41",
+    "mcp_sdk": "1.30.0",
+    "sidecar_python": "3.12.14",
+    "native_paraview": "5.13.2",
+    "native_python": "3.13",
+    "platform": "Linux x86_64"
+  },
+  "caller_sha256": {
+    "full": "a56c1298a81fde067a4e4f6e4ee40e05124efa815185e86d1e7d74f2cda6c26a",
+    "lifecycle": "c5eb65c464249538f3534db540343b5bf03c88d64f4206f33384f34e3fa8406a"
+  },
+  "qualification": {
+    "installed_wheel_host_free_passed": 329,
+    "native_tests_deselected_in_host_free_run": 22,
+    "full_generation_count": 1,
+    "cancellation_count": 1,
+    "render_performed": false
+  },
+  "normalization": "Selected records copied from actual HTTP execution logs. Only task-root path prefixes replaced by placeholders. Raw line and full-log SHA retained; summaries are projections, with explicit registry scope correction. These are not cryptographic execution attestations.",
+  "not_claimed": [
+    "Windows or macOS native execution",
+    "Native directory replacement race (covered by host-free fault injection only)",
+    "Original historical generation route",
+    "Removal of a specific registry registration",
+    "Rendering qualification"
+  ],
+  "runs": [
+    {
+      "name": "actual-http-evidence",
+      "raw_events_sha256": "29dbba205270d4c7b48c06329bf51d353ec2531c5647a137a52d09e68eb151d6",
+      "raw_summary_sha256": "38703fc9cbb3c47f639d8c878d163e28eee0c17e5a15dc7317783b69298dc6d3",
+      "summary_projection": {
+        "success": true,
+        "mode": "acceptance",
+        "frozen_commit": "9100157ebc60bc30e8f49fce0ce887058377059e",
+        "run_dir": "<qualification-root>/run-acceptance-01",
+        "mutations": "real HTTP MCP only",
+        "render_performed": false,
+        "result": {
+          "kind": "real_http_full_acceptance",
+          "small_chain_passed": true,
+          "full_created_once_via_http": true,
+          "full_artifact": "<qualification-root>/run-acceptance-01/workspace/analytic.vti",
+          "arrays": [
+            {
+              "name": "SyntheticTime_s",
+              "tuples": 510705,
+              "expected_sha256_le_float64": "6d0150f615d4a99b5e3e6b9c4f40810a57353cd48310bf3d006469fa4b2eacec",
+              "actual_sha256_le_float64": "6d0150f615d4a99b5e3e6b9c4f40810a57353cd48310bf3d006469fa4b2eacec",
+              "comparison": "every IEEE754 Float64 bit pattern"
+            },
+            {
+              "name": "SyntheticDelay_ms",
+              "tuples": 510705,
+              "expected_sha256_le_float64": "4f8608bba0a580345de07347e0aa9574b04f66f414514260360391bd1d0e2614",
+              "actual_sha256_le_float64": "4f8608bba0a580345de07347e0aa9574b04f66f414514260360391bd1d0e2614",
+              "comparison": "every IEEE754 Float64 bit pattern"
+            }
+          ],
+          "sha256": "43ade20b1f2b78149e7d948894568b599db55f5aa8f9a5ceb62050e970e93d9d",
+          "bytes": 13302837
+        },
+        "cleanup": {
+          "instance_id": null,
+          "pid": 23,
+          "returncode": -15,
+          "dispatcher_stopped": true,
+          "server_stopped": true,
+          "listener_rows": [],
+          "remaining_owned_process_group": {
+            "owned_pid": 23,
+            "pids": [],
+            "rss_bytes": 0,
+            "returncode": -15
+          },
+          "errors": [],
+          "registry_check": {
+            "status": "unidentified_no_entry_observed",
+            "correction": "Original caller set registry_removed true without an instance ID. Start also had null ID; no JSON was observed afterward. This projection corrects scope, not original execution."
+          }
+        },
+        "peak_sampled_owned_process_group_rss": 283918336,
+        "evidence_bytes": 389471
+      },
+      "selected_original_records": [
+        {
+          "source_record_sha256": "9bea5eefb2cb4bd8a3019dc4e1a07860253c0c57095021054fd7fc4f2490cdee",
+          "record": {
+            "sequence": 38,
+            "utc": "2026-10-20T19:09:35.048534+00:00",
+            "monotonic": 219915.988670109,
+            "kind": "initial_job",
+            "tool": "create_image_data",
+            "arguments": {
+              "name": "Volume",
+              "path": "volume.vti",
+              "dimensions": [
+                7,
+                7,
+                7
+              ],
+              "origin": [
+                -3,
+                -3,
+                -3
+              ],
+              "spacing": [
+                1,
+                1,
+                1
+              ],
+              "fields": [
+                {
+                  "name": "RadiusSquared",
+                  "dtype": "float64",
+                  "expression": "x*x+y*y+z*z"
+                }
+              ],
+              "serialization": "native"
+            },
+            "payload": {
+              "job_id": "8ad8a31f-b8c8-4cfa-a762-1ed757cf09dc",
+              "core_job_id": "8ad8a31f-b8c8-4cfa-a762-1ed757cf09dc",
+              "job_id_owner": "core",
+              "status": "pending",
+              "parent_job_id": null,
+              "core_poll": {
+                "owner": "core",
+                "tool": "jobs_get_status",
+                "arguments": {
+                  "job_id": "8ad8a31f-b8c8-4cfa-a762-1ed757cf09dc",
+                  "include_result": true
+                }
+              },
+              "_meta": {
+                "status": "pending",
+                "dcc": {
+                  "jobId": "8ad8a31f-b8c8-4cfa-a762-1ed757cf09dc",
+                  "coreJobId": "8ad8a31f-b8c8-4cfa-a762-1ed757cf09dc",
+                  "jobOwner": "core",
+                  "pollTool": "jobs_get_status",
+                  "parentJobId": null
+                }
+              }
+            }
+          }
+        },
+        {
+          "source_record_sha256": "49b87f476ee358930160baa9754217f44add3d3f13aaa4767e1c625fdb07e1a4",
+          "record": {
+            "sequence": 45,
+            "utc": "2026-10-20T19:09:35.157164+00:00",
+            "monotonic": 219916.097294238,
+            "kind": "terminal_job",
+            "job_id": "8ad8a31f-b8c8-4cfa-a762-1ed757cf09dc",
+            "payload": {
+              "job_id": "8ad8a31f-b8c8-4cfa-a762-1ed757cf09dc",
+              "core_job_id": "8ad8a31f-b8c8-4cfa-a762-1ed757cf09dc",
+              "job_id_owner": "core",
+              "core_poll": {
+                "owner": "core",
+                "tool": "jobs_get_status",
+                "arguments": {
+                  "job_id": "8ad8a31f-b8c8-4cfa-a762-1ed757cf09dc",
+                  "include_result": true
+                }
+              },
+              "parent_job_id": null,
+              "tool": "paraview_pipeline__create_image_data",
+              "status": "completed",
+              "created_at": "2026-10-20T19:09:35.039505642+00:00",
+              "started_at": "2026-10-20T19:09:35.039573934+00:00",
+              "completed_at": "2026-10-20T19:09:35.131916494+00:00",
+              "updated_at": "2026-10-20T19:09:35.131916494+00:00",
+              "progress": null,
+              "error": null,
+              "result": {
+                "success": true,
+                "message": "ParaView operation verified",
+                "error": null,
+                "prompt": null,
+                "context": {
+                  "source": {
+                    "name": "Volume",
+                    "type": "XMLImageDataReader",
+                    "points": 343,
+                    "cells": 216,
+                    "bounds": [
+                      -3.0,
+                      3.0,
+                      -3.0,
+                      3.0,
+                      -3.0,
+                      3.0
+                    ],
+                    "point_arrays": [
+                      {
+                        "name": "RadiusSquared",
+                        "components": 1,
+                        "range": [
+                          0.0,
+                          27.0
+                        ]
+                      }
+                    ]
+                  },
+                  "artifact": {
+                    "path": "<qualification-root>/run-acceptance-01/workspace/volume.vti",
+                    "bytes": 4159,
+                    "sha256": "1200e5b9584674645fe66473e1883b2ee2708801de09015e2be2b7c09b80e669",
+                    "native_readback": {
+                      "dimensions": [
+                        7,
+                        7,
+                        7
+                      ],
+                      "origin": [
+                        -3.0,
+                        -3.0,
+                        -3.0
+                      ],
+                      "spacing": [
+                        1.0,
+                        1.0,
+                        1.0
+                      ],
+                      "points": 343,
+                      "cells": 216,
+                      "bounds": [
+                        -3.0,
+                        3.0,
+                        -3.0,
+                        3.0,
+                        -3.0,
+                        3.0
+                      ],
+                      "active_scalar": "RadiusSquared",
+                      "arrays": [
+                        {
+                          "name": "RadiusSquared",
+                          "dtype": "float64",
+                          "components": 1,
+                          "tuples": 343,
+                          "sha256_le_float64": "4879e4c4f859e34df203fe7f0982b7975b643c88a3fe9d232c195d2eb678f9e7"
+                        }
+                      ]
+                    },
+                    "all_values_equal": true
+                  },
+                  "image_data": {
+                    "dimensions": [
+                      7,
+                      7,
+                      7
+                    ],
+                    "origin": [
+                      -3.0,
+                      -3.0,
+                      -3.0
+                    ],
+                    "spacing": [
+                      1.0,
+                      1.0,
+                      1.0
+                    ],
+                    "points": 343,
+                    "cells": 216,
+                    "bounds": [
+                      -3.0,
+                      3.0,
+                      -3.0,
+                      3.0,
+                      -3.0,
+                      3.0
+                    ],
+                    "active_scalar": "RadiusSquared",
+                    "arrays": [
+                      {
+                        "name": "RadiusSquared",
+                        "dtype": "float64",
+                        "components": 1,
+                        "tuples": 343,
+                        "sha256_le_float64": "4879e4c4f859e34df203fe7f0982b7975b643c88a3fe9d232c195d2eb678f9e7"
+                      }
+                    ],
+                    "fields": [
+                      {
+                        "name": "RadiusSquared",
+                        "dtype": "float64",
+                        "expression": "x*x+y*y+z*z"
+                      }
+                    ],
+                    "significant_digits": null,
+                    "serialization": "native",
+                    "expression_language": "coordinate_scalar_v1",
+                    "evaluation_order": "x_fastest_independent_fields",
+                    "operations": 3773,
+                    "array_bytes": 2744,
+                    "output_bound": 13014,
+                    "host_version": "5.13.2"
+                  },
+                  "runtime": {
+                    "adapter": "0.1.0",
+                    "core": "0.20.41",
+                    "server": "0.20.41"
+                  }
+                },
+                "postcondition": {
+                  "method": "host_api_readback",
+                  "operation": "create_image_data",
+                  "verified": true
+                }
+              }
+            }
+          }
+        },
+        {
+          "source_record_sha256": "c3779c405430bf07c3e1aa0e402771b855cd6b3c7a659ece81e6bf9a82ad83e7",
+          "record": {
+            "sequence": 50,
+            "utc": "2026-10-20T19:09:35.166069+00:00",
+            "monotonic": 219916.106202699,
+            "kind": "initial_job",
+            "tool": "save_state",
+            "arguments": {
+              "path": "small.pvsm"
+            },
+            "payload": {
+              "job_id": "ad0dbbae-bc79-489a-a506-0d8582e9073d",
+              "core_job_id": "ad0dbbae-bc79-489a-a506-0d8582e9073d",
+              "job_id_owner": "core",
+              "status": "pending",
+              "parent_job_id": null,
+              "core_poll": {
+                "owner": "core",
+                "tool": "jobs_get_status",
+                "arguments": {
+                  "job_id": "ad0dbbae-bc79-489a-a506-0d8582e9073d",
+                  "include_result": true
+                }
+              },
+              "_meta": {
+                "status": "pending",
+                "dcc": {
+                  "jobId": "ad0dbbae-bc79-489a-a506-0d8582e9073d",
+                  "coreJobId": "ad0dbbae-bc79-489a-a506-0d8582e9073d",
+                  "jobOwner": "core",
+                  "pollTool": "jobs_get_status",
+                  "parentJobId": null
+                }
+              }
+            }
+          }
+        },
+        {
+          "source_record_sha256": "557485a14ca12d42c41a66c5ddaecff2120484bb73039c25b05d6f5728e8b752",
+          "record": {
+            "sequence": 58,
+            "utc": "2026-10-20T19:09:35.273532+00:00",
+            "monotonic": 219916.213662591,
+            "kind": "terminal_job",
+            "job_id": "ad0dbbae-bc79-489a-a506-0d8582e9073d",
+            "payload": {
+              "job_id": "ad0dbbae-bc79-489a-a506-0d8582e9073d",
+              "core_job_id": "ad0dbbae-bc79-489a-a506-0d8582e9073d",
+              "job_id_owner": "core",
+              "core_poll": {
+                "owner": "core",
+                "tool": "jobs_get_status",
+                "arguments": {
+                  "job_id": "ad0dbbae-bc79-489a-a506-0d8582e9073d",
+                  "include_result": true
+                }
+              },
+              "parent_job_id": null,
+              "tool": "paraview_pipeline__save_state",
+              "status": "completed",
+              "created_at": "2026-10-20T19:09:35.161351967+00:00",
+              "started_at": "2026-10-20T19:09:35.161433900+00:00",
+              "completed_at": "2026-10-20T19:09:35.177971631+00:00",
+              "updated_at": "2026-10-20T19:09:35.177971631+00:00",
+              "progress": null,
+              "error": null,
+              "result": {
+                "success": true,
+                "message": "ParaView operation verified",
+                "error": null,
+                "prompt": null,
+                "context": {
+                  "artifact": {
+                    "path": "<qualification-root>/run-acceptance-01/workspace/small.pvsm",
+                    "bytes": 12706,
+                    "sha256": "33226a49e5b9aa0c4d963cd596e8626c336855f331f24a23a3d61ee74cbb720e",
+                    "xml_root": "GenericParaViewApplication",
+                    "portable_relative_paths": false
+                  },
+                  "sources": [
+                    {
+                      "name": "Volume",
+                      "type": "XMLImageDataReader",
+                      "points": 343,
+                      "cells": 216,
+                      "bounds": [
+                        -3.0,
+                        3.0,
+                        -3.0,
+                        3.0,
+                        -3.0,
+                        3.0
+                      ],
+                      "point_arrays": [
+                        {
+                          "name": "RadiusSquared",
+                          "components": 1,
+                          "range": [
+                            0.0,
+                            27.0
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "datasets": [
+                    {
+                      "name": "Volume",
+                      "path": "<qualification-root>/run-acceptance-01/workspace/volume.vti",
+                      "filename": "volume.vti",
+                      "sha256": "1200e5b9584674645fe66473e1883b2ee2708801de09015e2be2b7c09b80e669"
+                    }
+                  ]
+                },
+                "postcondition": {
+                  "method": "host_api_readback",
+                  "operation": "save_state",
+                  "verified": true
+                }
+              }
+            }
+          }
+        },
+        {
+          "source_record_sha256": "fe65f07a2846ace13a8b4557f41deee6c80b0d92b753c234053debee37e03e74",
+          "record": {
+            "sequence": 62,
+            "utc": "2026-10-20T19:09:35.281874+00:00",
+            "monotonic": 219916.222006129,
+            "kind": "initial_job",
+            "tool": "reopen_state",
+            "arguments": {
+              "path": "small.pvsm"
+            },
+            "payload": {
+              "job_id": "8ce57ca6-6c7c-4525-a495-6e920c969ceb",
+              "core_job_id": "8ce57ca6-6c7c-4525-a495-6e920c969ceb",
+              "job_id_owner": "core",
+              "status": "pending",
+              "parent_job_id": null,
+              "core_poll": {
+                "owner": "core",
+                "tool": "jobs_get_status",
+                "arguments": {
+                  "job_id": "8ce57ca6-6c7c-4525-a495-6e920c969ceb",
+                  "include_result": true
+                }
+              },
+              "_meta": {
+                "status": "pending",
+                "dcc": {
+                  "jobId": "8ce57ca6-6c7c-4525-a495-6e920c969ceb",
+                  "coreJobId": "8ce57ca6-6c7c-4525-a495-6e920c969ceb",
+                  "jobOwner": "core",
+                  "pollTool": "jobs_get_status",
+                  "parentJobId": null
+                }
+              }
+            }
+          }
+        },
+        {
+          "source_record_sha256": "1b722a12dc61433554f067f3a1eef5d65e83dc48bf828fd0773ebe5d02fb46ef",
+          "record": {
+            "sequence": 87,
+            "utc": "2026-10-20T19:09:36.013628+00:00",
+            "monotonic": 219916.953758597,
+            "kind": "terminal_job",
+            "job_id": "8ce57ca6-6c7c-4525-a495-6e920c969ceb",
+            "payload": {
+              "job_id": "8ce57ca6-6c7c-4525-a495-6e920c969ceb",
+              "core_job_id": "8ce57ca6-6c7c-4525-a495-6e920c969ceb",
+              "job_id_owner": "core",
+              "core_poll": {
+                "owner": "core",
+                "tool": "jobs_get_status",
+                "arguments": {
+                  "job_id": "8ce57ca6-6c7c-4525-a495-6e920c969ceb",
+                  "include_result": true
+                }
+              },
+              "parent_job_id": null,
+              "tool": "paraview_pipeline__reopen_state",
+              "status": "completed",
+              "created_at": "2026-10-20T19:09:35.277128205+00:00",
+              "started_at": "2026-10-20T19:09:35.277196097+00:00",
+              "completed_at": "2026-10-20T19:09:35.920643114+00:00",
+              "updated_at": "2026-10-20T19:09:35.920643114+00:00",
+              "progress": null,
+              "error": null,
+              "result": {
+                "success": true,
+                "message": "ParaView operation verified",
+                "error": null,
+                "prompt": null,
+                "context": {
+                  "sources": [
+                    {
+                      "name": "Volume",
+                      "type": "XMLImageDataReader",
+                      "points": 343,
+                      "cells": 216,
+                      "bounds": [
+                        -3.0,
+                        3.0,
+                        -3.0,
+                        3.0,
+                        -3.0,
+                        3.0
+                      ],
+                      "point_arrays": [
+                        {
+                          "name": "RadiusSquared",
+                          "components": 1,
+                          "range": [
+                            0.0,
+                            27.0
+                          ]
+                        }
+                      ]
+                    }
+                  ],
+                  "path": "<qualification-root>/run-acceptance-01/workspace/small.pvsm",
+                  "data_directory": null,
+                  "reader_paths": {
+                    "Volume": "<qualification-root>/run-acceptance-01/workspace/volume.vti"
+                  },
+                  "relocation_verified": false
+                },
+                "postcondition": {
+                  "method": "host_api_readback",
+                  "operation": "reopen_state",
+                  "verified": true
+                }
+              }
+            }
+          }
+        },
+        {
+          "source_record_sha256": "3068cb8fa17cfd5c8af8f62d68433969a92c2da1a7d052395f13b5703ed69214",
+          "record": {
+            "sequence": 91,
+            "utc": "2026-10-20T19:09:36.022427+00:00",
+            "monotonic": 219916.962558221,
+            "kind": "initial_job",
+            "tool": "contour",
+            "arguments": {
+              "name": "Iso",
+              "input_name": "Volume",
+              "scalar": "RadiusSquared",
+              "values": [
+                4
+              ]
+            },
+            "payload": {
+              "job_id": "19b383a0-5506-4660-8cb2-014dad75976c",
+              "core_job_id": "19b383a0-5506-4660-8cb2-014dad75976c",
+              "job_id_owner": "core",
+              "status": "pending",
+              "parent_job_id": null,
+              "core_poll": {
+                "owner": "core",
+                "tool": "jobs_get_status",
+                "arguments": {
+                  "job_id": "19b383a0-5506-4660-8cb2-014dad75976c",
+                  "include_result": true
+                }
+              },
+              "_meta": {
+                "status": "pending",
+                "dcc": {
+                  "jobId": "19b383a0-5506-4660-8cb2-014dad75976c",
+                  "coreJobId": "19b383a0-5506-4660-8cb2-014dad75976c",
+                  "jobOwner": "core",
+                  "pollTool": "jobs_get_status",
+                  "parentJobId": null
+                }
+              }
+            }
+          }
+        },
+        {
+          "source_record_sha256": "29d42b0b92d5df57159ce32eb631ea25a3e3326b1951e49a7327da4d0a5d5281",
+          "record": {
+            "sequence": 98,
+            "utc": "2026-10-20T19:09:36.129312+00:00",
+            "monotonic": 219917.069442009,
+            "kind": "terminal_job",
+            "job_id": "19b383a0-5506-4660-8cb2-014dad75976c",
+            "payload": {
+              "job_id": "19b383a0-5506-4660-8cb2-014dad75976c",
+              "core_job_id": "19b383a0-5506-4660-8cb2-014dad75976c",
+              "job_id_owner": "core",
+              "core_poll": {
+                "owner": "core",
+                "tool": "jobs_get_status",
+                "arguments": {
+                  "job_id": "19b383a0-5506-4660-8cb2-014dad75976c",
+                  "include_result": true
+                }
+              },
+              "parent_job_id": null,
+              "tool": "paraview_pipeline__contour",
+              "status": "completed",
+              "created_at": "2026-10-20T19:09:36.018619576+00:00",
+              "started_at": "2026-10-20T19:09:36.018715641+00:00",
+              "completed_at": "2026-10-20T19:09:36.040985989+00:00",
+              "updated_at": "2026-10-20T19:09:36.040985989+00:00",
+              "progress": null,
+              "error": null,
+              "result": {
+                "success": true,
+                "message": "ParaView operation verified",
+                "error": null,
+                "prompt": null,
+                "context": {
+                  "source": {
+                    "name": "Iso",
+                    "type": "Contour",
+                    "points": 54,
+                    "cells": 104,
+                    "bounds": [
+                      -2.0,
+                      2.0,
+                      -2.0,
+                      2.0,
+                      -2.0,
+                      2.0
+                    ],
+                    "point_arrays": [
+                      {
+                        "name": "Normals",
+                        "components": 3,
+                        "range": [
+                          -1.0,
+                          1.0
+                        ]
+                      },
+                      {
+                        "name": "RadiusSquared",
+                        "components": 1,
+                        "range": [
+                          4.0,
+                          4.0
+                        ]
+                      }
+                    ],
+                    "scalar": "RadiusSquared",
+                    "values": [
+                      4.0
+                    ]
+                  }
+                },
+                "postcondition": {
+                  "method": "host_api_readback",
+                  "operation": "contour",
+                  "verified": true
+                }
+              }
+            }
+          }
+        },
+        {
+          "source_record_sha256": "d14b8c088b4d767133b1d50fafaa83c0f168355d14af95b2e799df310f5c6fbc",
+          "record": {
+            "sequence": 102,
+            "utc": "2026-10-20T19:09:36.138437+00:00",
+            "monotonic": 219917.07856822,
+            "kind": "initial_job",
+            "tool": "slice_plane",
+            "arguments": {
+              "name": "Section",
+              "input_name": "Volume",
+              "origin": [
+                0,
+                0,
+                0
+              ],
+              "normal": [
+                1,
+                0,
+                0
+              ]
+            },
+            "payload": {
+              "job_id": "0fb0cf0c-3ff2-4904-8435-58f8abdc8ed0",
+              "core_job_id": "0fb0cf0c-3ff2-4904-8435-58f8abdc8ed0",
+              "job_id_owner": "core",
+              "status": "pending",
+              "parent_job_id": null,
+              "core_poll": {
+                "owner": "core",
+                "tool": "jobs_get_status",
+                "arguments": {
+                  "job_id": "0fb0cf0c-3ff2-4904-8435-58f8abdc8ed0",
+                  "include_result": true
+                }
+              },
+              "_meta": {
+                "status": "pending",
+                "dcc": {
+                  "jobId": "0fb0cf0c-3ff2-4904-8435-58f8abdc8ed0",
+                  "coreJobId": "0fb0cf0c-3ff2-4904-8435-58f8abdc8ed0",
+                  "jobOwner": "core",
+                  "pollTool": "jobs_get_status",
+                  "parentJobId": null
+                }
+              }
+            }
+          }
+        },
+        {
+          "source_record_sha256": "49188e5099682057ead876f395d7f84830ac2e0baca918b1ac0c9ac850e857c8",
+          "record": {
+            "sequence": 109,
+            "utc": "2026-10-20T19:09:36.243799+00:00",
+            "monotonic": 219917.183929631,
+            "kind": "terminal_job",
+            "job_id": "0fb0cf0c-3ff2-4904-8435-58f8abdc8ed0",
+            "payload": {
+              "job_id": "0fb0cf0c-3ff2-4904-8435-58f8abdc8ed0",
+              "core_job_id": "0fb0cf0c-3ff2-4904-8435-58f8abdc8ed0",
+              "job_id_owner": "core",
+              "core_poll": {
+                "owner": "core",
+                "tool": "jobs_get_status",
+                "arguments": {
+                  "job_id": "0fb0cf0c-3ff2-4904-8435-58f8abdc8ed0",
+                  "include_result": true
+                }
+              },
+              "parent_job_id": null,
+              "tool": "paraview_pipeline__slice_plane",
+              "status": "completed",
+              "created_at": "2026-10-20T19:09:36.134710091+00:00",
+              "started_at": "2026-10-20T19:09:36.134874038+00:00",
+              "completed_at": "2026-10-20T19:09:36.165644279+00:00",
+              "updated_at": "2026-10-20T19:09:36.165644279+00:00",
+              "progress": null,
+              "error": null,
+              "result": {
+                "success": true,
+                "message": "ParaView operation verified",
+                "error": null,
+                "prompt": null,
+                "context": {
+                  "source": {
+                    "name": "Section",
+                    "type": "Cut",
+                    "points": 49,
+                    "cells": 72,
+                    "bounds": [
+                      0.0,
+                      0.0,
+                      -3.0,
+                      3.0,
+                      -3.0,
+                      3.0
+                    ],
+                    "point_arrays": [
+                      {
+                        "name": "RadiusSquared",
+                        "components": 1,
+                        "range": [
+                          0.0,
+                          18.0
+                        ]
+                      }
+                    ],
+                    "origin": [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    "normal": [
+                      1.0,
+                      0.0,
+                      0.0
+                    ],
+                    "offsets": [
+                      0.0
+                    ],
+                    "crinkle": false,
+                    "triangulate": true,
+                    "input_bindings": [
+                      {
+                        "source_names": [
+                          "Volume"
+                        ],
+                        "port": 0
+                      }
+                    ],
+                    "input_name": "Volume"
+                  }
+                },
+                "postcondition": {
+                  "method": "host_api_readback",
+                  "operation": "slice_plane",
+                  "verified": true
+                }
+              }
+            }
+          }
+        },
+        {
+          "source_record_sha256": "70c49df34d57896badb92507657091ce3f087454e74542c3d3e1407849371a1e",
+          "record": {
+            "sequence": 110,
+            "utc": "2026-10-20T19:09:36.243834+00:00",
+            "monotonic": 219917.183963733,
+            "kind": "small_http_chain_passed",
+            "operations": [
+              "create_image_data",
+              "save_state",
+              "reopen_state",
+              "contour",
+              "slice_plane"
+            ]
+          }
+        },
+        {
+          "source_record_sha256": "02ede2e1e974bb51eafc909b09446ece70599cc641111d2a371e1893c9003707",
+          "record": {
+            "sequence": 115,
+            "utc": "2026-10-20T19:09:36.418723+00:00",
+            "monotonic": 219917.358854412,
+            "kind": "initial_job",
+            "tool": "create_image_data",
+            "arguments": {
+              "name": "AnalyticVolume",
+              "path": "analytic.vti",
+              "dimensions": [
+                81,
+                65,
+                97
+              ],
+              "origin": [
+                -2,
+                -1.6,
+                0
+              ],
+              "spacing": [
+                0.05,
+                0.05,
+                0.025
+              ],
+              "significant_digits": 10,
+              "active_scalar": "SyntheticTime_s",
+              "serialization": "canonical_ascii_v1",
+              "fields": [
+                {
+                  "name": "SyntheticTime_s",
+                  "dtype": "float64",
+                  "expression": ".6+.4*z+.025*(x*x+y*y)-(220*exp(-(((x-.2)/.9)**2+((y+.1)/.65)**2+((z-1.2)/.30)**2)))/1000"
+                },
+                {
+                  "name": "SyntheticDelay_ms",
+                  "dtype": "float64",
+                  "expression": "220*exp(-(((x-.2)/.9)**2+((y+.1)/.65)**2+((z-1.2)/.30)**2))"
+                }
+              ]
+            },
+            "payload": {
+              "job_id": "b8fb0144-a2e4-45f8-9062-bcda99f4a842",
+              "core_job_id": "b8fb0144-a2e4-45f8-9062-bcda99f4a842",
+              "job_id_owner": "core",
+              "status": "pending",
+              "parent_job_id": null,
+              "core_poll": {
+                "owner": "core",
+                "tool": "jobs_get_status",
+                "arguments": {
+                  "job_id": "b8fb0144-a2e4-45f8-9062-bcda99f4a842",
+                  "include_result": true
+                }
+              },
+              "_meta": {
+                "status": "pending",
+                "dcc": {
+                  "jobId": "b8fb0144-a2e4-45f8-9062-bcda99f4a842",
+                  "coreJobId": "b8fb0144-a2e4-45f8-9062-bcda99f4a842",
+                  "jobOwner": "core",
+                  "pollTool": "jobs_get_status",
+                  "parentJobId": null
+                }
+              }
+            }
+          }
+        },
+        {
+          "source_record_sha256": "4c8402be1d957d8c131a9d8e4d5f7dc73c36064cdbdb47e5aff40cf07a9bc1c7",
+          "record": {
+            "sequence": 423,
+            "utc": "2026-10-20T19:09:46.636339+00:00",
+            "monotonic": 219927.576468861,
+            "kind": "terminal_job",
+            "job_id": "b8fb0144-a2e4-45f8-9062-bcda99f4a842",
+            "payload": {
+              "job_id": "b8fb0144-a2e4-45f8-9062-bcda99f4a842",
+              "core_job_id": "b8fb0144-a2e4-45f8-9062-bcda99f4a842",
+              "job_id_owner": "core",
+              "core_poll": {
+                "owner": "core",
+                "tool": "jobs_get_status",
+                "arguments": {
+                  "job_id": "b8fb0144-a2e4-45f8-9062-bcda99f4a842",
+                  "include_result": true
+                }
+              },
+              "parent_job_id": null,
+              "tool": "paraview_pipeline__create_image_data",
+              "status": "completed",
+              "created_at": "2026-10-20T19:09:36.414084581+00:00",
+              "started_at": "2026-10-20T19:09:36.414178252+00:00",
+              "completed_at": "2026-10-20T19:09:46.581032254+00:00",
+              "updated_at": "2026-10-20T19:09:46.581032254+00:00",
+              "progress": null,
+              "error": null,
+              "result": {
+                "success": true,
+                "message": "ParaView operation verified",
+                "error": null,
+                "prompt": null,
+                "context": {
+                  "source": {
+                    "name": "AnalyticVolume",
+                    "type": "XMLImageDataReader",
+                    "points": 510705,
+                    "cells": 491520,
+                    "bounds": [
+                      -2.0,
+                      2.0,
+                      -1.6,
+                      1.6,
+                      0.0,
+                      2.4000000000000004
+                    ],
+                    "point_arrays": [
+                      {
+                        "name": "SyntheticDelay_ms",
+                        "components": 1,
+                        "range": [
+                          6.729617055e-11,
+                          220.0
+                        ]
+                      },
+                      {
+                        "name": "SyntheticTime_s",
+                        "components": 1,
+                        "range": [
+                          0.599999977,
+                          1.724
+                        ]
+                      }
+                    ]
+                  },
+                  "artifact": {
+                    "path": "<qualification-root>/run-acceptance-01/workspace/analytic.vti",
+                    "bytes": 13302837,
+                    "sha256": "43ade20b1f2b78149e7d948894568b599db55f5aa8f9a5ceb62050e970e93d9d",
+                    "native_readback": {
+                      "dimensions": [
+                        81,
+                        65,
+                        97
+                      ],
+                      "origin": [
+                        -2.0,
+                        -1.6,
+                        0.0
+                      ],
+                      "spacing": [
+                        0.05,
+                        0.05,
+                        0.025
+                      ],
+                      "points": 510705,
+                      "cells": 491520,
+                      "bounds": [
+                        -2.0,
+                        2.0,
+                        -1.6,
+                        1.6,
+                        0.0,
+                        2.4000000000000004
+                      ],
+                      "active_scalar": "SyntheticTime_s",
+                      "arrays": [
+                        {
+                          "name": "SyntheticTime_s",
+                          "dtype": "float64",
+                          "components": 1,
+                          "tuples": 510705,
+                          "sha256_le_float64": "6d0150f615d4a99b5e3e6b9c4f40810a57353cd48310bf3d006469fa4b2eacec"
+                        },
+                        {
+                          "name": "SyntheticDelay_ms",
+                          "dtype": "float64",
+                          "components": 1,
+                          "tuples": 510705,
+                          "sha256_le_float64": "4f8608bba0a580345de07347e0aa9574b04f66f414514260360391bd1d0e2614"
+                        }
+                      ]
+                    },
+                    "all_values_equal": true
+                  },
+                  "image_data": {
+                    "dimensions": [
+                      81,
+                      65,
+                      97
+                    ],
+                    "origin": [
+                      -2.0,
+                      -1.6,
+                      0.0
+                    ],
+                    "spacing": [
+                      0.05,
+                      0.05,
+                      0.025
+                    ],
+                    "points": 510705,
+                    "cells": 491520,
+                    "bounds": [
+                      -2.0,
+                      2.0,
+                      -1.6,
+                      1.6,
+                      0.0,
+                      2.4000000000000004
+                    ],
+                    "active_scalar": "SyntheticTime_s",
+                    "arrays": [
+                      {
+                        "name": "SyntheticTime_s",
+                        "dtype": "float64",
+                        "components": 1,
+                        "tuples": 510705,
+                        "sha256_le_float64": "6d0150f615d4a99b5e3e6b9c4f40810a57353cd48310bf3d006469fa4b2eacec"
+                      },
+                      {
+                        "name": "SyntheticDelay_ms",
+                        "dtype": "float64",
+                        "components": 1,
+                        "tuples": 510705,
+                        "sha256_le_float64": "4f8608bba0a580345de07347e0aa9574b04f66f414514260360391bd1d0e2614"
+                      }
+                    ],
+                    "fields": [
+                      {
+                        "name": "SyntheticTime_s",
+                        "dtype": "float64",
+                        "expression": ".6+.4*z+.025*(x*x+y*y)-(220*exp(-(((x-.2)/.9)**2+((y+.1)/.65)**2+((z-1.2)/.30)**2)))/1000"
+                      },
+                      {
+                        "name": "SyntheticDelay_ms",
+                        "dtype": "float64",
+                        "expression": "220*exp(-(((x-.2)/.9)**2+((y+.1)/.65)**2+((z-1.2)/.30)**2))"
+                      }
+                    ],
+                    "significant_digits": 10,
+                    "serialization": "canonical_ascii_v1",
+                    "expression_language": "coordinate_scalar_v1",
+                    "evaluation_order": "x_fastest_independent_fields",
+                    "operations": 33706530,
+                    "array_bytes": 8171280,
+                    "output_bound": 26560756,
+                    "host_version": "5.13.2"
+                  },
+                  "runtime": {
+                    "adapter": "0.1.0",
+                    "core": "0.20.41",
+                    "server": "0.20.41"
+                  }
+                },
+                "postcondition": {
+                  "method": "host_api_readback",
+                  "operation": "create_image_data",
+                  "verified": true
+                }
+              }
+            }
+          }
+        },
+        {
+          "source_record_sha256": "72feb06a2b3cd6b1abac855d62d10f0665f5a0d2f38f9292bfa3063b59957b96",
+          "record": {
+            "sequence": 424,
+            "utc": "2026-10-20T19:09:49.474391+00:00",
+            "monotonic": 219930.414534882,
+            "kind": "full_numeric_oracle_passed",
+            "arrays": [
+              {
+                "name": "SyntheticTime_s",
+                "tuples": 510705,
+                "expected_sha256_le_float64": "6d0150f615d4a99b5e3e6b9c4f40810a57353cd48310bf3d006469fa4b2eacec",
+                "actual_sha256_le_float64": "6d0150f615d4a99b5e3e6b9c4f40810a57353cd48310bf3d006469fa4b2eacec",
+                "comparison": "every IEEE754 Float64 bit pattern"
+              },
+              {
+                "name": "SyntheticDelay_ms",
+                "tuples": 510705,
+                "expected_sha256_le_float64": "4f8608bba0a580345de07347e0aa9574b04f66f414514260360391bd1d0e2614",
+                "actual_sha256_le_float64": "4f8608bba0a580345de07347e0aa9574b04f66f414514260360391bd1d0e2614",
+                "comparison": "every IEEE754 Float64 bit pattern"
+              }
+            ]
+          }
+        },
+        {
+          "source_record_sha256": "a7083d92b79e831fb3e2e96fdab6e93a82a94e0b1bbc73a93b10baa703e3448f",
+          "record": {
+            "sequence": 427,
+            "utc": "2026-10-20T19:09:49.544262+00:00",
+            "monotonic": 219930.484404148,
+            "kind": "cleanup",
+            "instance_id": null,
+            "pid": 23,
+            "returncode": -15,
+            "dispatcher_stopped": true,
+            "server_stopped": true,
+            "listener_rows": [],
+            "remaining_owned_process_group": {
+              "owned_pid": 23,
+              "pids": [],
+              "rss_bytes": 0,
+              "returncode": -15
+            },
+            "errors": []
+          }
+        }
+      ]
+    },
+    {
+      "name": "actual-lifecycle-evidence",
+      "raw_events_sha256": "5d5e2e236268a981c2b5537932c7edbaf4e8c288d19d1e84ba55833a279c9e9b",
+      "raw_summary_sha256": "63f2ab9fce25c6e798bf4e1578fd274a119504c26fbf514018877b9e8d88e1c1",
+      "summary_projection": {
+        "success": true,
+        "mode": "cancel-probe",
+        "frozen_commit": "9100157ebc60bc30e8f49fce0ce887058377059e",
+        "run_dir": "<qualification-root>/run-lifecycle-01",
+        "mutations": "real HTTP MCP only",
+        "render_performed": false,
+        "result": {
+          "kind": "qualification_only_cancellation",
+          "job_id": "0a5c6bd0-573a-49eb-9962-1215438e7a34",
+          "status": "cancelled",
+          "owned_host_exited": true,
+          "stages_removed": true,
+          "native_invalid_scalar_verified": true,
+          "retained_control_sha256": "5c138ac9f739f47a834b705d0be04260c177a1c7e12f312abc1a797edf9ce53f",
+          "retained_control_unchanged": true,
+          "published_file_retained": false,
+          "published_sha256": null,
+          "full_artifact_was_not_in_this_workspace": true
+        },
+        "cleanup": {
+          "instance_id": null,
+          "pid": 21,
+          "returncode": -15,
+          "dispatcher_stopped": true,
+          "server_stopped": true,
+          "listener_rows": [],
+          "remaining_owned_process_group": {
+            "owned_pid": 21,
+            "pids": [],
+            "rss_bytes": 0,
+            "returncode": -15
+          },
+          "errors": [],
+          "registry_check": {
+            "status": "unidentified_no_entry_observed",
+            "instance_id": null,
+            "json_files_after_stop": [],
+            "scope": "No specific registration removal is claimed without an identified owned entry"
+          }
+        },
+        "peak_sampled_owned_process_group_rss": 249110528,
+        "evidence_bytes": 638832
+      },
+      "selected_original_records": [
+        {
+          "source_record_sha256": "bd240fbde3bccf267835dc965ab9a53d65f5c0ea97df7391407b49a7387c4629",
+          "record": {
+            "sequence": 31,
+            "utc": "2026-10-20T19:14:56.940368+00:00",
+            "monotonic": 220237.880500394,
+            "kind": "initial_job",
+            "tool": "create_image_data",
+            "arguments": {
+              "name": "RetainedControl",
+              "path": "retained-control.vti",
+              "dimensions": [
+                2,
+                2,
+                2
+              ],
+              "origin": [
+                0,
+                0,
+                0
+              ],
+              "spacing": [
+                1,
+                1,
+                1
+              ],
+              "fields": [
+                {
+                  "name": "Control",
+                  "dtype": "float64",
+                  "expression": "x+y+z"
+                }
+              ]
+            },
+            "payload": {
+              "job_id": "5fa8a5f1-51f3-492e-a410-322c79de99c8",
+              "core_job_id": "5fa8a5f1-51f3-492e-a410-322c79de99c8",
+              "job_id_owner": "core",
+              "status": "pending",
+              "parent_job_id": null,
+              "core_poll": {
+                "owner": "core",
+                "tool": "jobs_get_status",
+                "arguments": {
+                  "job_id": "5fa8a5f1-51f3-492e-a410-322c79de99c8",
+                  "include_result": true
+                }
+              },
+              "_meta": {
+                "status": "pending",
+                "dcc": {
+                  "jobId": "5fa8a5f1-51f3-492e-a410-322c79de99c8",
+                  "coreJobId": "5fa8a5f1-51f3-492e-a410-322c79de99c8",
+                  "jobOwner": "core",
+                  "pollTool": "jobs_get_status",
+                  "parentJobId": null
+                }
+              }
+            }
+          }
+        },
+        {
+          "source_record_sha256": "53e216078889b175a307383c7321d75e39599ae073a73c5673d7ee9e17de6c1d",
+          "record": {
+            "sequence": 38,
+            "utc": "2026-10-20T19:14:57.055203+00:00",
+            "monotonic": 220237.995333862,
+            "kind": "terminal_job",
+            "job_id": "5fa8a5f1-51f3-492e-a410-322c79de99c8",
+            "payload": {
+              "job_id": "5fa8a5f1-51f3-492e-a410-322c79de99c8",
+              "core_job_id": "5fa8a5f1-51f3-492e-a410-322c79de99c8",
+              "job_id_owner": "core",
+              "core_poll": {
+                "owner": "core",
+                "tool": "jobs_get_status",
+                "arguments": {
+                  "job_id": "5fa8a5f1-51f3-492e-a410-322c79de99c8",
+                  "include_result": true
+                }
+              },
+              "parent_job_id": null,
+              "tool": "paraview_pipeline__create_image_data",
+              "status": "completed",
+              "created_at": "2026-10-20T19:14:56.935483760+00:00",
+              "started_at": "2026-10-20T19:14:56.935537040+00:00",
+              "completed_at": "2026-10-20T19:14:57.005611487+00:00",
+              "updated_at": "2026-10-20T19:14:57.005611487+00:00",
+              "progress": null,
+              "error": null,
+              "result": {
+                "success": true,
+                "message": "ParaView operation verified",
+                "error": null,
+                "prompt": null,
+                "context": {
+                  "source": {
+                    "name": "RetainedControl",
+                    "type": "XMLImageDataReader",
+                    "points": 8,
+                    "cells": 1,
+                    "bounds": [
+                      0.0,
+                      1.0,
+                      0.0,
+                      1.0,
+                      0.0,
+                      1.0
+                    ],
+                    "point_arrays": [
+                      {
+                        "name": "Control",
+                        "components": 1,
+                        "range": [
+                          0.0,
+                          3.0
+                        ]
+                      }
+                    ]
+                  },
+                  "artifact": {
+                    "path": "<qualification-root>/run-lifecycle-01/workspace/retained-control.vti",
+                    "bytes": 571,
+                    "sha256": "5c138ac9f739f47a834b705d0be04260c177a1c7e12f312abc1a797edf9ce53f",
+                    "native_readback": {
+                      "dimensions": [
+                        2,
+                        2,
+                        2
+                      ],
+                      "origin": [
+                        0.0,
+                        0.0,
+                        0.0
+                      ],
+                      "spacing": [
+                        1.0,
+                        1.0,
+                        1.0
+                      ],
+                      "points": 8,
+                      "cells": 1,
+                      "bounds": [
+                        0.0,
+                        1.0,
+                        0.0,
+                        1.0,
+                        0.0,
+                        1.0
+                      ],
+                      "active_scalar": "Control",
+                      "arrays": [
+                        {
+                          "name": "Control",
+                          "dtype": "float64",
+                          "components": 1,
+                          "tuples": 8,
+                          "sha256_le_float64": "b37835037caa45cade501ba6bef7d0c73ce640abd0faa3a163a31e86c56111ee"
+                        }
+                      ]
+                    },
+                    "all_values_equal": true
+                  },
+                  "image_data": {
+                    "dimensions": [
+                      2,
+                      2,
+                      2
+                    ],
+                    "origin": [
+                      0.0,
+                      0.0,
+                      0.0
+                    ],
+                    "spacing": [
+                      1.0,
+                      1.0,
+                      1.0
+                    ],
+                    "points": 8,
+                    "cells": 1,
+                    "bounds": [
+                      0.0,
+                      1.0,
+                      0.0,
+                      1.0,
+                      0.0,
+                      1.0
+                    ],
+                    "active_scalar": "Control",
+                    "arrays": [
+                      {
+                        "name": "Control",
+                        "dtype": "float64",
+                        "components": 1,
+                        "tuples": 8,
+                        "sha256_le_float64": "b37835037caa45cade501ba6bef7d0c73ce640abd0faa3a163a31e86c56111ee"
+                      }
+                    ],
+                    "fields": [
+                      {
+                        "name": "Control",
+                        "dtype": "float64",
+                        "expression": "x+y+z"
+                      }
+                    ],
+                    "significant_digits": null,
+                    "serialization": "native",
+                    "expression_language": "coordinate_scalar_v1",
+                    "evaluation_order": "x_fastest_independent_fields",
+                    "operations": 40,
+                    "array_bytes": 64,
+                    "output_bound": 4304,
+                    "host_version": "5.13.2"
+                  },
+                  "runtime": {
+                    "adapter": "0.1.0",
+                    "core": "0.20.41",
+                    "server": "0.20.41"
+                  }
+                },
+                "postcondition": {
+                  "method": "host_api_readback",
+                  "operation": "create_image_data",
+                  "verified": true
+                }
+              }
+            }
+          }
+        },
+        {
+          "source_record_sha256": "2b250b61eaf3f46aa013479f207b67a2a763e98d550d38f73cf5aae08319f9be",
+          "record": {
+            "sequence": 42,
+            "utc": "2026-10-20T19:14:57.071771+00:00",
+            "monotonic": 220238.011903553,
+            "kind": "initial_job",
+            "tool": "create_image_data",
+            "arguments": {
+              "name": "InvalidScalarProbe",
+              "path": "invalid-scalar-probe.vti",
+              "dimensions": [
+                2,
+                2,
+                2
+              ],
+              "origin": [
+                0,
+                0,
+                0
+              ],
+              "spacing": [
+                1,
+                1,
+                1
+              ],
+              "fields": [
+                {
+                  "name": "Invalid",
+                  "dtype": "float64",
+                  "expression": "1/x"
+                }
+              ]
+            },
+            "payload": {
+              "job_id": "0e0f1afa-67fa-470e-b125-1e11db975986",
+              "core_job_id": "0e0f1afa-67fa-470e-b125-1e11db975986",
+              "job_id_owner": "core",
+              "status": "pending",
+              "parent_job_id": null,
+              "core_poll": {
+                "owner": "core",
+                "tool": "jobs_get_status",
+                "arguments": {
+                  "job_id": "0e0f1afa-67fa-470e-b125-1e11db975986",
+                  "include_result": true
+                }
+              },
+              "_meta": {
+                "status": "pending",
+                "dcc": {
+                  "jobId": "0e0f1afa-67fa-470e-b125-1e11db975986",
+                  "coreJobId": "0e0f1afa-67fa-470e-b125-1e11db975986",
+                  "jobOwner": "core",
+                  "pollTool": "jobs_get_status",
+                  "parentJobId": null
+                }
+              }
+            }
+          }
+        },
+        {
+          "source_record_sha256": "b37904df9a1c098e94d4f1aa4c2a32842d366a3718c3998216dd5a730c582839",
+          "record": {
+            "sequence": 49,
+            "utc": "2026-10-20T19:14:57.180460+00:00",
+            "monotonic": 220238.120589744,
+            "kind": "terminal_job",
+            "job_id": "0e0f1afa-67fa-470e-b125-1e11db975986",
+            "payload": {
+              "job_id": "0e0f1afa-67fa-470e-b125-1e11db975986",
+              "core_job_id": "0e0f1afa-67fa-470e-b125-1e11db975986",
+              "job_id_owner": "core",
+              "core_poll": {
+                "owner": "core",
+                "tool": "jobs_get_status",
+                "arguments": {
+                  "job_id": "0e0f1afa-67fa-470e-b125-1e11db975986",
+                  "include_result": true
+                }
+              },
+              "parent_job_id": null,
+              "tool": "paraview_pipeline__create_image_data",
+              "status": "completed",
+              "created_at": "2026-10-20T19:14:57.066753088+00:00",
+              "started_at": "2026-10-20T19:14:57.066807951+00:00",
+              "completed_at": "2026-10-20T19:14:57.079190369+00:00",
+              "updated_at": "2026-10-20T19:14:57.079190369+00:00",
+              "progress": null,
+              "error": null,
+              "result": {
+                "success": false,
+                "message": "Scalar expression overflow, division by zero or invalid domain",
+                "error": "invalid_scalar",
+                "prompt": "Check the error details and try again.",
+                "context": {}
+              }
+            }
+          }
+        },
+        {
+          "source_record_sha256": "e8f45ddf8672ded0c20ab4e3ea0cc9c983ea6f911686f441f12488a2350379dc",
+          "record": {
+            "sequence": 50,
+            "utc": "2026-10-20T19:14:57.180834+00:00",
+            "monotonic": 220238.12096605,
+            "kind": "native_failure_preserved_control",
+            "invalid_job_id": "0e0f1afa-67fa-470e-b125-1e11db975986",
+            "retained_sha256": "5c138ac9f739f47a834b705d0be04260c177a1c7e12f312abc1a797edf9ce53f",
+            "retained_path": "<qualification-root>/run-lifecycle-01/workspace/retained-control.vti",
+            "native_error": "invalid_scalar",
+            "failed_output_absent": true,
+            "stages_absent": true
+          }
+        },
+        {
+          "source_record_sha256": "012dfe3b7252881a175e55442a37b8a46f66c5fe5d8478573efd749423c1fbc5",
+          "record": {
+            "sequence": 54,
+            "utc": "2026-10-20T19:14:57.193693+00:00",
+            "monotonic": 220238.133824665,
+            "kind": "initial_job",
+            "tool": "create_image_data",
+            "arguments": {
+              "name": "CancellationProbe",
+              "path": "qualification-only-probe.vti",
+              "dimensions": [
+                100,
+                100,
+                100
+              ],
+              "origin": [
+                0,
+                0,
+                0
+              ],
+              "spacing": [
+                0.001,
+                0.001,
+                0.001
+              ],
+              "fields": [
+                {
+                  "name": "Probe",
+                  "dtype": "float64",
+                  "expression": "(x*x+y*y+z*z)+(x*x+y*y+z*z)+(x*x+y*y+z*z)"
+                }
+              ]
+            },
+            "payload": {
+              "job_id": "0a5c6bd0-573a-49eb-9962-1215438e7a34",
+              "core_job_id": "0a5c6bd0-573a-49eb-9962-1215438e7a34",
+              "job_id_owner": "core",
+              "status": "pending",
+              "parent_job_id": null,
+              "core_poll": {
+                "owner": "core",
+                "tool": "jobs_get_status",
+                "arguments": {
+                  "job_id": "0a5c6bd0-573a-49eb-9962-1215438e7a34",
+                  "include_result": true
+                }
+              },
+              "_meta": {
+                "status": "pending",
+                "dcc": {
+                  "jobId": "0a5c6bd0-573a-49eb-9962-1215438e7a34",
+                  "coreJobId": "0a5c6bd0-573a-49eb-9962-1215438e7a34",
+                  "jobOwner": "core",
+                  "pollTool": "jobs_get_status",
+                  "parentJobId": null
+                }
+              }
+            }
+          }
+        },
+        {
+          "source_record_sha256": "3229733915b545fd2e10825ce85b5720b12ce506f4496af7f88ae858bbcf4e06",
+          "record": {
+            "sequence": 802,
+            "utc": "2026-10-20T19:15:02.960565+00:00",
+            "monotonic": 220243.900694802,
+            "kind": "probe_owned_request",
+            "request": {
+              "id": "a5da9e2175ce4fe49eef15ac1dd1f5ee",
+              "job_id": "0a5c6bd0-573a-49eb-9962-1215438e7a34",
+              "operation": "create_image_data",
+              "params": {
+                "name": "CancellationProbe",
+                "path": "qualification-only-probe.vti",
+                "dimensions": [
+                  100,
+                  100,
+                  100
+                ],
+                "origin": [
+                  0,
+                  0,
+                  0
+                ],
+                "spacing": [
+                  0.001,
+                  0.001,
+                  0.001
+                ],
+                "fields": [
+                  {
+                    "name": "Probe",
+                    "dtype": "float64",
+                    "expression": "(x*x+y*y+z*z)+(x*x+y*y+z*z)+(x*x+y*y+z*z)"
+                  }
+                ]
+              },
+              "output_directory": {
+                "device": 55,
+                "inode": 1193974
+              }
+            },
+            "pid": 21,
+            "native_stage_observed": {
+              "name": ".dcc-mcp-image-a5da9e2175ce4fe49eef15ac1dd1f5ee.native.vti",
+              "bytes": 251630
+            }
+          }
+        },
+        {
+          "source_record_sha256": "4d068d3d99cf09fede2dd0ce426d09b59d200c97f5593ee58fa4ea0a0c360864",
+          "record": {
+            "sequence": 803,
+            "utc": "2026-10-20T19:15:02.960608+00:00",
+            "monotonic": 220243.900737596,
+            "kind": "probe_cancel_request_once",
+            "method": "DELETE",
+            "url": "http://127.0.0.1:34447/v1/jobs/0a5c6bd0-573a-49eb-9962-1215438e7a34"
+          }
+        },
+        {
+          "source_record_sha256": "75432950b97897ac408246c7b56d8c2edc65d66c116e68d92fab38b60b9ab9df",
+          "record": {
+            "sequence": 805,
+            "utc": "2026-10-20T19:15:02.961516+00:00",
+            "monotonic": 220243.901647296,
+            "kind": "probe_cancel_response",
+            "status_code": 204,
+            "body": ""
+          }
+        },
+        {
+          "source_record_sha256": "7d658a50720e67574e962c7c4b29ba401778d8751acefde253eee93f81dd7c52",
+          "record": {
+            "sequence": 812,
+            "utc": "2026-10-20T19:15:03.066117+00:00",
+            "monotonic": 220244.0062468,
+            "kind": "terminal_job",
+            "job_id": "0a5c6bd0-573a-49eb-9962-1215438e7a34",
+            "payload": {
+              "job_id": "0a5c6bd0-573a-49eb-9962-1215438e7a34",
+              "core_job_id": "0a5c6bd0-573a-49eb-9962-1215438e7a34",
+              "job_id_owner": "core",
+              "core_poll": {
+                "owner": "core",
+                "tool": "jobs_get_status",
+                "arguments": {
+                  "job_id": "0a5c6bd0-573a-49eb-9962-1215438e7a34",
+                  "include_result": true
+                }
+              },
+              "parent_job_id": null,
+              "tool": "paraview_pipeline__create_image_data",
+              "status": "cancelled",
+              "created_at": "2026-10-20T19:14:57.189947883+00:00",
+              "started_at": "2026-10-20T19:14:57.189999650+00:00",
+              "completed_at": "2026-10-20T19:15:03.031245033+00:00",
+              "updated_at": "2026-10-20T19:15:03.031245033+00:00",
+              "progress": null,
+              "error": null
+            }
+          }
+        },
+        {
+          "source_record_sha256": "18d0ce47805fee5407ba91ebe01c55efe6a7f0722f40c4dbd70c7764ed1d8ae2",
+          "record": {
+            "sequence": 813,
+            "utc": "2026-10-20T19:15:03.070237+00:00",
+            "monotonic": 220244.010370247,
+            "kind": "cleanup",
+            "instance_id": null,
+            "pid": 21,
+            "returncode": -15,
+            "dispatcher_stopped": true,
+            "server_stopped": true,
+            "listener_rows": [],
+            "remaining_owned_process_group": {
+              "owned_pid": 21,
+              "pids": [],
+              "rss_bytes": 0,
+              "returncode": -15
+            },
+            "errors": []
+          }
+        }
+      ]
+    }
+  ]
+}
