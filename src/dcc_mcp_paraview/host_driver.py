@@ -5,13 +5,22 @@ import json
 import math
 import os
 import re
+import struct
 import sys
 import threading
 import uuid
 from pathlib import Path
 from xml.etree import ElementTree
 
-from contracts import MAX_SLICE_CELLS, MAX_SLICE_POINTS, SCALAR_BAR_CONTROLS, OperationError, validate
+from contracts import (
+    MAX_SLICE_CELLS,
+    MAX_SLICE_POINTS,
+    SCALAR_BAR_CONTROLS,
+    OperationError,
+    image_data,
+    image_files,
+    validate,
+)
 
 MAX_FILE_BYTES = 64 * 1024 * 1024
 
@@ -124,6 +133,235 @@ class Host:
                 else "DISPLAY is absent",
             },
         }
+
+    def create_image_data(
+        self,
+        name,
+        path,
+        dimensions,
+        origin,
+        spacing,
+        fields,
+        active_scalar=None,
+        significant_digits=None,
+        serialization="native",
+    ):
+        params = dict(
+            name=name,
+            path=path,
+            dimensions=dimensions,
+            origin=origin,
+            spacing=spacing,
+            fields=fields,
+            serialization=serialization,
+        )
+        if active_scalar is not None:
+            params["active_scalar"] = active_scalar
+        if significant_digits is not None:
+            params["significant_digits"] = significant_digits
+        validate("create_image_data", params)
+        plan = image_data.plan_image_data(params)
+        self.new_name(name)
+        output = self.path(path, ".vti", output=True)
+        active = self.pv.GetActiveSource()
+        reader = None
+        publication = None
+        try:
+            publication = image_files.ImageOutput(self.root, output, getattr(self, "request_id", uuid.uuid4().hex))
+            # All native imports and calls remain in this owned host's main-thread module.
+            from vtkmodules.vtkCommonCore import vtkDoubleArray
+            from vtkmodules.vtkCommonDataModel import vtkImageData
+            from vtkmodules.vtkIOXML import vtkXMLImageDataReader, vtkXMLImageDataWriter
+
+            dataset = vtkImageData()
+            dataset.SetDimensions(*dimensions)
+            dataset.SetOrigin(*origin)
+            dataset.SetSpacing(*spacing)
+            for field, expression in zip(fields, plan["plans"]):
+                array = vtkDoubleArray()
+                array.SetName(field["name"])
+                array.SetNumberOfComponents(1)
+                array.SetNumberOfTuples(plan["points"])
+                index = 0
+                for iz in range(dimensions[2]):
+                    z = origin[2] + iz * spacing[2]
+                    for iy in range(dimensions[1]):
+                        y = origin[1] + iy * spacing[1]
+                        for ix in range(dimensions[0]):
+                            x = origin[0] + ix * spacing[0]
+                            value = image_data.evaluate_expression(expression, (x, y, z), significant_digits)
+                            array.SetValue(index, value)
+                            index += 1
+                dataset.GetPointData().AddArray(array)
+            dataset.GetPointData().SetActiveScalars(plan["active_scalar"])
+            expected = self._image_data_evidence(dataset, params, plan)
+            native_path = publication.reserve(native=True)
+            writer = vtkXMLImageDataWriter()
+            writer.SetFileName(str(native_path))
+            writer.SetInputData(dataset)
+            writer.SetDataModeToBinary()
+            writer.SetCompressorTypeToNone()
+            if writer.Write() != 1 or writer.GetErrorCode():
+                raise OperationError("verification_failed", "Native ImageData writer failed")
+            if not 0 < native_path.stat().st_size <= MAX_FILE_BYTES:
+                raise OperationError("resource_limit", "Native ImageData serialization exceeded its output limit")
+
+            def read_verified(staged):
+                native_reader = vtkXMLImageDataReader()
+                native_reader.SetFileName(str(staged))
+                native_reader.Update()
+                if native_reader.GetErrorCode():
+                    raise OperationError("verification_failed", "Native ImageData reader failed")
+                readback = native_reader.GetOutput()
+                actual = self._image_data_evidence(readback, params, plan, reference=dataset)
+                if actual != expected:
+                    raise OperationError("verification_failed", "Native ImageData readback differs")
+                return native_reader, readback
+
+            native_reader, verified_native = read_verified(native_path)
+            result_path = publication.reserve()
+            if serialization == "canonical_ascii_v1":
+                self._write_canonical_image_data(result_path, verified_native, params, plan)
+            else:
+                # Copy the verified native serialization, not an independently generated XML dataset.
+                with native_path.open("rb") as source, result_path.open("wb") as destination:
+                    while True:
+                        chunk = source.read(65536)
+                        if not chunk:
+                            break
+                        destination.write(chunk)
+
+            def verify(staged):
+                read_verified(staged)
+                return {"native_readback": expected, "all_values_equal": True}
+
+            artifact = self.publish(output, None, verify, image_output=publication)
+            # Final state is an ordinary file reader, not an ephemeral in-memory producer.
+            self.path(str(output), ".vti")
+            if output.stat() != publication.stage_path().stat():
+                raise OperationError("path_denied", "Published output location changed")
+            reader = self._reader(output, name)
+            actual = self.info(name, reader)
+            from paraview import servermanager
+
+            final_data = servermanager.Fetch(reader)
+            final_evidence = self._image_data_evidence(final_data, params, plan, reference=dataset)
+            if final_evidence != expected:
+                raise OperationError("verification_failed", "Published reader-backed ImageData differs")
+            return {
+                "source": actual,
+                "artifact": artifact,
+                "image_data": {
+                    **expected,
+                    "fields": fields,
+                    "significant_digits": significant_digits,
+                    "serialization": serialization,
+                    "expression_language": "coordinate_scalar_v1",
+                    "evaluation_order": "x_fastest_independent_fields",
+                    "operations": plan["operations"],
+                    "array_bytes": plan["array_bytes"],
+                    "output_bound": plan["output_bound"],
+                    "host_version": self.version,
+                },
+            }
+        except BaseException as error:
+            if reader is None:
+                reader = self.pv.FindSource(name)
+            if reader is not None:
+                self.pv.Delete(reader)
+            if isinstance(error, image_data.ImageDataError):
+                raise OperationError(error.code, str(error)) from None
+            raise
+        finally:
+            if publication is not None:
+                publication.close()
+            self.pv.SetActiveSource(active)
+
+    @staticmethod
+    def _image_data_evidence(dataset, params, plan, reference=None):
+        if dataset is None or not dataset.IsA("vtkImageData"):
+            raise OperationError("verification_failed", "Native output is not ImageData")
+        expected_geometry = {
+            "dimensions": params["dimensions"],
+            "origin": params["origin"],
+            "spacing": params["spacing"],
+            "points": plan["points"],
+            "cells": plan["cells"],
+            "bounds": plan["bounds"],
+        }
+        actual = {
+            "dimensions": list(dataset.GetDimensions()),
+            "origin": list(dataset.GetOrigin()),
+            "spacing": list(dataset.GetSpacing()),
+            "points": dataset.GetNumberOfPoints(),
+            "cells": dataset.GetNumberOfCells(),
+            "bounds": list(dataset.GetBounds()),
+        }
+        if actual != expected_geometry:
+            raise OperationError("verification_failed", "Native ImageData geometry differs")
+        point_data = dataset.GetPointData()
+        active = point_data.GetScalars()
+        if active is None or active.GetName() != plan["active_scalar"]:
+            raise OperationError("verification_failed", "Native active scalar differs")
+        if point_data.GetNumberOfArrays() != len(params["fields"]):
+            raise OperationError("verification_failed", "Native field count differs")
+        arrays = []
+        for index, field in enumerate(params["fields"]):
+            array = point_data.GetArray(index)
+            if (
+                array is None
+                or array.GetName() != field["name"]
+                or array.GetDataType() != 11
+                or array.GetNumberOfComponents() != 1
+                or array.GetNumberOfTuples() != plan["points"]
+            ):
+                raise OperationError("verification_failed", "Native field identity or Float64 shape differs")
+            original = reference.GetPointData().GetArray(index) if reference is not None else None
+            values_hash = hashlib.sha256()
+            for offset in range(plan["points"]):
+                value = array.GetValue(offset)
+                if not math.isfinite(value):
+                    raise OperationError("verification_failed", "Native field contains a nonfinite value")
+                packed = struct.pack("<d", value)
+                if original is not None and packed != struct.pack("<d", original.GetValue(offset)):
+                    raise OperationError("verification_failed", "Native Float64 array value differs")
+                values_hash.update(packed)
+            arrays.append(
+                {
+                    "name": field["name"],
+                    "dtype": "float64",
+                    "components": 1,
+                    "tuples": plan["points"],
+                    "sha256_le_float64": values_hash.hexdigest(),
+                }
+            )
+        return {**actual, "active_scalar": plan["active_scalar"], "arrays": arrays}
+
+    @staticmethod
+    def _write_canonical_image_data(path, dataset, params, plan):
+        # Versioned generic layout. Values come only from fully verified native arrays.
+        extent = " ".join("0 %d" % (n - 1) for n in dataset.GetDimensions())
+        # Shortest round-tripping coordinate spelling, independent from field quantization.
+        origin = " ".join(str(int(v)) if v.is_integer() else repr(v) for v in dataset.GetOrigin())
+        spacing = " ".join(str(int(v)) if v.is_integer() else repr(v) for v in dataset.GetSpacing())
+        precision = ".%dg" % params.get("significant_digits", 17)
+        with path.open("w", encoding="ascii", newline="\n") as stream:
+            stream.write('<?xml version="1.0"?>\n<VTKFile type="ImageData" version="0.1" byte_order="LittleEndian">\n')
+            stream.write('<ImageData WholeExtent="%s" Origin="%s" Spacing="%s">\n' % (extent, origin, spacing))
+            stream.write('<Piece Extent="%s"><PointData Scalars="%s">\n' % (extent, plan["active_scalar"]))
+            for index, field in enumerate(params["fields"]):
+                stream.write(
+                    '<DataArray type="Float64" Name="%s" NumberOfComponents="1" format="ascii">\n' % field["name"]
+                )
+                array = dataset.GetPointData().GetArray(index)
+                for start in range(0, plan["points"], 1024):
+                    stop = min(start + 1024, plan["points"])
+                    stream.write(
+                        (" " if start else "")
+                        + " ".join(format(array.GetValue(i), precision) for i in range(start, stop))
+                    )
+                stream.write("\n</DataArray>\n")
+            stream.write("</PointData><CellData/></Piece></ImageData></VTKFile>\n")
 
     def create_sphere(self, name, radius=1.0, center=None, resolution=32):
         self.new_name(name)
@@ -249,7 +487,9 @@ class Host:
         actual.update(scalar=scalar, values=list(output.Isosurfaces))
         return {"source": actual}
 
-    def publish(self, path, writer, verifier):
+    def publish(self, path, writer, verifier, image_output=None):
+        if image_output is not None:
+            return image_output.publish(verifier)
         staged = path.with_name("." + path.stem + "." + uuid.uuid4().hex + path.suffix)
         try:
             writer(str(staged))
@@ -1040,6 +1280,7 @@ def main():
                 )
             ):
                 break
+            host.request_id = request["id"]
             context = host.call(request["operation"], request["params"])
             response = {"id": request["id"], "job_id": request.get("job_id"), "result": context}
         except Exception as error:

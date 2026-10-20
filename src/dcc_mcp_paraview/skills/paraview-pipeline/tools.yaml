@@ -45,6 +45,175 @@
       }
     },
     {
+      "name": "create_image_data",
+      "description": "Create bounded native Float64 ImageData from restricted coordinate expressions; verify every value and publish a new VTI with a persistent reader-backed source.",
+      "source_file": "scripts/create_image_data.py",
+      "input_schema": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+          },
+          "path": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 4096
+          },
+          "dimensions": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": {
+              "type": "integer",
+              "minimum": 2,
+              "maximum": 1000000
+            },
+            "description": "Product at most 1000000; arithmetic and output budgets also apply."
+          },
+          "origin": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": {
+              "type": "number",
+              "minimum": -1000000.0,
+              "maximum": 1000000.0
+            }
+          },
+          "spacing": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": {
+              "type": "number",
+              "exclusiveMinimum": 0,
+              "maximum": 1000000.0
+            }
+          },
+          "fields": {
+            "type": "array",
+            "minItems": 1,
+            "maxItems": 4,
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$"
+                },
+                "dtype": {
+                  "type": "string",
+                  "const": "float64"
+                },
+                "expression": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 512
+                }
+              },
+              "required": [
+                "name",
+                "dtype",
+                "expression"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "active_scalar": {
+            "type": "string",
+            "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$",
+            "description": "Declared field name; defaults to the first field."
+          },
+          "significant_digits": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 17,
+            "description": "Independent final-value decimal quantization; never applied to intermediates."
+          },
+          "serialization": {
+            "type": "string",
+            "enum": [
+              "native",
+              "canonical_ascii_v1"
+            ],
+            "default": "native"
+          }
+        },
+        "required": [
+          "name",
+          "path",
+          "dimensions",
+          "origin",
+          "spacing",
+          "fields"
+        ],
+        "additionalProperties": false
+      },
+      "output_schema": {
+        "type": "object",
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "context": {
+            "type": "object"
+          },
+          "job_id": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "pending",
+              "running",
+              "completed",
+              "failed",
+              "cancelled",
+              "interrupted"
+            ]
+          }
+        },
+        "anyOf": [
+          {
+            "required": [
+              "job_id",
+              "status"
+            ]
+          },
+          {
+            "required": [
+              "success",
+              "context"
+            ]
+          }
+        ]
+      },
+      "execution": "async",
+      "job_strategy": "monolithic",
+      "affinity": "main",
+      "enforce_thread_affinity": true,
+      "timeout_hint_secs": 65,
+      "annotations": {
+        "read_only_hint": false,
+        "destructive_hint": true,
+        "idempotent_hint": false,
+        "open_world_hint": false,
+        "deferred_hint": true
+      },
+      "next-tools": {
+        "on-failure": [
+          "inspect_pipeline"
+        ]
+      }
+    },
+    {
       "name": "create_sphere",
       "description": "Create a bounded native sphere source.",
       "source_file": "scripts/create_sphere.py",

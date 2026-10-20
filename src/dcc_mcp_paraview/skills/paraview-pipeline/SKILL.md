@@ -1,6 +1,6 @@
 ---
 name: paraview-pipeline
-description: Inspect and author bounded ParaView sphere and clip pipelines, save native states, and round-trip VTI/VTU/VTP datasets.
+description: Inspect and author bounded ParaView sphere, analytic ImageData and clip pipelines, save native states, and round-trip VTI/VTU/VTP datasets.
 license: MIT
 metadata:
   dcc-mcp:
@@ -8,7 +8,7 @@ metadata:
     layer: domain
     version: "0.1.0"
     tools: tools.yaml
-    search-hint: "ParaView scientific visualization sphere clip plane pvsm dataset vtu vtp render"
+    search-hint: "ParaView scientific visualization sphere ImageData analytic volume clip plane pvsm dataset vti vtu vtp render"
     tags: "paraview,scientific-visualization"
     links:
       repo: https://github.com/dcc-mcp/dcc-mcp-paraview
@@ -111,3 +111,29 @@ The native values are read back and participate in presentation capture checks.
 Omitting a control leaves its existing native behavior unchanged. No label or
 range-format string inputs are supported. The bounded controls still require
 visual QA for title fit, legend placement and actual line appearance.
+
+## Bounded analytic ImageData (native qualification pending)
+
+Use `create_image_data` to create a new `.vti` and a persistent named reader in
+one job. Supply dimensions, origin, strictly positive spacing and 1–4 independent
+`float64` scalar fields. Dimensions are at least 2 in each axis and total points
+at most 1,000,000. Expressions contain decimal constants, x/y/z, parentheses,
++ - * /, integer powers `**` from -8 to 8, and `exp`; they are not Python scripts.
+All intermediate results must be finite. Fields cannot reference other fields.
+Choose an optional declared `active_scalar` (first field by default).
+
+Optional `significant_digits` (1–17) quantizes each final field value independently,
+never an intermediate. `serialization` defaults to `native`; the generic
+`canonical_ascii_v1` profile serializes verified native arrays and verifies them
+again. Native numerical equality and exact XML bytes are distinct acceptance
+criteria. Four fields, maximum points, complex expressions or long numeric
+strings may exceed the aggregate 32 MiB payload, 64 million arithmetic-step or
+64 MiB output budget before evaluation. No arbitrary script entry exists.
+
+The result includes full native value readback evidence, per-array Float64
+hashes, artifact hash and expression/precision provenance. Staging uses pinned
+no-symlink output-directory descriptors and no-clobber publication. Cancellation
+cleans request-owned stages after host termination, but already-published output
+is retained and must not be overwritten or replayed. Native acceptance and the
+reader-backed save/reopen gate for this new capability remain pending. See the
+package's `docs/image-data.md` for grammar, budget and canonical profile details.
