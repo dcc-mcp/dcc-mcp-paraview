@@ -16,6 +16,7 @@ import jsonschema
 import pytest
 from test_host_files import host as host
 
+import dcc_mcp_paraview
 from dcc_mcp_paraview.contracts import OperationError, validate
 from dcc_mcp_paraview.image_data import ImageDataError, evaluate_expression, parse_expression, plan_image_data
 from dcc_mcp_paraview.image_files import ImageOutput
@@ -178,9 +179,9 @@ def test_invalid_contract(change):
 
 def test_contract_schema_and_payload_budgets():
     params = parameters(significant_digits=10, serialization="canonical_ascii_v1", active_scalar="Value")
-    tools = json.loads(
-        (Path(__file__).parents[1] / "src/dcc_mcp_paraview/skills/paraview-pipeline/tools.yaml").read_text()
-    )["tools"]
+    tools = json.loads((Path(dcc_mcp_paraview.__file__).parent / "skills/paraview-pipeline/tools.yaml").read_text())[
+        "tools"
+    ]
     tool = next(tool for tool in tools if tool["name"] == "create_image_data")
     jsonschema.validate(params, tool["input_schema"])
     assert tool["input_schema"]["properties"]["fields"]["items"]["additionalProperties"] is False
