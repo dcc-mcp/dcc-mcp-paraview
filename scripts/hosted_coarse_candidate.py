@@ -197,7 +197,7 @@ async def exercise(h, caller, server, workspace, parameters, evidence, guard):
     host = before["host"]
     h.require(
         before["sources"] == []
-        and host["pid"] == server.host_session.process.pid
+        and host["pid"] == server.host_session.identity["pid"]
         and host["thread_id"] == host["main_thread_id"]
         and host["version"] == "5.13.2"
         and host["render_available"] is True,
@@ -424,10 +424,31 @@ def main():
             parsed.scheme == "http" and parsed.hostname == "127.0.0.1" and h.listener_rows(parsed.port) == ["0100007F"],
             "Owned HTTP listener is not loopback-only",
         )
-        pid = server.host_session.process.pid
+        launcher_pid = server.host_session.process.pid
+        pid = server.host_session.identity["pid"]
+        owned = h.owned_process_snapshot(server)
+        evidence.record("owned_native_identity_before_validation", identity=server.host_session.identity, process=owned)
+        h.require(type(pid) is int and pid in owned["pids"], "Native readiness PID is outside the owned process group")
+        ancestry = [pid]
+        for _ in range(16):
+            if ancestry[-1] == launcher_pid:
+                break
+            status = Path("/proc/%d/status" % ancestry[-1]).read_text()
+            parent_pid = int(re.search(r"^PPid:\s+(\d+)$", status, re.MULTILINE).group(1))
+            h.require(parent_pid in owned["pids"] and parent_pid not in ancestry, "Native PID ancestry is not owned")
+            ancestry.append(parent_pid)
+        h.require(ancestry[-1] == launcher_pid, "Native PID does not descend from the owned launcher")
         actual_exe = Path(os.readlink("/proc/%d/exe" % pid)).resolve()
         python_libs = sorted(
             {line.split()[-1] for line in Path("/proc/%d/maps" % pid).read_text().splitlines() if "libpython" in line}
+        )
+        evidence.record(
+            "owned_native_runtime_before_validation",
+            launcher_pid=launcher_pid,
+            native_pid=pid,
+            ancestry=ancestry,
+            actual_executable=str(actual_exe),
+            loaded_python_libraries=python_libs,
         )
         h.require(
             actual_exe.is_relative_to(args.paraview_root)
