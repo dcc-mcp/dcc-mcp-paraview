@@ -195,6 +195,12 @@ class ParaViewSession:
                         raise OperationError("session_closed", "Owned ParaView session was stopped")
                     try:
                         self._image_output = image_files.ImageOutput(self.workspace, params["path"], request["id"])
+                        request["output_directory"] = self._image_output.directory_identity
+                        frame = (json.dumps(request, allow_nan=False) + "\n").encode()
+                        if len(frame) > MAX_FRAME_BYTES:
+                            self._image_output.close()
+                            self._image_output = None
+                            raise OperationError("invalid_input", "Request exceeded its size limit")
                     except image_data.ImageDataError as error:
                         raise OperationError(error.code, str(error)) from None
             try:

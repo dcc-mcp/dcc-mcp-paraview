@@ -41,6 +41,9 @@ callbacks are used. Every arithmetic intermediate must be finite. Overflow,
 division by zero and invalid domains fail without publishing an artifact.
 Underflow to finite zero is permitted by Float64 arithmetic.
 
+Origin and spacing are normalized to Float64 before coordinate arithmetic,
+and coordinate loads in the evaluator are always Float64. JSON integer versus
+floating-point spelling cannot select arbitrary-precision integer arithmetic.
 Coordinates are evaluated as `origin + index * spacing`, in x-fastest order.
 Fields cannot reference each other. `significant_digits` is an optional integer
 1–17: each completed field value is independently converted through that many
@@ -106,7 +109,12 @@ Pre-existing stage names and destinations are rejected. No overwritten-file
 mode is exposed. Workspaces remain operator-owned; this is not a multi-user
 hostile-filesystem isolation service.
 
-The sidecar pins its own output-parent descriptor before sending the request.
+The sidecar pins its own output-parent descriptor before sending the request
+and includes that descriptor's device/inode identity in the internal typed IPC
+envelope, not in user arguments. The host opens its parent and must match both
+values before allocating arrays or creating stages. Replacing the parent with
+a different ordinary directory is therefore rejected; after both descriptors
+are open, a rename cannot separate their cleanup target.
 After the host responds or has been terminated, it cleans only the exact two
 request-owned regular-file stage names, never the published destination or
 another request's stages. The live host also cleans stages on failure and

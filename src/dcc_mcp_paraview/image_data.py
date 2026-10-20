@@ -102,7 +102,7 @@ def evaluate_expression(instructions, coordinates, significant_digits=None):
             if operation == "constant":
                 value = operand
             elif operation == "coordinate":
-                value = coordinates[operand]
+                value = float(coordinates[operand])
             elif operation in ("positive", "negative", "power", "exp"):
                 a = stack.pop()
                 if operation == "positive":
@@ -168,8 +168,12 @@ def plan_image_data(params):
             )
         ):
             raise ImageDataError("Origin and positive spacing must be three bounded finite numbers")
+    # Normalize before coordinate arithmetic; JSON integer spelling must not
+    # introduce Python arbitrary-precision integer intermediates.
+    origin_values = [float(value) for value in params["origin"]]
+    spacing_values = [float(value) for value in params["spacing"]]
     bounds = []
-    for origin, spacing, size in zip(params["origin"], params["spacing"], dimensions):
+    for origin, spacing, size in zip(origin_values, spacing_values, dimensions):
         end = origin + (size - 1) * spacing
         if (
             not math.isfinite(end)
@@ -207,6 +211,8 @@ def plan_image_data(params):
     if array_bytes > MAX_ARRAY_BYTES or output_bound > MAX_OUTPUT_BYTES or operations > MAX_OPERATIONS:
         raise ImageDataError("ImageData exceeds its array, output or arithmetic budget", "resource_limit")
     return {
+        "origin": origin_values,
+        "spacing": spacing_values,
         "plans": plans,
         "points": points,
         "cells": math.prod(n - 1 for n in dimensions),

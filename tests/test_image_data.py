@@ -7,6 +7,7 @@ import copy
 import hashlib
 import json
 import math
+import os
 import struct
 import threading
 from pathlib import Path
@@ -427,3 +428,67 @@ def test_stage_path_replacement_cannot_publish_unverified_file(tmp_path):
         assert not (tmp_path / "result.vti").is_symlink()
     finally:
         output.close()
+
+
+@pytest.mark.parametrize(
+    "expression, coordinate, expected",
+    [
+        ("(x**8+x)-x**8", 999999, 0.0),
+        ("x*x*x*x-x**4", 999999, -134217728.0),
+        ("-x", 0, -0.0),
+    ],
+)
+def test_integer_coordinate_spelling_never_changes_float64_arithmetic(expression, coordinate, expected):
+    instructions = parse_expression(expression)
+    from_int = evaluate_expression(instructions, (coordinate, 0, 0))
+    from_float = evaluate_expression(instructions, (float(coordinate), 0.0, 0.0))
+    assert type(from_int) is float
+    assert struct.pack("<d", from_int) == struct.pack("<d", from_float) == struct.pack("<d", expected)
+
+
+def test_plan_normalizes_integer_geometry_before_arithmetic():
+    plan = plan_image_data(parameters(origin=[0, 1, 2], spacing=[1, 2, 3]))
+    assert all(type(value) is float for value in plan["origin"] + plan["spacing"] + plan["bounds"])
+
+
+def test_parent_directory_identity_rejects_replacement_before_host_preflight(tmp_path):
+    parent = tmp_path / "destination"
+    parent.mkdir()
+    sidecar = ImageOutput(tmp_path, "destination/result.vti", "a" * 32)
+    old = tmp_path / "old-destination"
+    parent.rename(old)
+    parent.mkdir()
+    try:
+        with pytest.raises(ImageDataError) as error:
+            ImageOutput(tmp_path, "destination/result.vti", "a" * 32, expected_directory=sidecar.directory_identity)
+        assert error.value.code == "path_denied"
+        assert list(parent.iterdir()) == list(old.iterdir()) == []
+    finally:
+        sidecar.close()
+
+
+def test_matching_directory_descriptors_clean_killed_host_stages_after_rename(tmp_path):
+    parent = tmp_path / "destination"
+    parent.mkdir()
+    sidecar = ImageOutput(tmp_path, "destination/result.vti", "b" * 32)
+    owned_host = ImageOutput(
+        tmp_path, "destination/result.vti", "b" * 32, expected_directory=sidecar.directory_identity
+    )
+    old = tmp_path / "old-destination"
+    parent.rename(old)
+    parent.mkdir()
+    try:
+        owned_host.reserve(native=True).write_text("partial native")
+        owned_host.reserve().write_text("partial result")
+        assert len(list(old.iterdir())) == 2 and list(parent.iterdir()) == []
+        # Simulate process death: descriptors close, but its Python finally never runs.
+        for descriptor in owned_host.files.values():
+            os.close(descriptor)
+        owned_host.files.clear()
+        os.close(owned_host.fd)
+        owned_host.fd = None
+        sidecar.close()
+        assert list(old.iterdir()) == list(parent.iterdir()) == []
+    finally:
+        owned_host.close()
+        sidecar.close()
