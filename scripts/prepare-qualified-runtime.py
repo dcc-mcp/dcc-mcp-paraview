@@ -23,7 +23,10 @@ def main():
     if args.archive.stat().st_size != lock["bytes"]:
         raise RuntimeError("Archive size differs from the completed download qualification")
     with args.archive.open("rb") as source:
-        digest = hashlib.file_digest(source, "sha256").hexdigest()
+        hasher = hashlib.sha256()
+        for chunk in iter(lambda: source.read(1024 * 1024), b""):
+            hasher.update(chunk)
+        digest = hasher.hexdigest()
     if digest != lock["sha256"]:
         raise RuntimeError("Archive SHA256 differs from the completed download qualification")
     if shutil.disk_usage(args.destination.parent).free < 6 * 1024**3:
